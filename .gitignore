@@ -3,3 +3,5 @@
 **/*.obj
 **/*.dump
 Dropfleet.prjgrd
+obj/timeAndFingerPrint.ScopeInfo
+Dropfleet.env
