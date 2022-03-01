@@ -1,0 +1,13 @@
+﻿% own pack
+#include @"fleet\fleet.ph"
+
+% privately used packages
+#include @"pfc\core.ph"
+
+% private interfaces
+
+% private classes
+
+% implementations
+#include @"fleet\fleet.pro"
+

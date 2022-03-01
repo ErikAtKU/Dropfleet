@@ -1,0 +1,13 @@
+﻿% own pack
+#include @"ship\ship.ph"
+
+% privately used packages
+#include @"ship\shipClass\shipClass.ph"
+
+% private interfaces
+
+% private classes
+
+% implementations
+#include @"ship\ship.pro"
+

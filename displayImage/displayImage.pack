@@ -1,0 +1,20 @@
+﻿#requires @"displayImage\displayImage.dlg"
+
+% own pack
+#include @"displayImage\displayImage.ph"
+
+% privately used packages
+#include @"pfc\core.ph"
+#include @"pfc\gui\controls\button\button.ph"
+#include @"pfc\gui\controls\imageControl\imageControl.ph"
+#include @"pfc\gui\gdiplus\gdiplus.ph"
+#include @"pfc\gui\gui.ph"
+#include @"pfc\vpi\vpiDomains\vpiDomains.ph"
+
+% private interfaces
+
+% private classes
+
+% implementations
+#include @"displayImage\displayImage.pro"
+

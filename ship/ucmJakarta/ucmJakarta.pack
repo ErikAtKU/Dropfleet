@@ -1,0 +1,13 @@
+﻿% own pack
+#include @"ship\ucmJakarta\ucmJakarta.ph"
+
+% privately used packages
+#include @"ship\ship.ph"
+#include @"pfc\list\list.ph"
+#include @"pfc\string\string.ph"
+#include @"ship\shipClass\shipClass.ph"
+
+% private interfaces
+% private classes
+% implementations
+#include @"ship\ucmJakarta\ucmJakarta.pro"

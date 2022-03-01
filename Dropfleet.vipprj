@@ -1,0 +1,298 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<projectData-map auto-formatting="true" debug_directory="deb" description="Dropfleet" final_directory="exe" intermediate_directory="obj" pattern="GUI application" rules="GUI" version="6">
+  <include_directory-list>
+    <include_directory>.</include_directory>
+    <include_directory>$(ProDir)</include_directory>
+  </include_directory-list>
+  <item-set key="filename">
+    <item-map filename="$(ProDir)lib\boostRegex.lib" />
+    <item-map filename="$(ProDir)lib\SciLexer.lib" />
+    <item-map filename="$(ProDir)lib\vipInit.lib" />
+    <item-map filename="$(ProDir)lib\vipKernel.lib" />
+    <item-map filename="$(ProDir)lib\vipRun.lib" />
+    <item-map filename="$(ProDir)lib\vipVpi.lib" />
+    <item-map filename="$(ProDir)lib\win32.lib" />
+    <item-map filename="$(ProDir)pfc\application\Exe\exe.pack" />
+    <item-map filename="$(ProDir)pfc\basis\disposable\disposable.pack" />
+    <item-map filename="$(ProDir)pfc\basis\disposable\disposeRetract\disposeRetract.pack" />
+    <item-map filename="$(ProDir)pfc\basis\iterator\iterator.pack" />
+    <item-map filename="$(ProDir)pfc\basis\uncollectable\uncollectable.pack" />
+    <item-map filename="$(ProDir)pfc\binary\binary.pack" />
+    <item-map filename="$(ProDir)pfc\boolean\boolean.pack" />
+    <item-map filename="$(ProDir)pfc\collection\algebraic\redBlackSet\redBlackSet.pack" />
+    <item-map filename="$(ProDir)pfc\collection\algebraic\redBlackTree\redBlackTree.pack" />
+    <item-map filename="$(ProDir)pfc\collection\algebraic\redBlackTree\redBlackTreeRep\redBlackTreeRep.pack" />
+    <item-map filename="$(ProDir)pfc\collection\collection.pack" />
+    <item-map filename="$(ProDir)pfc\collection\M\arrayM_inline\arrayM_inline.pack" />
+    <item-map filename="$(ProDir)pfc\collection\M\mapM_redBlack\mapM_redBlack.pack" />
+    <item-map filename="$(ProDir)pfc\collection\M\queueM_fact\queueM_fact.pack" />
+    <item-map filename="$(ProDir)pfc\collection\M\setM_redBlack\setM_redBlack.pack" />
+    <item-map filename="$(ProDir)pfc\collection\M\varM\varM.pack" />
+    <item-map filename="$(ProDir)pfc\collection\support\collectionMsupport\collectionMsupport.pack" />
+    <item-map filename="$(ProDir)pfc\collection\support\collectionSupport\collectionSupport.pack" />
+    <item-map filename="$(ProDir)pfc\collection\support\mapMSupport\mapMSupport.pack" />
+    <item-map filename="$(ProDir)pfc\collection\support\mapSupport\mapSupport.pack" />
+    <item-map filename="$(ProDir)pfc\collection\support\modifiableSupport\modifiableSupport.pack" />
+    <item-map filename="$(ProDir)pfc\com\com.pack" />
+    <item-map filename="$(ProDir)pfc\com\comSupport\comSupport.pack" />
+    <item-map filename="$(ProDir)pfc\com\exceptionHandling\exceptionHandling.pack" />
+    <item-map filename="$(ProDir)pfc\core.pack" />
+    <item-map filename="$(ProDir)pfc\event\event.pack" />
+    <item-map filename="$(ProDir)pfc\exception\exception.pack" />
+    <item-map filename="$(ProDir)pfc\exception\exceptionDump\exceptionDump.pack" />
+    <item-map filename="$(ProDir)pfc\fileSystem\fileSystem.pack" />
+    <item-map filename="$(ProDir)pfc\gui\applicationWindow\applicationWindow.pack" />
+    <item-map filename="$(ProDir)pfc\gui\clipboard\clipboard.pack" />
+    <item-map filename="$(ProDir)pfc\gui\commands\command\Command.pack" />
+    <item-map filename="$(ProDir)pfc\gui\commonDialogs\commonDialogs.pack" />
+    <item-map filename="$(ProDir)pfc\gui\controls\button\button.pack" />
+    <item-map filename="$(ProDir)pfc\gui\controls\checkButton\checkButton.pack" />
+    <item-map filename="$(ProDir)pfc\gui\controls\containerControl\containerControl.pack" />
+    <item-map filename="$(ProDir)pfc\gui\controls\controls.pack" />
+    <item-map filename="$(ProDir)pfc\gui\controls\controlSupport\controlSupport.pack" />
+    <item-map filename="$(ProDir)pfc\gui\controls\editControl\editControl.pack" />
+    <item-map filename="$(ProDir)pfc\gui\controls\groupBox\groupBox.pack" />
+    <item-map filename="$(ProDir)pfc\gui\controls\iconControl\iconControl.pack" />
+    <item-map filename="$(ProDir)pfc\gui\controls\imageControl\imageControl.ctl" resource_id="imageControl" />
+    <item-map filename="$(ProDir)pfc\gui\controls\imageControl\imageControl.pack" />
+    <item-map filename="$(ProDir)pfc\gui\controls\integerControl\integerControl.ctl" resource_id="integerControl" />
+    <item-map filename="$(ProDir)pfc\gui\controls\integerControl\integerControl.pack" />
+    <item-map filename="$(ProDir)pfc\gui\controls\listControl\listControl.pack" />
+    <item-map filename="$(ProDir)pfc\gui\controls\messageControl\messageControl.ctl" resource_id="messageControl" />
+    <item-map filename="$(ProDir)pfc\gui\controls\messageControl\messageControl.pack" />
+    <item-map filename="$(ProDir)pfc\gui\controls\messageControl\outputStream_delegate\outputStream_delegate.pack" />
+    <item-map filename="$(ProDir)pfc\gui\controls\messageControl\outputStream_post\outputStream_post.pack" />
+    <item-map filename="$(ProDir)pfc\gui\controls\radioButton\radioButton.pack" />
+    <item-map filename="$(ProDir)pfc\gui\controls\realControl\realControl.ctl" resource_id="realControl" />
+    <item-map filename="$(ProDir)pfc\gui\controls\realControl\realControl.pack" />
+    <item-map filename="$(ProDir)pfc\gui\controls\sciLexer\sciLexer.ctl" resource_id="sciLexer" />
+    <item-map filename="$(ProDir)pfc\gui\controls\sciLexer\sciLexer.pack" />
+    <item-map filename="$(ProDir)pfc\gui\controls\sciLexer\sciLexerSupport\findAndReplaceControl.ctl" resource_id="findAndReplaceControl" />
+    <item-map filename="$(ProDir)pfc\gui\controls\sciLexer\sciLexerSupport\sciLexerSupport.pack" />
+    <item-map filename="$(ProDir)pfc\gui\controls\statusBarControl\statusBarControl.ctl" resource_id="statusBarControl" />
+    <item-map filename="$(ProDir)pfc\gui\controls\statusBarControl\statusBarControl.pack" />
+    <item-map filename="$(ProDir)pfc\gui\controls\textControl\textControl.pack" />
+    <item-map filename="$(ProDir)pfc\gui\controls\versionControl\versionControl.ctl" resource_id="versionControl" />
+    <item-map filename="$(ProDir)pfc\gui\controls\versionControl\versionControl.pack" />
+    <item-map filename="$(ProDir)pfc\gui\documentWindow\documentWindow.pack" />
+    <item-map filename="$(ProDir)pfc\gui\errorPresentationDialog\errorPresentationDialog.pack" />
+    <item-map filename="$(ProDir)pfc\gui\gdiplus\gdiplus.pack" />
+    <item-map filename="$(ProDir)pfc\gui\gui.pack" />
+    <item-map filename="$(ProDir)pfc\gui\guiSupport\guiSupport.pack" />
+    <item-map filename="$(ProDir)pfc\gui\ImageList\ImageList.pack" />
+    <item-map filename="$(ProDir)pfc\gui\messageBox\messageBox.pack" />
+    <item-map filename="$(ProDir)pfc\gui\statusBar\statusBar.pack" />
+    <item-map filename="$(ProDir)pfc\gui\toolTip\toolTip.pack" />
+    <item-map filename="$(ProDir)pfc\gui\toolTip\tooltipSupport\tooltipSupport.pack" />
+    <item-map filename="$(ProDir)pfc\guid\guid.pack" />
+    <item-map filename="$(ProDir)pfc\list\list.pack" />
+    <item-map filename="$(ProDir)pfc\math\math.pack" />
+    <item-map filename="$(ProDir)pfc\memory\memory.pack" />
+    <item-map filename="$(ProDir)pfc\memory\segmented\segmented.pack" />
+    <item-map filename="$(ProDir)pfc\memory\segmented\segmented_binary\segmented_binary.pack" />
+    <item-map filename="$(ProDir)pfc\memory\segmented\segmented_utf16\segmented_utf16.pack" />
+    <item-map filename="$(ProDir)pfc\memory\segmented\segmented_utf8\segmented_utf8.pack" />
+    <item-map filename="$(ProDir)pfc\memory\segmented\segmentedSupport\segmentedSupport.pack" />
+    <item-map filename="$(ProDir)pfc\memory\weakPointer\weakPointer.pack" />
+    <item-map filename="$(ProDir)pfc\memory\weakReference\weakReference.pack" />
+    <item-map filename="$(ProDir)pfc\multiThread\compareAndSwap\compareAndSwap.pack" />
+    <item-map filename="$(ProDir)pfc\multiThread\criticalSectionSupport\criticalSectionSupport.pack" />
+    <item-map filename="$(ProDir)pfc\multiThread\multiThread.pack" />
+    <item-map filename="$(ProDir)pfc\multiThread\srwLock\srwLock.pack" />
+    <item-map filename="$(ProDir)pfc\namedValue\namedValue.pack" />
+    <item-map filename="$(ProDir)pfc\presenter\presenter.pack" />
+    <item-map filename="$(ProDir)pfc\programControl\programControl.pack" />
+    <item-map filename="$(ProDir)pfc\reflection\reflection.pack" />
+    <item-map filename="$(ProDir)pfc\reflection\typeLibrary\typeLibrary.pack" />
+    <item-map filename="$(ProDir)pfc\regEx\regEx.pack" />
+    <item-map filename="$(ProDir)pfc\registry\registry.pack" />
+    <item-map filename="$(ProDir)pfc\std\std.pack" />
+    <item-map filename="$(ProDir)pfc\stream\inputStreamSupport\inputStreamSupport.pack" />
+    <item-map filename="$(ProDir)pfc\stream\inputSupport_mode\inputSupport_mode.pack" />
+    <item-map filename="$(ProDir)pfc\stream\outputStreamSupport\outputStreamSupport.pack" />
+    <item-map filename="$(ProDir)pfc\stream\stream.pack" />
+    <item-map filename="$(ProDir)pfc\string\string.pack" />
+    <item-map filename="$(ProDir)pfc\string8\string8.pack" />
+    <item-map filename="$(ProDir)pfc\templateExpander\templateExpander.pack" />
+    <item-map filename="$(ProDir)pfc\time\iso8601Parser\iso8601Parser.pack" />
+    <item-map filename="$(ProDir)pfc\time\time.pack" />
+    <item-map filename="$(ProDir)pfc\vpi\vpi.pack" />
+    <item-map filename="$(ProDir)pfc\vpi\vpi_native\vpi_native.pack" />
+    <item-map filename="$(ProDir)pfc\vpi\vpiDomains\vpiDomains.pack" />
+    <item-map filename="$(ProDir)pfc\vpi\vpiToolbar\vpiToolbar.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\clipboard_api\clipboard_api.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\com_api\basicInterfaces\basicInterfaces.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\com_api\com_api.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\com_api\comDomains\comDomains.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\com_api\iStream_api\iStream_api.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\com_api\safeArray_api\safeArray_api.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\com_api\standardInterfaces\IEnumXXXX\iEnumXXXX.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\com_api\standardInterfaces\standardInterfaces.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\commonControls_api\commonControls_api.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\exe_api\exe_api.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\fileSystem_api\fileSystem_api.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\gdiplus_api\gdiplus_api.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\gui_api\gui_api.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\guid_api\guid_api.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\hash_api\hash_api.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\iconDirectory_api\iconDirectory_api.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\ImageList_api\ImageList_api.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\locale_api\locale_api.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\memory_api\memory_api.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\multiThread_api\multiThread_api.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\registry_api\registry_api.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\runTime_api\runTime_api.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\sciLexer_api\sciLexer_api.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\Shell_api\Shell_api.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\string_api\string_api.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\string8_api\string8_api.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\systemInformation_api\systemInformation_api.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\time_api\time_api.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\uxTheme_api\uxTheme_api.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\windowsAPI.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\WinErrors\winErrors.pack" />
+    <item-map filename="aboutDialog\aboutDialog.pack" />
+    <item-map filename="displayImage\displayImage.dlg" resource_id="dlg_displayImage" />
+    <item-map filename="displayImage\displayImage.pack" />
+    <item-map filename="fleet\fleet.pack" />
+    <item-map filename="fleet\fleetBuilder\fleetBuilder.pack" />
+    <item-map filename="main.manifest" />
+    <item-map filename="main.pack" />
+    <item-map filename="main.version" />
+    <item-map filename="ProjectIcon.ico" resource_id="application_icon" />
+    <item-map filename="ship\phrAchilles\phrAchilles.pack" />
+    <item-map filename="ship\phrAgamemnon\phrAgamemnon.pack" />
+    <item-map filename="ship\phrAgrippa\phrAgrippa.pack" />
+    <item-map filename="ship\phrAjax\phrAjax.pack" />
+    <item-map filename="ship\phrAndromeda\phrAndromeda.pack" />
+    <item-map filename="ship\phrAriadne\phrAriadne.pack" />
+    <item-map filename="ship\phrBellerophon\phrBellerophon.pack" />
+    <item-map filename="ship\phrCalypso\phrCalypso.pack" />
+    <item-map filename="ship\phrCastor\phrCastor.pack" />
+    <item-map filename="ship\phrEcho\phrEcho.pack" />
+    <item-map filename="ship\phrElectra\phrElectra.pack" />
+    <item-map filename="ship\phrEuropa\phrEuropa.pack" />
+    <item-map filename="ship\phrGanymede\phrGanymede.pack" />
+    <item-map filename="ship\phrHarpocrates\phrHarpocrates.pack" />
+    <item-map filename="ship\phrHector\phrHector.pack" />
+    <item-map filename="ship\phrHeracles\phrHeracles.pack" />
+    <item-map filename="ship\phrIkarus\phrIkarus.pack" />
+    <item-map filename="ship\phrJason\phrJason.pack" />
+    <item-map filename="ship\phrLeonidas\phrLeonidas.pack" />
+    <item-map filename="ship\phrMedea\phrMedea.pack" />
+    <item-map filename="ship\phrMinos\phrMinos.pack" />
+    <item-map filename="ship\phrOdysseus\phrOdysseus.pack" />
+    <item-map filename="ship\phrOrion\phrOrion.pack" />
+    <item-map filename="ship\phrOrpheus\phrOrpheus.pack" />
+    <item-map filename="ship\phrOurania\phrOurania.pack" />
+    <item-map filename="ship\phrPandora\phrPandora.pack" />
+    <item-map filename="ship\phrPegasus\phrPegasus.pack" />
+    <item-map filename="ship\phrPerseus\phrPerseus.pack" />
+    <item-map filename="ship\phrPollux\phrPollux.pack" />
+    <item-map filename="ship\phrPompeius\phrPompeius.pack" />
+    <item-map filename="ship\phrPriam\phrPriam.pack" />
+    <item-map filename="ship\phrRemus\phrRemus.pack" />
+    <item-map filename="ship\phrRomulus\phrRomulus.pack" />
+    <item-map filename="ship\phrScipio\phrScipio.pack" />
+    <item-map filename="ship\phrTheseus\phrTheseus.pack" />
+    <item-map filename="ship\shaltariAdamant\shaltariAdamant.pack" />
+    <item-map filename="ship\shaltariAmber\shaltariAmber.pack" />
+    <item-map filename="ship\shaltariAmethyst\shaltariAmethyst.pack" />
+    <item-map filename="ship\shaltariAquamarine\shaltariAquamarine.pack" />
+    <item-map filename="ship\shaltariAzurite\shaltariAzurite.pack" />
+    <item-map filename="ship\shaltariBasalt\shaltariBasalt.pack" />
+    <item-map filename="ship\shaltariCaesium\shaltariCaesium.pack" />
+    <item-map filename="ship\shaltariChromium\shaltariChromium.pack" />
+    <item-map filename="ship\shaltariCobalt\shaltariCobalt.pack" />
+    <item-map filename="ship\shaltariDiamond\shaltariDiamond.pack" />
+    <item-map filename="ship\shaltariEmerald\shaltariEmerald.pack" />
+    <item-map filename="ship\shaltariGallium\shaltariGallium.pack" />
+    <item-map filename="ship\shaltariGlass\shaltariGlass.pack" />
+    <item-map filename="ship\shaltariGoethite\shaltariGoethite.pack" />
+    <item-map filename="ship\shaltariGranite\shaltariGranite.pack" />
+    <item-map filename="ship\shaltariHelium\shaltariHelium.pack" />
+    <item-map filename="ship\shaltariHematite\shaltariHematite.pack" />
+    <item-map filename="ship\shaltariJade\shaltariJade.pack" />
+    <item-map filename="ship\shaltariJet\shaltariJet.pack" />
+    <item-map filename="ship\shaltariMercury\shaltariMercury.pack" />
+    <item-map filename="ship\shaltariObsidian\shaltariObsidian.pack" />
+    <item-map filename="ship\shaltariOnyx\shaltariOnyx.pack" />
+    <item-map filename="ship\shaltariOpal\shaltariOpal.pack" />
+    <item-map filename="ship\shaltariPalladium\shaltariPalladium.pack" />
+    <item-map filename="ship\shaltariPlatinum\shaltariPlatinum.pack" />
+    <item-map filename="ship\shaltariPlutonium\shaltariPlutonium.pack" />
+    <item-map filename="ship\shaltariRuby\shaltariRuby.pack" />
+    <item-map filename="ship\shaltariSapphire\shaltariSapphire.pack" />
+    <item-map filename="ship\shaltariSelenium\shaltariSelenium.pack" />
+    <item-map filename="ship\shaltariSilicon\shaltariSilicon.pack" />
+    <item-map filename="ship\shaltariTopaz\shaltariTopaz.pack" />
+    <item-map filename="ship\shaltariTurquoise\shaltariTurquoise.pack" />
+    <item-map filename="ship\shaltariUranium\shaltariUranium.pack" />
+    <item-map filename="ship\shaltariVoidgate\shaltariVoidgate.pack" />
+    <item-map filename="ship\ship.pack" />
+    <item-map filename="ship\shipClass\shipClass.pack" />
+    <item-map filename="ship\ucmAtlantis\ucmAtlantis.pack" />
+    <item-map filename="ship\ucmAvalon\ucmAvalon.pack" />
+    <item-map filename="ship\ucmBeijing\ucmBeijing.pack" />
+    <item-map filename="ship\ucmBerlin\ucmBerlin.pack" />
+    <item-map filename="ship\ucmHavana\ucmHavana.pack" />
+    <item-map filename="ship\ucmIstanbul\ucmIstanbul.pack" />
+    <item-map filename="ship\ucmJakarta\ucmJakarta.pack" />
+    <item-map filename="ship\ucmJohannesburg\ucmJohannesburg.pack" />
+    <item-map filename="ship\ucmKyiv\ucmKyiv.pack" />
+    <item-map filename="ship\ucmLima\ucmLima.pack" />
+    <item-map filename="ship\ucmLondon\ucmLondon.pack" />
+    <item-map filename="ship\ucmLysander\ucmLysander.pack" />
+    <item-map filename="ship\ucmMadrid\ucmMadrid.pack" />
+    <item-map filename="ship\ucmMoscow\ucmMoscow.pack" />
+    <item-map filename="ship\ucmNewCairo\ucmNewCairo.pack" />
+    <item-map filename="ship\ucmNewOrleans\ucmNewOrleans.pack" />
+    <item-map filename="ship\ucmNewYork\ucmNewYork.pack" />
+    <item-map filename="ship\ucmNuuk\ucmNuuk.pack" />
+    <item-map filename="ship\ucmOsaka\ucmOsaka.pack" />
+    <item-map filename="ship\ucmPerth\ucmPerth.pack" />
+    <item-map filename="ship\ucmReykjavik\ucmReykjavik.pack" />
+    <item-map filename="ship\ucmRio\ucmRio.pack" />
+    <item-map filename="ship\ucmRome\ucmRome.pack" />
+    <item-map filename="ship\ucmSanFransisco\ucmSanFransisco.pack" />
+    <item-map filename="ship\ucmSantiago\ucmSantiago.pack" />
+    <item-map filename="ship\ucmSeattle\ucmSeattle.pack" />
+    <item-map filename="ship\ucmStPetersburg\ucmStPetersburg.pack" />
+    <item-map filename="ship\ucmTaipei\ucmTaipei.pack" />
+    <item-map filename="ship\ucmTokyo\ucmTokyo.pack" />
+    <item-map filename="ship\ucmToulon\ucmToulon.pack" />
+    <item-map filename="ship\ucmVancouver\ucmVancouver.pack" />
+    <item-map filename="ship\ucmVenice\ucmVenice.pack" />
+    <item-map filename="ship\ucmVienna\ucmVienna.pack" />
+    <item-map filename="ship\ucmWashington\ucmWashington.pack" />
+    <item-map filename="taskWindow\TaskMenu.mnu" resource_id="mnu_TaskMenu" />
+    <item-map filename="taskWindow\taskWindow.pack" />
+    <item-map filename="taskWindow\taskWindow.win" resource_id="win_2" />
+    <item-map filename="taskWindow\Toolbars\CopyBitmap.bmp" resource_id="idb_CopyBitmap" />
+    <item-map filename="taskWindow\Toolbars\CutBitmap.bmp" resource_id="idb_CutBitmap" />
+    <item-map filename="taskWindow\Toolbars\HelpBitmap.bmp" resource_id="idb_HelpBitmap" />
+    <item-map filename="taskWindow\Toolbars\NewFileBitmap.bmp" resource_id="idb_NewFileBitmap" />
+    <item-map filename="taskWindow\Toolbars\OpenFileBitmap.bmp" resource_id="idb_OpenFileBitmap" />
+    <item-map filename="taskWindow\Toolbars\PasteBitmap.bmp" resource_id="idb_PasteBitmap" />
+    <item-map filename="taskWindow\Toolbars\projectToolbar.cl" />
+    <item-map filename="taskWindow\Toolbars\projectToolbar.pro" />
+    <item-map filename="taskWindow\Toolbars\projectToolbar.tb" resource_id="tb_projectToolbar" />
+    <item-map filename="taskWindow\Toolbars\RedoBitmap.bmp" resource_id="idb_RedoBitmap" />
+    <item-map filename="taskWindow\Toolbars\SaveFileBitmap.bmp" resource_id="idb_SaveFileBitmap" />
+    <item-map filename="taskWindow\Toolbars\Toolbars.pack" />
+    <item-map filename="taskWindow\Toolbars\UndoBitmap.bmp" resource_id="idb_UndoBitmap" />
+  </item-set>
+  <setting-set key="target">
+    <setting-map target="Win32">
+      <var-list>
+        <var-map name="Target.Machine" value="x86" />
+      </var-list>
+    </setting-map>
+    <setting-map hidden="true" target="x64">
+      <var-list>
+        <var-map name="Target.Machine" value="x64" />
+        <var-map name="Target.DirPrefix" value="64" />
+      </var-list>
+    </setting-map>
+  </setting-set>
+</projectData-map>

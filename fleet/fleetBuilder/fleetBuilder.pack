@@ -1,0 +1,21 @@
+﻿% own pack
+#include @"fleet\fleetBuilder\fleetBuilder.ph"
+
+% privately used packages
+#include @"pfc\collection\collection.ph"
+#include @"pfc\collection\M\mapM_redBlack\mapM_redBlack.ph"
+#include @"pfc\collection\M\setM_redBlack\setM_redBlack.ph"
+#include @"pfc\collection\M\varM\varM.ph"
+#include @"pfc\core.ph"
+#include @"pfc\list\list.ph"
+#include @"pfc\math\math.ph"
+#include @"pfc\std\std.ph"
+#include @"ship\shipClass\shipClass.ph"
+
+% private interfaces
+
+% private classes
+
+% implementations
+#include @"fleet\fleetBuilder\fleetBuilder.pro"
+

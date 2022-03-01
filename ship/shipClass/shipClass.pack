@@ -1,0 +1,15 @@
+﻿% own pack
+#include @"ship\shipClass\shipClass.ph"
+
+% privately used packages
+#include @"pfc\collection\M\varM\varM.ph"
+#include @"pfc\list\list.ph"
+#include @"pfc\presenter\presenter.ph"
+
+% private interfaces
+
+% private classes
+
+% implementations
+#include @"ship\shipClass\shipClass.pro"
+

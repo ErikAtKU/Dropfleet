@@ -1,0 +1,9 @@
+﻿#include @"ship\phrPegasus\phrPegasus.ph"
+
+% privately used packages
+#include @"ship\ship.ph"
+#include @"pfc\string\string.ph"
+#include @"pfc\list\list.ph"
+#include @"ship\shipClass\shipClass.ph"
+% implementations
+#include @"ship\phrPegasus\phrPegasus.pro"

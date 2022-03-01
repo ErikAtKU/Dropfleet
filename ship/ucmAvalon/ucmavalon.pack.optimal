@@ -1,0 +1,15 @@
+﻿% own pack
+#include @"ship\ucmAvalon\ucmAvalon.ph"
+
+% privately used packages
+#include @"pfc\list\list.ph"
+#include @"pfc\string\string.ph"
+#include @"ship\shipClass\shipClass.ph"
+
+% private interfaces
+
+% private classes
+
+% implementations
+#include @"ship\ucmAvalon\ucmAvalon.pro"
+

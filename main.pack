@@ -1,0 +1,15 @@
+﻿% own pack
+#include @"main.ph"
+
+% privately used packages
+#include @"pfc\application\Exe\exe.ph"
+#include @"pfc\windowsApi\exe_api\exe_api.ph"
+#include @"taskWindow\taskWindow.ph"
+
+% private interfaces
+
+% private classes
+
+% implementations
+#include @"main.pro"
+
