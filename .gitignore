@@ -1,7 +1,9 @@
-**/*.Scope
-**/*.deb
-**/*.obj
-**/*.dump
+*.Scope
+*.deb
+*.obj
+*.dump
 Dropfleet.prjgrd
-obj/timeAndFingerPrint.ScopeInfo
 Dropfleet.env
+*.env
+*.bro
+obj/*
