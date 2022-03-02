@@ -7,3 +7,8 @@ Dropfleet.env
 *.env
 *.bro
 obj/*
+obj/pack.obj.options
+obj/Dropfleet.res
+obj/Dropfleet.map
+deb/Dropfleet.bro
+Dropfleet.env
