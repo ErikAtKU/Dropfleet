@@ -19,7 +19,9 @@ domains
         extraSize(gameSize*).
     battlegroupType = battlegroupSize(tuple{rosterCategory, shipClass::group}*, integer Max).
     battlegroupTemplate = bg(battlegroupType, groupTemplate*).
-    groupTemplate = group(shipClass::fleetBuilderStats, integer Count).
+    groupTemplate =
+        group(shipClass::fleetBuilderStats, integer Count)
+        [presenter(fleetBuilder::groupTemplatePresenter)].
 
 constants
     skirmish : gameSize =
@@ -35,6 +37,10 @@ constants
     flag : battlegroupType = battlegroupSize([tuple(cat_light, shipClass::g(0, 1)), tuple(cat_superHeavy, shipClass::g(1, 2))], 3).
 
 predicates
-    buildFleet_nd : (integer Points, tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}*) nondeterm.
+    buildFleet_dt : (integer Points, tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}*)
+        -> mapM{integer Cost, mapM{groupTemplate*, setM{tuple{integer Count, shipClass::fleetBuilderStats}**}}} determ.
+
+predicates
+    groupTemplatePresenter : presenter::presenter{groupTemplate}.
 
 end class fleetBuilder

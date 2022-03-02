@@ -69,6 +69,7 @@
     <item-map filename="$(ProDir)pfc\gui\controls\sciLexer\sciLexer.pack" />
     <item-map filename="$(ProDir)pfc\gui\controls\sciLexer\sciLexerSupport\findAndReplaceControl.ctl" resource_id="findAndReplaceControl" />
     <item-map filename="$(ProDir)pfc\gui\controls\sciLexer\sciLexerSupport\sciLexerSupport.pack" />
+    <item-map filename="$(ProDir)pfc\gui\controls\scrollControl\scrollControl.pack" />
     <item-map filename="$(ProDir)pfc\gui\controls\statusBarControl\statusBarControl.ctl" resource_id="statusBarControl" />
     <item-map filename="$(ProDir)pfc\gui\controls\statusBarControl\statusBarControl.pack" />
     <item-map filename="$(ProDir)pfc\gui\controls\textControl\textControl.pack" />
@@ -183,6 +184,7 @@
     <item-map filename="displayImage\displayImage.pack" />
     <item-map filename="fleet\fleet.pack" />
     <item-map filename="fleet\fleetBuilder\fleetBuilder.pack" />
+    <item-map filename="generateCostListDlg\generateCostListDlg.pack" />
     <item-map filename="main.manifest" />
     <item-map filename="main.pack" />
     <item-map filename="main.version" />

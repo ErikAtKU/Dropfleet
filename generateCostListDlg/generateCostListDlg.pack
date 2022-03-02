@@ -1,0 +1,15 @@
+﻿#include @"generateCostListDlg\generateCostListDlg.ph"
+
+% privately used packages
+#include @"pfc\gui\controls\textControl\textControl.ph"
+#include @"pfc\gui\controls\scrollControl\scrollControl.ph"
+#include @"pfc\string\string.ph"
+#include @"fleet\fleet.ph"
+#include @"fleet\fleetBuilder\fleetBuilder.ph"
+#include @"pfc\gui\controls\listControl\listControl.ph"
+#include @"pfc\gui\controls\button\button.ph"
+#include @"pfc\gui\gui.ph"
+#include @"pfc\resourceIdentifiers.ph"
+
+% implementations
+#include @"generateCostListDlg\generateCostListDlg.pro"

@@ -9,7 +9,7 @@ class facts
     listSet : mapM{integer Cost, mapM{groupTemplate*, setM{tuple{integer Count, shipClass::fleetBuilderStats}**}}} := erroneous.
 
 clauses
-    buildFleet_nd(Points, AvailableShips) :-
+    buildFleet_dt(Points, AvailableShips) = listSet :-
         gameSize_var := getGameSize_dt(Points),
         totalPoints := Points,
         listSet := mapM_redBlack::new(),
@@ -36,8 +36,6 @@ clauses
 %                        Subset:insert(list::sort(BattlegroupTemplateList)),
 %                        totalCount := totalCount + 1,
 %                        nothing(BattlegroupTemplateList),
-    buildFleet_nd(_, _) :-
-        nothing(listSet).
 
 class predicates
     generateCostLists_nd : (tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}*, integer CurrentCost = 0,
@@ -351,5 +349,10 @@ clauses
     getMaxSize(extraSize([Head | Tail])) = tuple(Groups1 + Groups2, Points1 + Points2) :-
         tuple(Groups1, Points1) = getMaxSize(Head),
         tuple(Groups2, Points2) = getMaxSize(extraSize(Tail)).
+
+clauses
+    groupTemplatePresenter(Template) = presenter::noExpand(Return, toAny(Template)) :-
+        group(FBS, Count) = Template,
+        Return = string::format("%d %s", Count, string::present(FBS)).
 
 end implement fleetBuilder
