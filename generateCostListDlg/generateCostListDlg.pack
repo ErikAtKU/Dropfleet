@@ -1,5 +1,6 @@
-﻿#include @"generateCostListDlg\generateCostListDlg.ph"
+﻿#requires @"generateCostListDlg\generateCostListDlg.dlg"
 
+#include @"generateCostListDlg\generateCostListDlg.ph"
 % privately used packages
 #include @"pfc\gui\controls\textControl\textControl.ph"
 #include @"pfc\gui\controls\scrollControl\scrollControl.ph"

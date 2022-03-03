@@ -20,7 +20,7 @@ clauses
     generate() :-
         listbox_ctl:setList([]),
         Points = tryToTerm(points_ctl:getText()),
-        ListSet = fleetBuilder::buildFleet_dt(Points, fleet::myUCMShips),
+        ListSet = fleetBuilder::buildFleet_dt(Points, fleet::myShaltariShips),
         foreach tuple(Cost, SetMap) in ListSet do
             foreach tuple(Template, _SubMap) in SetMap do
                 listbox_ctl:add(string::format("%d: %s", Cost, string::present(Template)))
