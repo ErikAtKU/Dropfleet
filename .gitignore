@@ -3,7 +3,6 @@
 *.obj
 *.dump
 Dropfleet.prjgrd
-Dropfleet.env
-*.env
 obj/*
 deb/*
+Dropfleet.env
