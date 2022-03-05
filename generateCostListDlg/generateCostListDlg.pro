@@ -60,13 +60,14 @@ facts
     cancel_ctl : button.
     fleetList_scroll : scrollControl.
     fleetList_lbox : listBox.
+    fleetPicker_ctl : fleetPicker.
 
 predicates
     generatedInitialize : ().
 clauses
     generatedInitialize() :-
         setText("generateCostListDlg"),
-        setRect(vpiDomains::rct(50, 40, 650, 332)),
+        setRect(vpiDomains::rct(50, 40, 650, 488)),
         setModal(true),
         setDecoration(titlebar([frameDecoration::closeButton])),
         StaticText_ctl = textControl::new(This),
@@ -108,7 +109,9 @@ clauses
         fleetList_scroll:addScrollListener(onHScroll),
         fleetList_lbox := listBox::new(This),
         fleetList_lbox:setText("listBox"),
-        fleetList_lbox:setRect(vpiDomains::rct(0, 142, 1000, 226)).
+        fleetList_lbox:setRect(vpiDomains::rct(0, 142, 1000, 226)),
+        fleetPicker_ctl := fleetPicker::new(This),
+        fleetPicker_ctl:setRect(vpiDomains::rct(60, 250, 228, 364)).
 % end of automatic code
 
 end implement generateCostListDlg

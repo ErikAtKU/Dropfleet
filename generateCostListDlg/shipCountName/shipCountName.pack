@@ -1,0 +1,10 @@
+﻿#include @"generateCostListDlg\shipCountName\shipCountName.ph"
+
+% privately used packages
+#include @"pfc\string\string.ph"
+#include @"ship\shipClass\shipClass.ph"
+#include @"pfc\gui\controls\controlSupport\controlSupport.ph"
+#include @"pfc\resourceIdentifiers.ph"
+
+% implementations
+#include @"generateCostListDlg\shipCountName\shipCountName.pro"
