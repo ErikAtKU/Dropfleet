@@ -9,9 +9,6 @@ predicates
     getShipCount : () -> integer.
 
 predicates
-    getImageFile : () -> string.
-
-predicates
     newShip : () -> ship.
 
 predicates

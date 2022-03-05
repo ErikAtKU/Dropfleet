@@ -1,0 +1,12 @@
+﻿#include @"generateCostListDlg\lboxScroll_ctl\lboxScroll_ctl.ph"
+
+% privately used packages
+#include @"pfc\math\math.ph"
+#include @"pfc\list\list.ph"
+#include @"pfc\gui\controls\scrollControl\scrollControl.ph"
+#include @"pfc\gui\controls\groupBox\groupBox.ph"
+#include @"pfc\gui\controls\controlSupport\controlSupport.ph"
+#include @"pfc\resourceIdentifiers.ph"
+
+% implementations
+#include @"generateCostListDlg\lboxScroll_ctl\lboxScroll_ctl.pro"

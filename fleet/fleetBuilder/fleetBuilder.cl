@@ -46,4 +46,11 @@ predicates
 predicates
     groupTemplatePresenter : presenter::presenter{groupTemplate}.
 
+predicates
+    getUCMList : () -> fleetBuilderStats*.
+    getScourgeList : () -> fleetBuilderStats*.
+    getPHRList : () -> fleetBuilderStats*.
+    getShaltariList : () -> fleetBuilderStats*.
+    getResistanceList : () -> fleetBuilderStats*.
+
 end class fleetBuilder

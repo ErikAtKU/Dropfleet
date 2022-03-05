@@ -14,7 +14,4 @@ predicates
 predicates
     getShipCount : () -> integer.
 
-predicates
-    getImageFile : () -> string.
-
 end class shaltariCaesium

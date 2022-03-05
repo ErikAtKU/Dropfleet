@@ -1,7 +1,7 @@
 ﻿using namespace System.Drawing
 
-$input_folder = "C:\ErikPrograms\png1"
-$output_folder = "C:\ErikPrograms\png2"
+$input_folder = "C:\git\Dropfleet\origImages"
+$output_folder = "C:\git\Dropfleet\images"
 $width = 480
 $height = 320
 $BGColor = [Color]::LimeGreen
@@ -27,11 +27,9 @@ Get-ChildItem $input_folder -File | ForEach-Object {
 
 
     $graphics.DrawImage($image, $destination_rect, 0, 0, $image.Width, $image.Height, [GraphicsUnit]::Pixel, $wrapmode)
-
-
-    $destination_image.MakeTransparent($destination_image.GetPixel(1, 1))    
   
+    $string = $_ -replace '\s',''
 
     
-    $destination_image.Save((Join-Path $output_folder ucm$_))
+    $destination_image.Save((Join-Path $output_folder ucm$string))
 }

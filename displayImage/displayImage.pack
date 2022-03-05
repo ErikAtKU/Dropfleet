@@ -4,6 +4,7 @@
 #include @"displayImage\displayImage.ph"
 
 % privately used packages
+#include @"ship\shipClass\shipClass.ph"
 #include @"pfc\core.ph"
 #include @"pfc\gui\controls\button\button.ph"
 #include @"pfc\gui\controls\imageControl\imageControl.ph"

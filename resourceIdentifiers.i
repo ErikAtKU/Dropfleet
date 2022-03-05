@@ -33,4 +33,5 @@ constants
     idd_displayImage = 10028.    % taskWindow\taskWindow.win
     cancel_ctl = 10029.    % taskWindow\taskWindow.win
     imageControl_ctl = 10030.    % taskWindow\taskWindow.win
+    closeAll_ctl = 10031.    % taskWindow\taskWindow.win
 end interface resourceIdentifiers

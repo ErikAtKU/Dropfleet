@@ -48,7 +48,4 @@ clauses
 clauses
     getShipCount() = shipCount.
 
-clauses
-    getImageFile() = string::format("../images/%s.png", class_name()).
-
 end implement phrAgamemnon

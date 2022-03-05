@@ -22,6 +22,9 @@ predicates
     onScroll : scrollControl::scrollListener.
 clauses
     onScroll(_Source, _ScrollType, ThumbPosition) :-
+        (ThumbPosition < 0 or 100 < ThumbPosition),
+        !.
+    onScroll(_Source, _ScrollType, ThumbPosition) :-
         Count = list::length(shipCountNameList),
         CtlHeight = shipCountName_ctl:getHeight() + 1,
         Height = groupBox_ctl:getHeight(),
@@ -46,7 +49,6 @@ clauses
             W = ShipCountName_ctl:getWidth(),
             H = ShipCountName_ctl:getHeight(),
             ShipCountName_ctl:setRect(vpiDomains::rct(3, 0, 3 + W, H)),
-            ShipCountName_ctl:setFBS(ucmToulon::getFleetBuilderStats()),
             ShipCountName_ctl:setFBS(FBS),
             ShipCountName_ctl:show(),
             shipCountNameList := list::append(shipCountNameList, [ShipCountName_ctl])
@@ -58,6 +60,39 @@ clauses
         onScroll(vertScroll_ctl, vpiDomains::sc_lineUp, vertScroll_ctl:getThumbPosition()).
     addShipList(_Ships) :-
         deleteAllOthers().
+
+clauses
+    addModelList(ModelList) :-
+        [First | Rest] = ModelList,
+        !,
+        deleteAllOthers(),
+        shipCountName_ctl:setModel(First),
+        shipCountName_ctl:setVisible(true),
+        shipCountNameList := [shipCountName_ctl],
+        foreach Model in Rest do
+            ShipCountName_ctl = shipCountName::new(groupBox_ctl),
+            W = ShipCountName_ctl:getWidth(),
+            H = ShipCountName_ctl:getHeight(),
+            ShipCountName_ctl:setRect(vpiDomains::rct(3, 0, 3 + W, H)),
+            ShipCountName_ctl:setModel(Model),
+            ShipCountName_ctl:show(),
+            shipCountNameList := list::append(shipCountNameList, [ShipCountName_ctl])
+        end foreach,
+        if [_, SecondShipCount | _] = shipCountNameList then
+            shipCountName_ctl:setRect(SecondShipCount:getRect())
+        end if,
+        vertScroll_ctl:setThumbPosition(0),
+        onScroll(vertScroll_ctl, vpiDomains::sc_lineUp, vertScroll_ctl:getThumbPosition()).
+    addModelList(_Ships) :-
+        deleteAllOthers().
+
+clauses
+    getFleetRange() = List :-
+        List =
+            [ GroupRange ||
+                ShipCountName in shipCountNameList, %+
+                    GroupRange = ShipCountName:getGroupRange()
+            ].
 
 predicates
     deleteAllOthers : ().
@@ -77,7 +112,7 @@ clauses
     onFrameScroll(_Source, ScrollCode, _ThumbPosition) :-
         Mod = if ScrollCode = 1 then -1 elseif ScrollCode = 2 then 1 else 0 end if,
         vertScroll_ctl:setThumbPosition(vertScroll_ctl:getThumbPosition() + Mod),
-        onScroll(vertScroll_ctl, ScrollCode, vertScroll_ctl:getThumbPosition()).
+        delayCall(1, { () :- onScroll(vertScroll_ctl, ScrollCode, vertScroll_ctl:getThumbPosition()) }).
 
 % This code is maintained automatically, do not update it manually.
 facts

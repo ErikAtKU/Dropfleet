@@ -22,6 +22,12 @@ clauses
         name_ctl:setText(string::present(FBS)).
 
 clauses
+    setModel(tuple(MinNum, MaxNum, FBS)) :-
+        setFBS(FBS),
+        min_int:setText(toString(MinNum)),
+        max_int:setText(toString(MaxNum)).
+
+clauses
     getGroupRange() = Return :-
         Min = tryToTerm(min_int:getText()),
         Max = tryToTerm(max_int:getText()),
@@ -48,11 +54,17 @@ clauses
         !.
     onMod(_Source).
 
+predicates
+    onClick : button::clickResponder.
+clauses
+    onClick(_Source) = button::defaultAction :-
+        displayImage::displayImage(This, fbs).
+
 % This code is maintained automatically, do not update it manually.
 facts
     min_int : editControl.
     max_int : editControl.
-    name_ctl : editControl.
+    name_ctl : button.
 
 predicates
     generatedInitialize : ().
@@ -69,10 +81,13 @@ clauses
         max_int:setText("1"),
         max_int:setRect(vpiDomains::rct(20, 0, 36, 12)),
         max_int:addModifiedListener(onMod),
-        name_ctl := editControl::new(This),
+        name_ctl := button::new(This),
         name_ctl:setText("UCM"),
-        name_ctl:setRect(vpiDomains::rct(36, 0, 136, 12)),
-        name_ctl:setReadOnly(true).
+        name_ctl:setPosition(36, 0),
+        name_ctl:setWidth(100),
+        name_ctl:defaultHeight := false,
+        name_ctl:setHeight(12),
+        name_ctl:setClickResponder(onClick).
 % end of automatic code
 
 end implement shipCountName

@@ -2,6 +2,7 @@
 #include @"taskWindow\taskWindow.ph"
 
 % privately used packages
+#include @"fleet\fleet.ph"
 #include @"generateCostListDlg\generateCostListDlg.ph"
 #include @"ship\ucmToulon\ucmToulon.ph"
 #include @"displayImage\displayImage.ph"

@@ -360,4 +360,133 @@ clauses
         group(FBS, Count) = Template,
         Return = string::format("%d %s", Count, string::present(FBS)).
 
+clauses
+    getUCMList() = UCMList :-
+        UCMList =
+            [
+                ucmAtlantis::getFleetBuilderStats(),
+                ucmAvalon::getFleetBuilderStats(),
+                ucmBeijing::getFleetBuilderStats(),
+                ucmBerlin::getFleetBuilderStats(),
+                ucmHavana::getFleetBuilderStats(),
+                ucmIstanbul::getFleetBuilderStats(),
+                ucmJakarta::getFleetBuilderStats(),
+                ucmJohannesburg::getFleetBuilderStats(),
+                ucmKyiv::getFleetBuilderStats(),
+                ucmLima::getFleetBuilderStats(),
+                ucmLondon::getFleetBuilderStats(),
+                ucmLysander::getFleetBuilderStats(),
+                ucmMadrid::getFleetBuilderStats(),
+                ucmMoscow::getFleetBuilderStats(),
+                ucmNewCairo::getFleetBuilderStats(),
+                ucmNewOrleans::getFleetBuilderStats(),
+                ucmNewYork::getFleetBuilderStats(),
+                ucmNuuk::getFleetBuilderStats(),
+                ucmOsaka::getFleetBuilderStats(),
+                ucmPerth::getFleetBuilderStats(),
+                ucmReykjavik::getFleetBuilderStats(),
+                ucmRio::getFleetBuilderStats(),
+                ucmRome::getFleetBuilderStats(),
+                ucmSanFransisco::getFleetBuilderStats(),
+                ucmSantiago::getFleetBuilderStats(),
+                ucmSeattle::getFleetBuilderStats(),
+                ucmStPetersburg::getFleetBuilderStats(),
+                ucmTaipei::getFleetBuilderStats(),
+                ucmTokyo::getFleetBuilderStats(),
+                ucmToulon::getFleetBuilderStats(),
+                ucmVancouver::getFleetBuilderStats(),
+                ucmVenice::getFleetBuilderStats(),
+                ucmVienna::getFleetBuilderStats(),
+                ucmWashington::getFleetBuilderStats()
+            ].
+
+clauses
+    getScourgeList() = FleetBuilderStats_List :-
+        exception::raise_notImplemented().
+
+clauses
+    getPHRList() = PHRList :-
+        PHRList =
+            [
+                phrAchilles::getFleetBuilderStats(),
+                phrAgamemnon::getFleetBuilderStats(),
+                phrAgrippa::getFleetBuilderStats(),
+                phrAjax::getFleetBuilderStats(),
+                phrAndromeda::getFleetBuilderStats(),
+                phrAriadne::getFleetBuilderStats(),
+                phrBellerophon::getFleetBuilderStats(),
+                phrCalypso::getFleetBuilderStats(),
+                phrCastor::getFleetBuilderStats(),
+                phrEcho::getFleetBuilderStats(),
+                phrElectra::getFleetBuilderStats(),
+                phrEuropa::getFleetBuilderStats(),
+                phrGanymede::getFleetBuilderStats(),
+                phrHarpocrates::getFleetBuilderStats(),
+                phrHector::getFleetBuilderStats(),
+                phrHeracles::getFleetBuilderStats(),
+                phrIkarus::getFleetBuilderStats(),
+                phrJason::getFleetBuilderStats(),
+                phrLeonidas::getFleetBuilderStats(),
+                phrMedea::getFleetBuilderStats(),
+                phrMinos::getFleetBuilderStats(),
+                phrOdysseus::getFleetBuilderStats(),
+                phrOrion::getFleetBuilderStats(),
+                phrOrpheus::getFleetBuilderStats(),
+                phrOurania::getFleetBuilderStats(),
+                phrPandora::getFleetBuilderStats(),
+                phrPegasus::getFleetBuilderStats(),
+                phrPerseus::getFleetBuilderStats(),
+                phrPollux::getFleetBuilderStats(),
+                phrPompeius::getFleetBuilderStats(),
+                phrPriam::getFleetBuilderStats(),
+                phrRemus::getFleetBuilderStats(),
+                phrRomulus::getFleetBuilderStats(),
+                phrScipio::getFleetBuilderStats(),
+                phrTheseus::getFleetBuilderStats()
+            ].
+
+clauses
+    getShaltariList() = ShaltariList :-
+        ShaltariList =
+            [
+                shaltariAdamant::getFleetBuilderStats(),
+                shaltariAmber::getFleetBuilderStats(),
+                shaltariAmethyst::getFleetBuilderStats(),
+                shaltariAquamarine::getFleetBuilderStats(),
+                shaltariAzurite::getFleetBuilderStats(),
+                shaltariBasalt::getFleetBuilderStats(),
+                shaltariCaesium::getFleetBuilderStats(),
+                shaltariChromium::getFleetBuilderStats(),
+                shaltariCobalt::getFleetBuilderStats(),
+                shaltariDiamond::getFleetBuilderStats(),
+                shaltariEmerald::getFleetBuilderStats(),
+                shaltariGallium::getFleetBuilderStats(),
+                shaltariGlass::getFleetBuilderStats(),
+                shaltariGoethite::getFleetBuilderStats(),
+                shaltariGranite::getFleetBuilderStats(),
+                shaltariHelium::getFleetBuilderStats(),
+                shaltariHematite::getFleetBuilderStats(),
+                shaltariJade::getFleetBuilderStats(),
+                shaltariJet::getFleetBuilderStats(),
+                shaltariMercury::getFleetBuilderStats(),
+                shaltariObsidian::getFleetBuilderStats(),
+                shaltariOnyx::getFleetBuilderStats(),
+                shaltariOpal::getFleetBuilderStats(),
+                shaltariPalladium::getFleetBuilderStats(),
+                shaltariPlatinum::getFleetBuilderStats(),
+                shaltariPlutonium::getFleetBuilderStats(),
+                shaltariRuby::getFleetBuilderStats(),
+                shaltariSapphire::getFleetBuilderStats(),
+                shaltariSelenium::getFleetBuilderStats(),
+                shaltariSilicon::getFleetBuilderStats(),
+                shaltariTopaz::getFleetBuilderStats(),
+                shaltariTurquoise::getFleetBuilderStats(),
+                shaltariUranium::getFleetBuilderStats(),
+                shaltariVoidgate::getFleetBuilderStats()
+            ].
+
+clauses
+    getResistanceList() = FleetBuilderStats_List :-
+        exception::raise_notImplemented().
+
 end implement fleetBuilder

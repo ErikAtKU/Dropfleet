@@ -44,7 +44,4 @@ clauses
 clauses
     getShipCount() = shipCount.
 
-clauses
-    getImageFile() = string::format("../images/%s.bmp", class_name()).
-
 end implement ucmSeattle

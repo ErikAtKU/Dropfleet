@@ -4,14 +4,46 @@ implement generateCostListDlg inherits dialog
     open core, vpiDomains
 
 clauses
-    display(Parent) = Dialog :-
-        Dialog = new(Parent),
+    display(Parent, Faction, Models) = Dialog :-
+        FactionList = fillFactionMap(Faction, Models),
+        Dialog = new(Parent, FactionList),
         Dialog:show().
 
+class predicates
+    fillFactionMap : (faction, tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* OwnedFleet)
+        -> tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* FullFleet.
 clauses
-    new(Parent) :-
+    fillFactionMap(ucm, Fleet) = Return :-
+        Return = fillFactionMap_helper(fleetBuilder::getUCMList(), Fleet).
+    fillFactionMap(scourge, Fleet) = Return :-
+        Return = fillFactionMap_helper(fleetBuilder::getScourgeList(), Fleet).
+    fillFactionMap(phr, Fleet) = Return :-
+        Return = fillFactionMap_helper(fleetBuilder::getPHRList(), Fleet).
+    fillFactionMap(shaltari, Fleet) = Return :-
+        Return = fillFactionMap_helper(fleetBuilder::getShaltariList(), Fleet).
+    fillFactionMap(resistance, Fleet) = Return :-
+        Return = fillFactionMap_helper(fleetBuilder::getResistanceList(), Fleet).
+
+class predicates
+    fillFactionMap_helper : (shipClass::fleetBuilderStats* ALLShips, tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* OwnedFleet)
+        -> tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* FullFleet.
+clauses
+    fillFactionMap_helper(ALLShips, Models) = Return :-
+        HelpSet = setM_redBlack::newCustom({ (tuple(_, _, LFBS), tuple(_, _, RFBS)) = shipClass::fbsSorter(LFBS, RFBS) }),
+        foreach Ship in ALLShips do
+            HelpSet:insert(tuple(0, 0, Ship))
+        end foreach,
+        foreach Model in Models do
+            HelpSet:remove(Model),
+            HelpSet:insert(Model)
+        end foreach,
+        Return = HelpSet:asList.
+
+clauses
+    new(Parent, Fleet) :-
         dialog::new(Parent),
-        generatedInitialize().
+        generatedInitialize(),
+        delayCall(1, { () :- fleetPicker_ctl:addModelList(Fleet) }).
 
 predicates
     generate : ().
@@ -20,9 +52,8 @@ clauses
         fleetCost_lbox:setList([]),
         LowerPoints = tryToTerm(lowerPoints_ctl:getText()),
         UpperPoints = tryToTerm(upperPoints_ctl:getText()),
-        fleetBuilder::buildFleetCostMap_dt(LowerPoints, UpperPoints, fleet::myShaltariShips),
-        ShipList = list::map(fleet::myShaltariShips, { (tuple(Min, Max, FBS)) = FBS }),
-        fleetPicker_ctl:addShipList(ShipList),
+        FleetRange = fleetPicker_ctl:getFleetRange(),
+        fleetBuilder::buildFleetCostMap_dt(LowerPoints, UpperPoints, FleetRange),
         foreach tuple(Cost, SetMap) in fleetBuilder::getListSet() do
             foreach tuple(Template, _SubMap) in SetMap do
                 fleetCost_lbox:add(string::format("%d: %s", Cost, string::present(Template)))
@@ -37,31 +68,15 @@ clauses
     onGenerate(_Source) = button::defaultAction :-
         generate().
 
-predicates
-    onHScroll : scrollControl::scrollListener.
-clauses
-    onHScroll(fleetCost_scroll, _ScrollType, ThumbPosition) :-
-        New = 0 - ThumbPosition * ((fleetCost_lbox:getWidth() - getWidth()) div 100),
-        fleetCost_lbox:setPosition(New, 20),
-        !.
-    onHScroll(fleetList_scroll, _ScrollType, ThumbPosition) :-
-        New = 0 - ThumbPosition * ((fleetCost_lbox:getWidth() - getWidth()) div 100),
-        fleetCost_lbox:setPosition(New, 20),
-        !.
-    onHScroll(_fleetCost_scroll, _ScrollType, ThumbPosition).
-
 % This code is maintained automatically, do not update it manually.
 facts
     lowerPoints_ctl : editControl.
     upperPoints_ctl : editControl.
     generate_ctl : button.
-    fleetCost_lbox : listBox.
-    fleetCost_scroll : scrollControl.
     ok_ctl : button.
     cancel_ctl : button.
-    fleetList_scroll : scrollControl.
-    fleetList_lbox : listBox.
     fleetPicker_ctl : fleetPicker.
+    fleetCost_lbox : lboxScroll_ctl.
 
 predicates
     generatedInitialize : ().
@@ -73,25 +88,19 @@ clauses
         setDecoration(titlebar([frameDecoration::closeButton])),
         StaticText_ctl = textControl::new(This),
         StaticText_ctl:setText("Points"),
-        StaticText_ctl:setPosition(52, 6),
+        StaticText_ctl:setPosition(4, 8),
+        StaticText_ctl:setWidth(24),
         lowerPoints_ctl := editControl::new(This),
         lowerPoints_ctl:setText("480"),
-        lowerPoints_ctl:setRect(vpiDomains::rct(100, 4, 124, 16)),
+        lowerPoints_ctl:setRect(vpiDomains::rct(32, 6, 56, 18)),
         upperPoints_ctl := editControl::new(This),
         upperPoints_ctl:setText("500"),
-        upperPoints_ctl:setPosition(128, 4),
+        upperPoints_ctl:setPosition(56, 6),
         upperPoints_ctl:setWidth(24),
         generate_ctl := button::new(This),
         generate_ctl:setText("Generate"),
-        generate_ctl:setPosition(180, 2),
+        generate_ctl:setPosition(116, 4),
         generate_ctl:setClickResponder(onGenerate),
-        fleetCost_lbox := listBox::new(This),
-        fleetCost_lbox:setRect(vpiDomains::rct(0, 20, 1000, 104)),
-        fleetCost_lbox:setColumnWidth(6000),
-        fleetCost_scroll := scrollControl::newHorizontal(This),
-        fleetCost_scroll:setPosition(8, 102),
-        fleetCost_scroll:addScrollListener(onHScroll),
-        fleetCost_scroll:setSize(584, 10),
         ok_ctl := button::newOk(This),
         ok_ctl:setText("&OK"),
         ok_ctl:setPosition(472, 272),
@@ -104,15 +113,10 @@ clauses
         cancel_ctl:setSize(56, 16),
         cancel_ctl:defaultHeight := false,
         cancel_ctl:setAnchors([control::right, control::bottom]),
-        fleetList_scroll := scrollControl::newHorizontal(This),
-        fleetList_scroll:setText("scrollControl"),
-        fleetList_scroll:setRect(vpiDomains::rct(8, 224, 592, 234)),
-        fleetList_scroll:addScrollListener(onHScroll),
-        fleetList_lbox := listBox::new(This),
-        fleetList_lbox:setText("listBox"),
-        fleetList_lbox:setRect(vpiDomains::rct(0, 142, 1000, 226)),
         fleetPicker_ctl := fleetPicker::new(This),
-        fleetPicker_ctl:setRect(vpiDomains::rct(60, 250, 228, 364)).
+        fleetPicker_ctl:setRect(vpiDomains::rct(4, 24, 172, 268)),
+        fleetCost_lbox := lboxScroll_ctl::new(This),
+        fleetCost_lbox:setRect(vpiDomains::rct(180, 24, 600, 268)).
 % end of automatic code
 
 end implement generateCostListDlg

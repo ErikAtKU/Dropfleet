@@ -186,6 +186,7 @@
     <item-map filename="fleet\fleetBuilder\fleetBuilder.pack" />
     <item-map filename="generateCostListDlg\fleetPicker\fleetPicker.pack" />
     <item-map filename="generateCostListDlg\generateCostListDlg.pack" />
+    <item-map filename="generateCostListDlg\lboxScroll_ctl\lboxScroll_ctl.pack" />
     <item-map filename="generateCostListDlg\shipCountName\shipCountName.pack" />
     <item-map filename="main.manifest" />
     <item-map filename="main.pack" />

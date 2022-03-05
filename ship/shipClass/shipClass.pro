@@ -117,6 +117,33 @@ clauses
         fbs(_, ClassName, _, _) = FBS.
 
 clauses
+    fbsSorter(Left, Right) = Result :-
+        getFBSTonnage(Left, LTonnage),
+        getFBSTonnage(Right, RTonnage),
+        LTonnage <> RTonnage,
+        if light(X) = LTonnage then
+            Result = if light(Y) = RTonnage then compare(X, Y) else less end if
+        elseif medium = LTonnage then
+            Result = if light(_Y) = RTonnage then greater else less end if
+        elseif heavy = LTonnage then
+            Result = if light(_Y) = RTonnage or medium = RTonnage then greater else less end if
+        else
+            superHeavy(X) = LTonnage,
+            Result = if superHeavy(Y) = RTonnage then compare(X, Y) else greater end if
+        end if,
+        !.
+    fbsSorter(Left, Right) = Result :-
+        getFBSPoints(Left, LPoints),
+        getFBSPoints(Right, RPoints),
+        LPoints <> RPoints,
+        Result = compare(LPoints, RPoints),
+        !.
+    fbsSorter(Left, Right) = Result :-
+        getFBSName(Left, LName),
+        getFBSName(Right, RName),
+        Result = compare(LName, RName).
+
+clauses
     getFBSLaunchCount(FBS, LaunchCount:value) :-
         fbs(conStats(_Points, g(_Min, _Max), _Tonnage), _Name, SpecialList, _Con) = FBS,
         LaunchCount = varM_integer::new(0),
@@ -135,6 +162,15 @@ clauses
                 end if
             end foreach
         end if.
+
+clauses
+    getFBSName(fbs(conStats(_Points, g(_Min, _Max), _Tonnage), Name, _SpecialList, _Con), Name).
+
+clauses
+    getFBSPoints(fbs(conStats(Points, g(_Min, _Max), _Tonnage), _Name, _SpecialList, _Con), Points).
+
+clauses
+    getFBSTonnage(fbs(conStats(_Points, g(_Min, _Max), Tonnage), _Name, _SpecialList, _Con), Tonnage).
 
 clauses
     getFBSDropBulkCount(FBS, DropCount:value, BulkCount:value) :-
@@ -161,5 +197,9 @@ clauses
         list::isMember(rare, SpecialList),
         !.
     getFBSIsRare(_FBS, false).
+
+clauses
+    getFBSImageFile(fbs(conStats(_Points, g(_Min, _Max), _Tonnage), Name, _SpecialList, _Con), ImageFile) :-
+        ImageFile = string::format("../images/%s.png", Name).
 
 end implement shipClass
