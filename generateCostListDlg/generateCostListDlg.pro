@@ -11,8 +11,7 @@ clauses
 clauses
     new(Parent) :-
         dialog::new(Parent),
-        generatedInitialize(),
-        generate().
+        generatedInitialize().
 
 predicates
     generate : ().
@@ -22,6 +21,8 @@ clauses
         LowerPoints = tryToTerm(lowerPoints_ctl:getText()),
         UpperPoints = tryToTerm(upperPoints_ctl:getText()),
         fleetBuilder::buildFleetCostMap_dt(LowerPoints, UpperPoints, fleet::myShaltariShips),
+        ShipList = list::map(fleet::myShaltariShips, { (tuple(Min, Max, FBS)) = FBS }),
+        fleetPicker_ctl:addShipList(ShipList),
         foreach tuple(Cost, SetMap) in fleetBuilder::getListSet() do
             foreach tuple(Template, _SubMap) in SetMap do
                 fleetCost_lbox:add(string::format("%d: %s", Cost, string::present(Template)))

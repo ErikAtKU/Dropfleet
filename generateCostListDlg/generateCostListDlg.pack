@@ -2,6 +2,7 @@
 
 #include @"generateCostListDlg\generateCostListDlg.ph"
 % privately used packages
+#include @"pfc\list\list.ph"
 #include @"generateCostListDlg\fleetPicker\fleetPicker.ph"
 #include @"pfc\gui\controls\textControl\textControl.ph"
 #include @"pfc\gui\controls\scrollControl\scrollControl.ph"

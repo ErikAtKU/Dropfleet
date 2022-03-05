@@ -59,19 +59,19 @@ predicates
 clauses
     generatedInitialize() :-
         setText("shipCountName"),
-        setSize(140, 14),
+        setSize(140, 12),
         min_int := editControl::new(This),
         min_int:setText("0"),
-        min_int:setPosition(4, 2),
+        min_int:setPosition(4, 0),
         min_int:setWidth(16),
         min_int:addModifiedListener(onMod),
         max_int := editControl::new(This),
         max_int:setText("1"),
-        max_int:setRect(vpiDomains::rct(20, 2, 36, 14)),
+        max_int:setRect(vpiDomains::rct(20, 0, 36, 12)),
         max_int:addModifiedListener(onMod),
         name_ctl := editControl::new(This),
         name_ctl:setText("UCM"),
-        name_ctl:setRect(vpiDomains::rct(36, 2, 136, 14)),
+        name_ctl:setRect(vpiDomains::rct(36, 0, 136, 12)),
         name_ctl:setReadOnly(true).
 % end of automatic code
 
