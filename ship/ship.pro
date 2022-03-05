@@ -49,7 +49,7 @@ clauses
     getShipPoints() = shipPoints.
 
 clauses
-    getHull() = hull.
+    getHull() = hull - damage.
 
 clauses
     getThrust() = thrust.

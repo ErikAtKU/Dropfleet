@@ -4,19 +4,24 @@ implement fleetBuilder
     open core, shipClass
 
 class facts
-    totalPoints : integer := 0.
+    lowerPoints : integer := 0.
+    upperPoints : integer := 0.
     gameSize_var : gameSize := skirmish.
-    listSet : mapM{integer Cost, mapM{groupTemplate*, setM{tuple{integer Count, shipClass::fleetBuilderStats}**}}} := erroneous.
+    listSet : mapM{integer Cost, mapM{groupTemplate*, setM{fleet}}} := erroneous.
 
 clauses
-    buildFleet_dt(Points, AvailableShips) = listSet :-
-        gameSize_var := getGameSize_dt(Points),
-        totalPoints := Points,
+    buildFleetCostMap_dt(LowerPoints, UpperPoints, AvailableShips) :-
+        gameSize_var := getGameSize_dt(UpperPoints),
+        lowerPoints := LowerPoints,
+        upperPoints := UpperPoints,
         listSet := mapM_redBlack::new(),
         foreach tuple(TotalCost, TotalList) = generateCostLists_nd(AvailableShips) do
             SetMap = listSet:get_default(TotalCost, mapM_redBlack::new()),
             _Subset = SetMap:get_default(TotalList, setM_redBlack::new())
         end foreach.
+
+clauses
+    getListSet() = listSet.
 %        fleetSize(_, tuple(MinPoints, MaxPoints), shipClass::g(PMin, PMax), shipClass::g(LMin, LMax), shipClass::g(VMin, VMax),
 %                shipClass::g(FMin, FMax), MaxGroups, _, _, _)
 %            = gameSize_var,
@@ -59,7 +64,7 @@ clauses
         Count = std::fromTo(Lower, Upper), %+
             NewCost = Points * Count,
             TotalCost = NewCost + CurrentCost,
-            TotalCost <= totalPoints,
+            TotalCost <= upperPoints,
             Count * LaunchCount <= MaxLaunch,
             NewGroup = group(FBS, Count),
             Return = generateCostLists_nd(RemainingList, TotalCost, [NewGroup | CurrentGroups]).
@@ -72,11 +77,11 @@ class predicates
     checkConditions_dt : (integer CurrentCost, groupTemplate* CurrentGroups) determ.
 clauses
     checkConditions_dt(CurrentCost, _CurrentGroups) :-
-        30 < totalPoints - CurrentCost,
+        CurrentCost < lowerPoints,
         !,
         fail.
     checkConditions_dt(CurrentCost, _CurrentGroups) :-
-        totalPoints - CurrentCost < 0,
+        upperPoints < CurrentCost,
         !,
         fail.
     checkConditions_dt(_CurrentCost, CurrentGroups) :-
@@ -269,7 +274,7 @@ clauses
             tuple(ReturnCost, ReturnList) = generateForTonnageList(GroupsLeft - 1, Rest, FBSList),
             FullPoints = PointCost + ReturnCost,
             fleetSize(_Name, _Tuple, _Pathfinder, _Line, _Vanguard, _Flag, _MaxGroups, _MaxLaunch, _MaxRares, GroupSize) = gameSize_var,
-            FullPoints / GroupSize < totalPoints.
+            FullPoints / GroupSize < upperPoints.
 
 class predicates
     buildNGroups_nd : (integer Count, shipClass::fleetBuilderStats*) -> tuple{integer Points, tuple{integer Count, shipClass::fleetBuilderStats}*}
