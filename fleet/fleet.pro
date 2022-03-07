@@ -20,7 +20,7 @@ class facts
         ].
     myShaltariShips : tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* :=
         [
-            tuple(1, 1, shaltariEmerald::getFleetBuilderStats()),
+            tuple(0, 1, shaltariEmerald::getFleetBuilderStats()),
             tuple(0, 0, shaltariAmber::getFleetBuilderStats()),
             tuple(0, 0, shaltariGranite::getFleetBuilderStats()),
             tuple(0, 0, shaltariObsidian::getFleetBuilderStats()),
@@ -30,11 +30,11 @@ class facts
             tuple(0, 0, shaltariBasalt::getFleetBuilderStats()),
             tuple(0, 0, shaltariOnyx::getFleetBuilderStats()),
             tuple(0, 0, shaltariAzurite::getFleetBuilderStats()),
-            tuple(3, 3, shaltariVoidgate::getFleetBuilderStats()),
-            tuple(0, 4, shaltariTopaz::getFleetBuilderStats()),
-            tuple(0, 4, shaltariJade::getFleetBuilderStats()),
-            tuple(0, 4, shaltariAmethyst::getFleetBuilderStats()),
-            tuple(0, 1, shaltariOpal::getFleetBuilderStats())
+            tuple(0, 3, shaltariVoidgate::getFleetBuilderStats()),
+            tuple(0, 0, shaltariTopaz::getFleetBuilderStats()),
+            tuple(0, 2, shaltariJade::getFleetBuilderStats()),
+            tuple(0, 2, shaltariAmethyst::getFleetBuilderStats()),
+            tuple(0, 0, shaltariOpal::getFleetBuilderStats())
         ].
 
 end implement fleet
