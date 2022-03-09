@@ -34,6 +34,7 @@ domains
         advancedECMSuite;
         aegis(integer);
         atmospheric;
+        cloakingCrest;
         detector;
         dreadnought;
         freeAdmiral(integer);
@@ -43,6 +44,7 @@ domains
         monitor_stat;
         open_stat;
         outlier;
+        partialCloak;
         rare;
         shieldBooster;
         stealth;
@@ -53,6 +55,9 @@ domains
         ourania_stat;
         remus_stat;
         pegasus_stat;
+        hiruko_stat;
+        parasite_stat;
+        umbra_stat;
         venice_stat.
 
 domains
@@ -76,12 +81,13 @@ domains
         haywire;
         impel(integer);
         ion(integer);
+        linked(integer);
+        lowLevel;
         mauler(integer);
         overcharged;
         particle;
-        linked(integer);
-        lowLevel;
         reEntry;
+        scald;
         siphonPower;
         squadron(integer).
     caType = standard; beam; swarmer.
@@ -109,7 +115,9 @@ domains
         bulkLander_stats(string Name, real Thrust);
         dropships_stats(string Name, real Thrust);
         gate_stats(string Name).
-    launchSpecial = limited(integer).
+    launchSpecial =
+        limited(integer);
+        corruptor.
 
 domains
     fleetBuilderStats =
@@ -141,6 +149,12 @@ constants
     ucmTorpedoes : torpedoSystem = torpedo_stats("UCM Torpedoes", 9.0, d6(2, p), i(4), i(2), []).
     ucmLightTorpedoes : torpedoSystem = torpedo_stats("UCM Light Torpedoes", 14.0, d6(2, p), i(4), i(1), []).
     ucmHeavyTorpedo : torpedoSystem = torpedo_stats("UCM Heavy Torpedoes", 9.0, d6(2, p), i(4), i(4), []).
+
+constants
+    scourgeFighter : strikeCraftSystem = fighter_stats("Scourge Fighters", 24.0, 3, []).
+    scourgeBomber : strikeCraftSystem = bomber_stats("Scourge Bombers", 15.0, d6(3, p), i(2), i(1), [scald]).
+    scourgeFightersBombers : strikeCraftSystem = fighterBomber_stats(scourgeFighter, scourgeBomber).
+    scourgeTorpedo : torpedoSystem = torpedo_stats("Scourge Torpedoes", 9.0, d3(3, p), i(3), i(2), [corruptor]).
 
 predicates
     shipPoints : () -> integer.
