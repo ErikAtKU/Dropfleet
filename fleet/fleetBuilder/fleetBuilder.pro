@@ -401,8 +401,43 @@ clauses
             ].
 
 clauses
-    getScourgeList() = FleetBuilderStats_List :-
-        exception::raise_notImplemented().
+    getScourgeList() = ScourgeList :-
+        ScourgeList =
+            [
+                scourgeAkuma::getFleetBuilderStats(),
+                scourgeBanshee::getFleetBuilderStats(),
+                scourgeBasilisk::getFleetBuilderStats(),
+                scourgeCharybdis::getFleetBuilderStats(),
+                scourgeChimera::getFleetBuilderStats(),
+                scourgeCthulu::getFleetBuilderStats(),
+                scourgeDaemon::getFleetBuilderStats(),
+                scourgeDjinn::getFleetBuilderStats(),
+                scourgeDragon::getFleetBuilderStats(),
+                scourgeGargoyle::getFleetBuilderStats(),
+                scourgeHarpy::getFleetBuilderStats(),
+                scourgeHiruko::getFleetBuilderStats(),
+                scourgeHydra::getFleetBuilderStats(),
+                scourgeIfrit::getFleetBuilderStats(),
+                scourgeIncubus::getFleetBuilderStats(),
+                scourgeLamassu::getFleetBuilderStats(),
+                scourgeManticore::getFleetBuilderStats(),
+                scourgeNickar::getFleetBuilderStats(),
+                scourgeNosferatu::getFleetBuilderStats(),
+                scourgeParasite::getFleetBuilderStats(),
+                scourgeRaiju::getFleetBuilderStats(),
+                scourgeRevenant::getFleetBuilderStats(),
+                scourgeScylla::getFleetBuilderStats(),
+                scourgeShadow::getFleetBuilderStats(),
+                scourgeShedu::getFleetBuilderStats(),
+                scourgeShenlong::getFleetBuilderStats(),
+                scourgeSphinx::getFleetBuilderStats(),
+                scourgeStrix::getFleetBuilderStats(),
+                scourgeSuccubus::getFleetBuilderStats(),
+                scourgeUmbra::getFleetBuilderStats(),
+                scourgeWraith::getFleetBuilderStats(),
+                scourgeWyvern::getFleetBuilderStats(),
+                scourgeYokai::getFleetBuilderStats()
+            ].
 
 clauses
     getPHRList() = PHRList :-

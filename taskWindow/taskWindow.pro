@@ -53,7 +53,8 @@ clauses
 predicates
     onEditUndo : window::menuItemListener.
 clauses
-    onEditUndo(_Source, _MenuTag).
+    onEditUndo(_Source, _MenuTag) :-
+        _ = generateCostListDlg::display(This, generateCostListDlg::scourge, []).
 
 predicates
     onEditRedo : window::menuItemListener.
@@ -70,7 +71,8 @@ clauses
 predicates
     onEditCopy : window::menuItemListener.
 clauses
-    onEditCopy(_Source, _MenuTag).
+    onEditCopy(_Source, _MenuTag) :-
+        _ = generateCostListDlg::display(This, generateCostListDlg::phr, []).
 
 predicates
     onEditPaste : window::menuItemListener.
