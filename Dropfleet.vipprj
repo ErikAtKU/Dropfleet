@@ -346,6 +346,7 @@
     <item-map filename="taskWindow\Toolbars\SaveFileBitmap.bmp" resource_id="idb_SaveFileBitmap" />
     <item-map filename="taskWindow\Toolbars\Toolbars.pack" />
     <item-map filename="taskWindow\Toolbars\UndoBitmap.bmp" resource_id="idb_UndoBitmap" />
+    <item-map filename="weapon\weapon.pack" />
   </item-set>
   <setting-set key="target">
     <setting-map target="Win32">

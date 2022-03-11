@@ -1,0 +1,9 @@
+﻿#include @"weapon\weapon.ph"
+
+% privately used packages
+#include @"pfc\math\math.ph"
+#include @"pfc\std\std.ph"
+#include @"pfc\collection\M\varM\varM.ph"
+#include @"pfc\collection\M\mapM_redBlack\mapM_redBlack.ph"
+% implementations
+#include @"weapon\weapon.pro"
