@@ -12,4 +12,8 @@ predicates
 constructors
     new : (window Parent, tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* Fleet).
 
+predicates
+    fillFactionMap : (faction, tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* OwnedFleet)
+        -> tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* FullFleet.
+
 end class generateCostListDlg

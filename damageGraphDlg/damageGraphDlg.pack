@@ -1,0 +1,26 @@
+﻿#include @"damageGraphDlg\damageGraphDlg.ph"
+
+% privately used packages
+#include @"pfc\gui\controls\textControl\textControl.ph"
+#include @"ship\phrMinos\phrMinos.ph"
+#include @"ship\phrMedea\phrMedea.ph"
+#include @"ship\phrAndromeda\phrAndromeda.ph"
+#include @"ship\phrPandora\phrPandora.ph"
+#include @"ship\phrEuropa\phrEuropa.ph"
+#include @"weapon\weapon.ph"
+#include @"pfc\string\string.ph"
+#include @"pfc\collection\M\setM_redBlack\setM_redBlack.ph"
+#include @"fleet\fleetBuilder\fleetBuilder.ph"
+#include @"generateCostListDlg\damagePicker\damagePicker.ph"
+#include @"pfc\gui\controls\editControl\editControl.ph"
+#include @"damageGraph\damageGraph.ph"
+#include @"generateCostListDlg\lboxScroll_ctl\lboxScroll_ctl.ph"
+#include @"ship\shipClass\shipClass.ph"
+#include @"pfc\gui\gdiplus\brush\linearGradientBrush\linearGradientBrush.ph"
+#include @"pfc\collection\collection.ph"
+#include @"pfc\gui\controls\button\button.ph"
+#include @"pfc\gui\gui.ph"
+#include @"pfc\resourceIdentifiers.ph"
+
+% implementations
+#include @"damageGraphDlg\damageGraphDlg.pro"

@@ -23,10 +23,10 @@ domains
         superHeavy(integer).
     group = g(integer, integer).
     roll =
-        d3(integer, diemod);
-        d6(integer, diemod);
+        %d3(integer, diemod);
+        d6(integer Value, diemod Diemod);
         star.
-    diemod = m; e; p.
+    diemod = e; p.
     shaltariSplit =
         sig(real, real);
         arm(roll, roll).
@@ -82,7 +82,9 @@ domains
         impel(integer);
         ion(integer);
         linked(integer);
+        limited(integer);
         lowLevel;
+        lowPower;
         mauler(integer);
         overcharged;
         particle;
@@ -105,8 +107,8 @@ domains
 
 domains
     launchSystem =
-        torpedo(torpedoSystem, integer Launch, launchSpecial*);
-        strikeCraft(strikeCraftSystem, integer Launch, launchSpecial*).
+        torpedo(torpedoSystem, integer Launch, weaponSpecial*);
+        strikeCraft(strikeCraftSystem, integer Launch, weaponSpecial*).
     torpedoSystem = torpedo_stats(string Name, real Thrust, roll Lock, count Attack, count Damage, weaponSpecial* Special = []).
     strikeCraftSystem =
         fighter_stats(string Name, real Thrust, integer PointDefenseBonus, weaponSpecial* Special = []);
@@ -115,9 +117,6 @@ domains
         bulkLander_stats(string Name, real Thrust);
         dropships_stats(string Name, real Thrust);
         gate_stats(string Name).
-    launchSpecial =
-        limited(integer);
-        corruptor.
 
 domains
     fleetBuilderStats =
@@ -140,7 +139,7 @@ constants
     shaltariFighter : strikeCraftSystem = fighter_stats("Shaltari Fighters", 24.0, 5, []).
     shaltariBomber : strikeCraftSystem = bomber_stats("Shaltari Bombers", 12.0, d6(3, p), i(2), i(1), []).
     shaltariFightersBombers : strikeCraftSystem = fighterBomber_stats(shaltariFighter, shaltariBomber).
-    shaltariTorpedo : torpedoSystem = torpedo_stats("Shaltari Torpedoes", 0.0, d3(4, p), i(0), i(0), []).
+    shaltariTorpedo : torpedoSystem = torpedo_stats("Shaltari Torpedoes", 0.0, d6(4, p), i(0), i(0), []).
 
 constants
     ucmFighter : strikeCraftSystem = fighter_stats("UCM Fighters", 20.0, 3, []).
@@ -154,7 +153,7 @@ constants
     scourgeFighter : strikeCraftSystem = fighter_stats("Scourge Fighters", 24.0, 3, []).
     scourgeBomber : strikeCraftSystem = bomber_stats("Scourge Bombers", 15.0, d6(3, p), i(2), i(1), [scald]).
     scourgeFightersBombers : strikeCraftSystem = fighterBomber_stats(scourgeFighter, scourgeBomber).
-    scourgeTorpedo : torpedoSystem = torpedo_stats("Scourge Torpedoes", 9.0, d3(3, p), i(3), i(2), [corruptor]).
+    scourgeTorpedo : torpedoSystem = torpedo_stats("Scourge Torpedoes", 9.0, d6(3, p), i(3), i(2), [corruptor]).
 
 predicates
     shipPoints : () -> integer.

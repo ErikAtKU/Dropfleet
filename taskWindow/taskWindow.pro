@@ -43,7 +43,10 @@ predicates
     onFileNew : window::menuItemListener.
 clauses
     onFileNew(_Source, _MenuTag) :-
-        displayImage::displayImage(This, ucmToulon::getFleetBuilderStats()).
+        weapon::simulate(fleetBuilder::group(phrEuropa::getFleetBuilderStats(), 3), phrOrpheus::getFleetBuilderStats(), false, false, true, true,
+                5000)
+            = ReturnMap,
+        nothing(ReturnMap).
 
 predicates
     onFileOpen : window::menuItemListener.
@@ -78,8 +81,38 @@ predicates
     onEditPaste : window::menuItemListener.
 clauses
     onEditPaste(_Source, _MenuTag).
-% This code is maintained automatically, do not update it manually.%  13:49:15-5.3.2022
 
+predicates
+    onGraphsUcmGraphs : window::menuItemListener.
+clauses
+    onGraphsUcmGraphs(_Source, _MenuTag) :-
+        _ = damageGraphDlg::display(This, generateCostListDlg::ucm, []).
+
+predicates
+    onGraphsResistanceGraphs : window::menuItemListener.
+clauses
+    onGraphsResistanceGraphs(_Source, _MenuTag) :-
+        _ = damageGraphDlg::display(This, generateCostListDlg::resistance, []).
+
+predicates
+    onGraphsShaltariGraphs : window::menuItemListener.
+clauses
+    onGraphsShaltariGraphs(_Source, _MenuTag) :-
+        _ = damageGraphDlg::display(This, generateCostListDlg::shaltari, []).
+
+predicates
+    onGraphsPhrGraphs : window::menuItemListener.
+clauses
+    onGraphsPhrGraphs(_Source, _MenuTag) :-
+        _ = damageGraphDlg::display(This, generateCostListDlg::phr, []).
+
+predicates
+    onGraphsScourgeGraphs : window::menuItemListener.
+clauses
+    onGraphsScourgeGraphs(_Source, _MenuTag) :-
+        _ = damageGraphDlg::display(This, generateCostListDlg::scourge, []).
+
+% This code is maintained automatically, do not update it manually.
 predicates
     generatedInitialize : ().
 clauses
@@ -103,7 +136,12 @@ clauses
         addMenuItemListener(resourceIdentifiers::id_edit_redo, onEditRedo),
         addMenuItemListener(resourceIdentifiers::id_edit_cut, onEditCut),
         addMenuItemListener(resourceIdentifiers::id_edit_copy, onEditCopy),
-        addMenuItemListener(resourceIdentifiers::id_edit_paste, onEditPaste).
+        addMenuItemListener(resourceIdentifiers::id_edit_paste, onEditPaste),
+        addMenuItemListener(resourceIdentifiers::id_graphs_ucm_graphs, onGraphsUcmGraphs),
+        addMenuItemListener(resourceIdentifiers::id_graphs_resistance_graphs, onGraphsResistanceGraphs),
+        addMenuItemListener(resourceIdentifiers::id_graphs_shaltari_graphs, onGraphsShaltariGraphs),
+        addMenuItemListener(resourceIdentifiers::id_graphs_phr_graphs, onGraphsPhrGraphs),
+        addMenuItemListener(resourceIdentifiers::id_graphs_scourge_graphs, onGraphsScourgeGraphs).
 % end of automatic code
 
 end implement taskWindow

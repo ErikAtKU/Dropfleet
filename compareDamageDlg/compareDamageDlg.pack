@@ -1,0 +1,12 @@
+﻿#include @"compareDamageDlg\compareDamageDlg.ph"
+
+% privately used packages
+#include @"pfc\gui\controls\textControl\textControl.ph"
+#include @"pfc\gui\controls\editControl\editControl.ph"
+#include @"generateCostListDlg\fleetPicker\fleetPicker.ph"
+#include @"pfc\gui\controls\button\button.ph"
+#include @"pfc\gui\gui.ph"
+#include @"pfc\resourceIdentifiers.ph"
+
+% implementations
+#include @"compareDamageDlg\compareDamageDlg.pro"

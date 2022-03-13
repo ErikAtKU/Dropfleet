@@ -9,9 +9,6 @@ clauses
         Dialog = new(Parent, FactionList),
         Dialog:show().
 
-class predicates
-    fillFactionMap : (faction, tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* OwnedFleet)
-        -> tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* FullFleet.
 clauses
     fillFactionMap(ucm, Fleet) = Return :-
         Return = fillFactionMap_helper(fleetBuilder::getUCMList(), Fleet).

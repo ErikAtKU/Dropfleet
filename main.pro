@@ -4,8 +4,10 @@ implement main
 
 clauses
     run() :-
+        Token = gdiplus::startUp(),
         TaskWindow = taskWindow::new(),
-        TaskWindow:show().
+        TaskWindow:show(),
+        gdiplus::shutDown(Token).
 
 end implement main
 

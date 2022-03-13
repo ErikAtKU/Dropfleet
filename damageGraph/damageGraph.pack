@@ -1,0 +1,21 @@
+﻿#include @"damageGraph\damageGraph.ph"
+
+% privately used packages
+#include @"ship\shipClass\shipClass.ph"
+#include @"ship\ucmOsaka\ucmOsaka.ph"
+#include @"fleet\fleetBuilder\fleetBuilder.ph"
+#include @"weapon\weapon.ph"
+#include @"pfc\multiThread\multiThread.ph"
+#include @"pfc\string\string.ph"
+#include @"pfc\collection\M\varM\varM.ph"
+#include @"damageGraph\convertPixelsWidths\convertPixelsWidths.ph"
+#include @"pfc\gui\gdiplus\brush\linearGradientBrush\linearGradientBrush.ph"
+#include @"pfc\list\list.ph"
+#include @"pfc\math\math.ph"
+#include @"pfc\gui\controls\imageControl\imageControl.ph"
+#include @"pfc\collection\collection.ph"
+#include @"pfc\gui\controls\controlSupport\controlSupport.ph"
+#include @"pfc\resourceIdentifiers.ph"
+
+% implementations
+#include @"damageGraph\damageGraph.pro"

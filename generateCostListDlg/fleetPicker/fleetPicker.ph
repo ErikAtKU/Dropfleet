@@ -1,5 +1,6 @@
 ﻿#requires @"generateCostListDlg\fleetPicker\fleetPicker.pack"
 % publicly used packages
+#include @"ship\shipClass\shipClass.ph"
 #include @"pfc\gui\gui.ph"
 #include @"pfc\core.ph"
 

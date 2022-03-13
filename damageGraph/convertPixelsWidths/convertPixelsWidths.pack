@@ -1,0 +1,5 @@
+﻿#include @"damageGraph\convertPixelsWidths\convertPixelsWidths.ph"
+
+% privately used packages
+% implementations
+#include @"damageGraph\convertPixelsWidths\convertPixelsWidths.pro"

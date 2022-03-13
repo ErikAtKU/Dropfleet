@@ -1,4 +1,5 @@
 ﻿implement ship
+    open shipClass
 
 facts
     shipClass_var : shipClass.
@@ -9,49 +10,65 @@ clauses
     new(ShipClass) :-
         shipClass_var := ShipClass.
 
-properties
-    shipPoints : integer (o).
-    scan : real (o).
-    signature : real (o).
-    thrust : real (o).
-    hull : integer (o).
-    armour : shipClass::roll (o).
-    pointDefense : integer (o).
+clauses
+    getShipPoints() = shipClass_var:shipPoints().
 
 clauses
-    shipPoints() = shipClass_var:shipPoints().
-    scan() = shipClass_var:scan().
-    signature() = shipClass_var:signature(shieldsUp).
-    thrust() = shipClass_var:thrust().
-    hull() = shipClass_var:hull().
-    armour() = shipClass_var:armour(shieldsUp).
-    pointDefense() = shipClass_var:pointDefense(shieldsUp).
+    getScan() = shipClass_var:scan().
 
 clauses
-    getWeaponSystem_nd() = shipClass_var:getWeaponSystem_nd().
+    getSignature() = shipClass_var:signature(shieldsUp).
+
+clauses
+    getThrust() = shipClass_var:thrust().
+
+clauses
+    getHull() = shipClass_var:hull() - damage.
+
+clauses
+    getArmour() = shipClass_var:armour(false).
+
+clauses
+    getShields_dt() = shipClass_var:armour(true) :-
+        true = shieldsUp.
+
+clauses
+    getPointDefense() = shipClass_var:pointDefense(shieldsUp).
+
+clauses
+    getTonnage() = shipClass_var:tonnage().
+
+clauses
+    getWeaponSystem_nd(SingleKey, Weapons) :-
+        WepMap = mapM_redBlack::new(),
+        foreach Wep = shipClass_var:getWeaponSystem_nd() and weaponSystem(_Name, _Lock, _Attack, _Damage, _Arc, WeaponSpecial) = Wep do
+            Key =
+                [ SpecialKey ||
+                    Special in WeaponSpecial, %+
+                        if linked(LinkedInt) = Special then
+                            SpecialKey = linked(LinkedInt)
+                        elseif alt(AltVal) = Special then
+                            SpecialKey = alt(AltVal)
+                        else
+                            fail
+                        end if
+                ],
+            List = WepMap:get_default(list::sort(Key), []),
+            WepMap:set(Key, [Wep | List])
+        end foreach,
+        SingleKey = WepMap:getKey_nd(),
+        if [] = SingleKey then
+            WeaponsList = WepMap:get_default(SingleKey, []),
+            Weapons in list::map(WeaponsList, { (Elem) = [Elem] })
+        else
+            Weapons = WepMap:get_default(SingleKey, [])
+        end if.
 
 clauses
     getShipSpecial_nd() = shipClass_var:getShipSpecial_nd().
 
 clauses
-    getScan() = scan.
-
-clauses
-    getSignature() = signature.
-
-clauses
-    getArmour() = armour.
-
-clauses
-    getPointDefense() = pointDefense.
-
-clauses
-    getShipPoints() = shipPoints.
-
-clauses
-    getHull() = hull - damage.
-
-clauses
-    getThrust() = thrust.
+    setShields(ShieldsUp) :-
+        shieldsUp := ShieldsUp.
 
 end implement ship

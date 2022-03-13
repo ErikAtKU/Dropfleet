@@ -1,4 +1,4 @@
-﻿#include @"generateCostListDlg\shipCountName\shipCountName.ph"
+﻿#include @"generateCostListDlg\fleetPicker\shipCountName\shipCountName.ph"
 
 % privately used packages
 #include @"displayImage\displayImage.ph"
@@ -8,4 +8,4 @@
 #include @"pfc\resourceIdentifiers.ph"
 
 % implementations
-#include @"generateCostListDlg\shipCountName\shipCountName.pro"
+#include @"generateCostListDlg\fleetPicker\shipCountName\shipCountName.pro"

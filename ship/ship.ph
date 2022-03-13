@@ -1,6 +1,7 @@
 ﻿#requires @"ship\ship.pack"
 
 % publicly used packages
+#include @"pfc\collection\collection.ph"
 #include @"ship\shipClass\shipClass.ph"
 
 % exported interfaces

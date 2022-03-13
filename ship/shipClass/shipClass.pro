@@ -64,7 +64,7 @@ clauses
         arm(Down, Up) = Armour,
         Return = if ShieldsUp = true then Up else Down end if,
         !.
-    armour(_) = d3(4, e).
+    armour(_) = d6(7, e).
 
     pointDefense(_) = PointDefense :-
         stats(_ShipPoints, _Scan, _Signature, _Thrust, _Hull, _Armour, PointDefense, _GroupSize, _Tonnage) = shipStats_var,
@@ -101,10 +101,32 @@ clauses
         ShipSpecial in shipSpecialList.
 
 clauses
-    getFleetBuilderStats(Stats) = conStats(ShipPointsOut, GroupSizeOut, TonnageOut) :-
-        stats(ShipPointsOut, _Scan, _Signature, _Thrust, _Hull, _Armour, _PointDefense, GroupSizeOut, TonnageOut) = Stats.
-    getFleetBuilderStats(Stats) = conStats(ShipPointsOut, GroupSizeOut, TonnageOut) :-
-        shaltariStats(ShipPointsOut, _Scan, _Signature, _Thrust, _Hull, _Armour, _PointDefense, GroupSizeOut, TonnageOut) = Stats.
+    getFleetBuilderStats(Name, Stats, Special, Constructor) = fbs(ConstructorStats, Name, Special, Constructor) :-
+        stats(ShipPointsOut, _Scan, _Signature, _Thrust, _Hull, _Armour, _PointDefense, GroupSizeOut, TonnageOut) = Stats,
+        ConstructorStats = conStats(ShipPointsOut, GroupSizeOut, TonnageOut).
+    getFleetBuilderStats(Name, Stats, Special, Constructor) = fbs(ConstructorStats, Name, Special, Constructor) :-
+        shaltariStats(ShipPointsOut, _Scan, _Signature, _Thrust, _Hull, _Armour, _PointDefense, GroupSizeOut, TonnageOut) = Stats,
+        ConstructorStats = conStats(ShipPointsOut, GroupSizeOut, TonnageOut).
+
+class predicates
+    trimName : (string Name) -> string TrimmedName.
+clauses
+    trimName(Name) = Return :-
+        string::hasPrefixIgnoreCase(Name, "phr", Return),
+        !.
+    trimName(Name) = Return :-
+        string::hasPrefixIgnoreCase(Name, "scourge", Return),
+        !.
+    trimName(Name) = Return :-
+        string::hasPrefixIgnoreCase(Name, "shaltari", Return),
+        !.
+    trimName(Name) = Return :-
+        string::hasPrefixIgnoreCase(Name, "ucm", Return),
+        !.
+    trimName(Name) = Return :-
+        string::hasPrefixIgnoreCase(Name, "resistance", Return),
+        !.
+    trimName(Name) = Name.
 
 clauses
     matchRosterCatTonnage_dt(cat_light, light(_)).
@@ -113,7 +135,7 @@ clauses
     matchRosterCatTonnage_dt(cat_superHeavy, superHeavy(_)).
 
 clauses
-    fbsPresenter(FBS) = presenter::noExpand(ClassName, toAny(FBS)) :-
+    fbsPresenter(FBS) = presenter::noExpand(trimName(ClassName), toAny(FBS)) :-
         fbs(_, ClassName, _, _) = FBS.
 
 clauses

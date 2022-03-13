@@ -45,8 +45,8 @@ clauses
         shipCount := 0.
 
 clauses
-    getFleetBuilderStats() = fbs(ConstructorStats, class_name(), special_var, { () = newShip() }) :-
-        ConstructorStats = getFleetBuilderStats(shipStats_var).
+    getFleetBuilderStats() = ConstructorStats :-
+        ConstructorStats = getFleetBuilderStats(class_name(), shipStats_var, special_var, { () = newShip() }).
 
 clauses
     getShipCount() = shipCount.

@@ -2,6 +2,12 @@
 #include @"taskWindow\taskWindow.ph"
 
 % privately used packages
+#include @"damageGraphDlg\damageGraphDlg.ph"
+#include @"damageGraph\damageGraph.ph"
+#include @"ship\phrEuropa\phrEuropa.ph"
+#include @"ship\phrOrpheus\phrOrpheus.ph"
+#include @"ship\phrPandora\phrPandora.ph"
+#include @"weapon\weapon.ph"
 #include @"fleet\fleet.ph"
 #include @"generateCostListDlg\generateCostListDlg.ph"
 #include @"ship\ucmToulon\ucmToulon.ph"

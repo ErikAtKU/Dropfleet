@@ -180,14 +180,20 @@
     <item-map filename="$(ProDir)pfc\windowsApi\windowsAPI.pack" />
     <item-map filename="$(ProDir)pfc\windowsApi\WinErrors\winErrors.pack" />
     <item-map filename="aboutDialog\aboutDialog.pack" />
+    <item-map filename="damageGraph\convertPixelsWidths\convertPixelsWidths.pack" />
+    <item-map filename="damageGraph\damageGraph.pack" />
+    <item-map filename="damageGraphDlg\damageGraphDlg.pack" />
+    <item-map filename="dice\dice.pack" />
     <item-map filename="displayImage\displayImage.dlg" resource_id="dlg_displayImage" />
     <item-map filename="displayImage\displayImage.pack" />
     <item-map filename="fleet\fleet.pack" />
     <item-map filename="fleet\fleetBuilder\fleetBuilder.pack" />
+    <item-map filename="generateCostListDlg\damagePicker\damagePicker.pack" />
+    <item-map filename="generateCostListDlg\damagePicker\shipDamagePicker\shipDamagePicker.pack" />
     <item-map filename="generateCostListDlg\fleetPicker\fleetPicker.pack" />
+    <item-map filename="generateCostListDlg\fleetPicker\shipCountName\shipCountName.pack" />
     <item-map filename="generateCostListDlg\generateCostListDlg.pack" />
     <item-map filename="generateCostListDlg\lboxScroll_ctl\lboxScroll_ctl.pack" />
-    <item-map filename="generateCostListDlg\shipCountName\shipCountName.pack" />
     <item-map filename="main.manifest" />
     <item-map filename="main.pack" />
     <item-map filename="main.version" />
@@ -332,9 +338,9 @@
     <item-map filename="ship\ucmWashington\ucmWashington.pack" />
     <item-map filename="taskWindow\TaskMenu.mnu" resource_id="mnu_TaskMenu" />
     <item-map filename="taskWindow\taskWindow.pack" />
-    <item-map filename="taskWindow\taskWindow.win" resource_id="win_2" />
     <item-map filename="taskWindow\Toolbars\CopyBitmap.bmp" resource_id="idb_CopyBitmap" />
     <item-map filename="taskWindow\Toolbars\CutBitmap.bmp" resource_id="idb_CutBitmap" />
+    <item-map filename="taskWindow\Toolbars\graph.bmp" resource_id="idb_graph" />
     <item-map filename="taskWindow\Toolbars\HelpBitmap.bmp" resource_id="idb_HelpBitmap" />
     <item-map filename="taskWindow\Toolbars\NewFileBitmap.bmp" resource_id="idb_NewFileBitmap" />
     <item-map filename="taskWindow\Toolbars\OpenFileBitmap.bmp" resource_id="idb_OpenFileBitmap" />

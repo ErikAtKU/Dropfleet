@@ -8,7 +8,7 @@
 #include @"ship\ucmTokyo\ucmTokyo.ph"
 #include @"pfc\gui\controls\scrollControl\scrollControl.ph"
 #include @"pfc\gui\controls\groupBox\groupBox.ph"
-#include @"generateCostListDlg\shipCountName\shipCountName.ph"
+#include @"generateCostListDlg\fleetPicker\shipCountName\shipCountName.ph"
 #include @"pfc\gui\controls\controlSupport\controlSupport.ph"
 #include @"pfc\resourceIdentifiers.ph"
 

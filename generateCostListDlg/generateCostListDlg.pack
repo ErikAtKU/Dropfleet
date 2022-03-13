@@ -2,6 +2,17 @@
 
 #include @"generateCostListDlg\generateCostListDlg.ph"
 % privately used packages
+#include @"generateCostListDlg\damagePicker\damagePicker.ph"
+#include @"ship\phrMedea\phrMedea.ph"
+#include @"ship\phrMinos\phrMinos.ph"
+#include @"ship\phrPollux\phrPollux.ph"
+#include @"ship\phrAndromeda\phrAndromeda.ph"
+#include @"ship\phrPandora\phrPandora.ph"
+#include @"ship\phrEuropa\phrEuropa.ph"
+#include @"weapon\weapon.ph"
+#include @"pfc\collection\M\mapM_redBlack\mapM_redBlack.ph"
+#include @"damageGraphDlg\damageGraphDlg.ph"
+#include @"damageGraph\damageGraph.ph"
 #include @"pfc\collection\M\setM_redBlack\setM_redBlack.ph"
 #include @"generateCostListDlg\lboxScroll_ctl\lboxScroll_ctl.ph"
 #include @"pfc\list\list.ph"
