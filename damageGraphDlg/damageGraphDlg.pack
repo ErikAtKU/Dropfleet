@@ -11,7 +11,7 @@
 #include @"pfc\string\string.ph"
 #include @"pfc\collection\M\setM_redBlack\setM_redBlack.ph"
 #include @"fleet\fleetBuilder\fleetBuilder.ph"
-#include @"generateCostListDlg\damagePicker\damagePicker.ph"
+#include @"damageGraphDlg\damagePicker\damagePicker.ph"
 #include @"pfc\gui\controls\editControl\editControl.ph"
 #include @"damageGraph\damageGraph.ph"
 #include @"generateCostListDlg\lboxScroll_ctl\lboxScroll_ctl.ph"

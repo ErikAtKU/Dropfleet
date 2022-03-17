@@ -2,7 +2,7 @@
 
 #include @"generateCostListDlg\generateCostListDlg.ph"
 % privately used packages
-#include @"generateCostListDlg\damagePicker\damagePicker.ph"
+#include @"damageGraphDlg\damagePicker\damagePicker.ph"
 #include @"ship\phrMedea\phrMedea.ph"
 #include @"ship\phrMinos\phrMinos.ph"
 #include @"ship\phrPollux\phrPollux.ph"

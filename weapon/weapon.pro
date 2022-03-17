@@ -4,17 +4,13 @@ implement weapon
     open core, shipClass
 
 clauses
-    simulate(Attacker) = ReturnMap :-
-        ReturnMap = simulate(Attacker, ucmOsaka::getFleetBuilderStats(), false, false, true, true, 5000).
-
-clauses
     simulate(Attacker, Defender, ShieldsUp, CAW, WeaponsFree, SingleLinkedDirection, Trials) = ReturnMap :-
         fleetBuilder::group(fbs(_, _, _, AttackerConstructor), AttackerCount) = Attacker,
         AttackShip = AttackerConstructor(),
         fbs(_, _, _, DefenderConstructor) = Defender,
         DefendShip = DefenderConstructor(),
         DefendShip:setShields(ShieldsUp),
-        WeaponDamageList =
+        AllWeaponDamageList =
             [ tuple(WeaponKeySet:asList, AfterLinked) ||
                 AttackShip:getWeaponSystem_nd(WeaponKey, WeaponSystem), %+
                     SingleDamageList =
@@ -46,7 +42,7 @@ clauses
                                     HitsVar:add(Hits),
                                     CritsVar:add(Crits)
                                 end foreach,
-                                Total = HitsVar:value + CritsVar:value
+                                Total = getWeaponDamage(SingleSystem, HitsVar:value, CritsVar:value) * (HitsVar:value + CritsVar:value)
                         ],
                     WeaponKeySet = setM_redBlack::new(WeaponKey),
                     if alt(AltX) in WeaponKeySet then
@@ -56,7 +52,7 @@ clauses
                     else
                         AfterAlt = SingleDamageList
                     end if,
-                    if true = SingleLinkedDirection and linked(LinkedX) in WeaponKeySet then
+                    if true = SingleLinkedDirection and linked(_LinkedX) in WeaponKeySet then
                         ArcList =
                             [ tuple(LinkedTotalVar:value, LinkedCritsVar:value, SubList) ||
                                 ArcToHit in [front(narrow), side(left), side(right), rear], %+
@@ -71,13 +67,76 @@ clauses
                                                 LinkedCritsVar:add(Crits)
                                         ]
                             ],
-                        [tuple(_, _, AfterLinked) | _] = list::sort(ArcList, core::descending),
-                        WeaponKeySet:remove(linked(LinkedX))
+                        [tuple(_, _, AfterLinked) | _] = list::sort(ArcList, core::descending)
                     else
                         AfterLinked = AfterAlt
                     end if,
                     [] <> AfterLinked
             ],
+        if true = SingleLinkedDirection then
+            MaxLinkedTuple = varM::new(tuple(0, 0)),
+            SumLinkedTuple = varM::new(tuple(0, 0)),
+            MaxDirectionalWeaponDamageList = varM::new([]),
+            foreach ArcToHit in [front(narrow), side(left), side(right), rear] do
+                SumLinkedTuple:value := tuple(0, 0),
+                CheckArcWeaponDamageList =
+                    [ tuple(WeaponKeyList, FilteredWeaponSystem) ||
+                        tuple(WeaponKeyList, GroupedWeaponSystem) in AllWeaponDamageList, %+
+                            FilteredWeaponSystem =
+                                [ tuple(Total, Crits, SingleSystem, WeaponFunc) ||
+                                    tuple(Total, Crits, SingleSystem, WeaponFunc) in GroupedWeaponSystem, %+
+                                        isInArc(SingleSystem, ArcToHit),
+                                        tuple(TTotal, TCrits) = SumLinkedTuple:value,
+                                        SumLinkedTuple:value := tuple(TTotal + Total, TCrits + Crits)
+                                ],
+                            [] <> FilteredWeaponSystem
+                    ],
+                if MaxLinkedTuple:value < SumLinkedTuple:value then
+                    MaxLinkedTuple:value := SumLinkedTuple:value,
+                    MaxDirectionalWeaponDamageList:value := CheckArcWeaponDamageList
+                end if
+            end foreach,
+            DirectionalWeaponDamageList = MaxDirectionalWeaponDamageList:value
+        else
+            DirectionalWeaponDamageList = AllWeaponDamageList
+        end if,
+        if true = WeaponsFree then
+            WeaponDamageList = DirectionalWeaponDamageList
+        else
+            NonCAWList =
+                list::sort(
+                    [ tuple(NonCawDamage:value, WeaponKeyList, FilteredWeaponSystem) ||
+                        tuple(WeaponKeyList, GroupedWeaponSystem) in DirectionalWeaponDamageList, %+
+                            NonCawDamage = varM::new(tuple(0, 0)),
+                            FilteredWeaponSystem =
+                                [ tuple(Total, Crits, SingleSystem, WeaponFunc) ||
+                                    tuple(Total, Crits, SingleSystem, WeaponFunc) in GroupedWeaponSystem, %+
+                                        not(isCloseAction(SingleSystem)),
+                                        tuple(TTotal, TCrits) = NonCawDamage:value,
+                                        NonCawDamage:value := tuple(TTotal + Total, TCrits + Crits)
+                                ],
+                            [] <> FilteredWeaponSystem
+                    ],
+                    core::descending),
+            if dreadnought = AttackShip:getShipSpecial_nd() then
+                Take = 2
+            else
+                Take = 1
+            end if,
+            NonCawFinal = list::take(Take, NonCAWList),
+            WeaponDamageList =
+                [ tuple(WeaponKeyList, FilteredWeaponSystem) ||
+                    tuple(_, WeaponKeyList, FilteredWeaponSystem) in NonCawFinal
+                    or
+                    tuple(WeaponKeyList, GroupedWeaponSystem) in DirectionalWeaponDamageList, %+
+                        FilteredWeaponSystem =
+                            [ tuple(Total, Crits, SingleSystem, WeaponFunc) ||
+                                tuple(Total, Crits, SingleSystem, WeaponFunc) in GroupedWeaponSystem, %+
+                                    isCloseAction(SingleSystem)
+                            ],
+                        [] <> FilteredWeaponSystem
+                ]
+        end if,
         LaunchDamageList =
             [ SingleDamageList ||
                 ShipSpecial = AttackShip:getShipSpecial_nd(), %+
@@ -111,13 +170,13 @@ clauses
         PointDefenseRolls = DefendShip:getPointDefense(),
         foreach _ = std::fromTo(1, Trials) do
             DamageVar = varM_integer::new(0),
-            CAWVar = varM_integer::new(0),
+            CAWVar = varM::new([]),
             %Standard Block
             foreach tuple(WeaponKey, SingleDamageList) in WeaponDamageList do
                 foreach tuple(_, _, SingleSystem, WeaponFunc) in SingleDamageList and not(isCloseAction(SingleSystem)) do
                     tuple(Hits, Crits) = WeaponFunc(),
-                    WepDamage = getWeaponDamage(Weapon, Hits, Crits),
-                    WepSpecial = getWeaponSpecial(Weapon),
+                    WepDamage = getWeaponDamage(SingleSystem, Hits, Crits),
+                    WepSpecial = getWeaponSpecial(SingleSystem),
                     DamageVar:add(applySaves(WepSpecial, WepDamage, Hits, Crits, DefendShip))
                 end foreach
             end foreach,
@@ -131,7 +190,6 @@ clauses
             %Launch Block
             foreach SingleDamageList in LaunchDamageList do
                 foreach tuple(_, _, SingleSystem, WeaponFunc) in SingleDamageList do
-                    tuple(Hits, Crits) = WeaponFunc(),
                     tuple(Hits, Crits) = WeaponFunc(),
                     CAWVar:value := [tuple(getLaunchSpecial(SingleSystem), getLaunchDamage(SingleSystem), Hits, Crits) | CAWVar:value]
                 end foreach
@@ -170,7 +228,6 @@ clauses
             LockRoll = BaseLockRoll,
             CritRoll = d6(Lock + 2, Diemod)
         end if,
-        ExtraSquadronCount = if squadron(SquadronCount) in Special and ! and SquadronCount <= AttackerCount then nd6plus(1, 0) else i(0) end if,
         DiceFunction1 =
             { () =
                     [ Die ||
@@ -182,18 +239,22 @@ clauses
                     ] :-
                 DiceCount = dice::getCount(Attack)
             },
-        DiceFunction2 =
-            { () =
-                    [ Die ||
-                        _ = std::fromTo(1, SquadronDiceCount), %+
-                            Die = dice::new(LockRoll, CritRoll),
-                            if true = Particle then
-                                Die:setParticle()
-                            end if
-                    ] :-
-                SquadronDiceCount = dice::getCount(ExtraSquadronCount)
-            },
-        (DiceFunction = DiceFunction1 and _ = std::fromTo(1, AttackerCount) or DiceFunction = DiceFunction2).
+        (DiceFunction = DiceFunction1 and _ = std::fromTo(1, AttackerCount)
+            or if squadron(SquadronCount) in Special and ! and SquadronCount <= AttackerCount then
+                DiceFunction =
+                    { () =
+                            [ Die ||
+                                _ = std::fromTo(1, SquadronDiceCount), %+
+                                    Die = dice::new(LockRoll, CritRoll),
+                                    if true = Particle then
+                                        Die:setParticle()
+                                    end if
+                            ] :-
+                        SquadronDiceCount = dice::getCount(nd6plus(1, 0))
+                    }
+            else
+                fail
+            end if).
     getDiceFunction_nd(_WeaponSystem, _Attacker, _AttackerCount, _Defender) = { () = [] }.
 
 class predicates
@@ -263,13 +324,13 @@ clauses
         !.
 
 class predicates
-    getWeaponDamage : (shipClass::weaponSystem, integer Hits, integer Crits) -> shipClass::count Damage.
+    getWeaponDamage : (shipClass::weaponSystem, integer Hits, integer Crits) -> integer Damage.
 clauses
     getWeaponDamage(weaponSystem(_Name, _Lock, _Attack, star, _Arc, WeaponSpecial), Hits, Crits) = Damage :-
         list::isMember(distortion, WeaponSpecial),
         !,
         Damage = Hits + Crits.
-    getWeaponDamage(weaponSystem(_Name, _Lock, _Attack, Damage, _Arc, _WeaponSpecial), _Hits, _Crits) = Damage.
+    getWeaponDamage(weaponSystem(_Name, _Lock, _Attack, Damage, _Arc, _WeaponSpecial), _Hits, _Crits) = dice::getCount(Damage).
 
 class predicates
     getWeaponSpecial : (weaponSystem) -> shipClass::weaponSpecial*.
@@ -338,14 +399,14 @@ clauses
         Roll = DefendShip:getArmour(),
         HitsDice = dice::new(Roll),
         DamageVar = varM_integer::new(WepDamage * (Hits + Crits)),
-        foreach _ = std::fromTo(1, Hits) and _ = std::fromTo(1, dice::getCount(WepDamage)) do
+        foreach _ = std::fromTo(1, Hits) and _ = std::fromTo(1, WepDamage) do
             if _ = HitsDice:getRoll_dt() then
                 DamageVar:dec()
             end if
         end foreach,
         foreach
             ShieldRoll = DefendShip:getShields_dt() and CritsDice = dice::new(ShieldRoll) and _ = std::fromTo(1, Crits)
-            and _ = std::fromTo(1, dice::getCount(WepDamage))
+            and _ = std::fromTo(1, WepDamage)
         do
             if _ = CritsDice:getRoll_dt() then
                 DamageVar:dec()
@@ -354,7 +415,8 @@ clauses
         Damage = DamageVar:value.
 
 class predicates
-    applyPointDefense : (tuple{shipClass::weaponSpecial, integer Damage, integer Hits, integer Crits}*, integer PD, ship DefendShip) -> Damage.
+    applyPointDefense : (tuple{shipClass::weaponSpecial*, integer Damage, integer Hits, integer Crits}*, integer PD, ship DefendShip)
+        -> integer Damage.
     %  applyPointDefense : (shipClass::launchSystem, integer Hits, integer Crits, ship DefendShip, integer HitsOut [out], integer CritsOut [out]).
 clauses
     applyPointDefense([], _PD, _DefendShip) = 0 :-
@@ -362,7 +424,7 @@ clauses
     applyPointDefense(SpecialList, PD, DefendShip) = OutDamage :-
         PDAttack in SpecialList, %+
             tuple(WeaponSpecial, WepDamage, Hits, Crits) = PDAttack,
-            (list::isMember(particle, WeaponSpecial) orelse list::isMember(closeAction(beam), WeaponSpecia)),
+            (list::isMember(particle, WeaponSpecial) orelse list::isMember(closeAction(beam), WeaponSpecial)),
         !,
         NextList = list::remove(SpecialList, PDAttack),
         Damage = applySaves(WeaponSpecial, WepDamage, Hits, Crits, DefendShip),
@@ -379,7 +441,8 @@ clauses
     applyPointDefense(SpecialList, PD, DefendShip) = OutDamage :-
         PDAttack in SpecialList, %+
             tuple(WeaponSpecial, WepDamage, Hits, Crits) = PDAttack,
-            (list::isMember(mauler(_), WeaponSpecial) orelse list::isMember(closeAction(standard), WeaponSpecia)),
+            Special in WeaponSpecial, %+
+                (mauler(_) = Special orelse closeAction(standard) = Special),
         !,
         NextList = list::remove(SpecialList, PDAttack),
         Damage = applySaves(WeaponSpecial, WepDamage, Hits, Crits, DefendShip),
@@ -388,7 +451,7 @@ clauses
     applyPointDefense(SpecialList, PD, DefendShip) = OutDamage :-
         PDAttack in SpecialList, %+
             tuple(WeaponSpecial, WepDamage, Hits, Crits) = PDAttack,
-            list::isMember(closeAction(swarmer), WeaponSpecia),
+            list::isMember(closeAction(swarmer), WeaponSpecial),
         !,
         NextList = list::remove(SpecialList, PDAttack),
         Damage = applySaves(WeaponSpecial, WepDamage, Hits, Crits, DefendShip),
@@ -396,7 +459,6 @@ clauses
 
     applyPointDefense([tuple(WeaponSpecial, WepDamage, Hits, Crits) | NextList], PD, DefendShip) = OutDamage :-
         !,
-        NextList = list::remove(SpecialList, PDAttack),
         Damage = applySaves(WeaponSpecial, WepDamage, Hits, Crits, DefendShip),
         OutDamage = Damage + applyPointDefense(NextList, PD, DefendShip).
 

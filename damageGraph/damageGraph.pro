@@ -12,7 +12,7 @@ constants
     barWidth : integer = 7.
 
 facts
-    damageMaps : tuple{pen, tuple{string Name, mapM{integer Damage, integer Count}}}* := [].
+    damageMaps : tuple{pen, string Name, integer TotalCost, mapM{integer Damage, integer Count}}* := [].
     maxDamage : integer := 0.
     total : integer := 0.
 
@@ -52,7 +52,7 @@ clauses
                 MapFact = varM::new([])
             ],
         ThreadList = varM::new([]),
-        foreach tuple(Pen, MapFact, SO, WF, CAW, SingleLinkedArc, Max, FBS) in PenSimList do
+        foreach tuple(Pen, MapFact, _SO, WF, CAW, SingleLinkedArc, Max, FBS) in PenSimList do
             Thread =
                 thread::start(
                     { () :-
@@ -64,7 +64,9 @@ clauses
                         else
                             NameStr = Name
                         end if,
-                        MapFact:value := [tuple(Pen, tuple(NameStr, MapOut))]
+                        shipClass::getFBSPoints(FBS, ShipPoints),
+                        TotalCost = ShipPoints * Max,
+                        MapFact:value := [tuple(Pen, NameStr, TotalCost, MapOut)]
                     }),
             ThreadList:value := [Thread | ThreadList:value]
         end foreach,
@@ -72,15 +74,15 @@ clauses
             Thread:wait()
         end foreach,
         foreach
-            tuple(Pen, MapFact, SO, WF, CAW, SingleLinkedArc, Max, FBS) in PenSimList and [DamageMap | _] = MapFact:value
-            and tuple(Pen, tuple(NameStr, MapOut)) = DamageMap
+            tuple(Pen, MapFact, _SO, _WF, _CAW, _SingleLinkedArc, _Max, _FBS) in PenSimList and [DamageMap | _] = MapFact:value
+            and tuple(Pen, NameStr, TotalCost, MapOut) = DamageMap
         do
             CountMap = mapM_redBlack::new(),
             foreach Key = MapOut:getKey_nd() and Count = MapOut:tryGet(Key) and Damage = std::fromTo(0, Key) do
                 DamageVal = CountMap:get_default(Damage, 0),
                 CountMap:set(Damage, DamageVal + Count)
             end foreach,
-            damageMaps := [tuple(Pen, tuple(NameStr, CountMap)) | damageMaps]
+            damageMaps := [tuple(Pen, NameStr, TotalCost, CountMap) | damageMaps]
         end foreach,
         setMaxs(),
         This:invalidate(),
@@ -91,11 +93,11 @@ predicates
 clauses
     setMaxs() :-
         maxDamage := 0,
-        foreach tuple(_, tuple(_, DamageMap)) in damageMaps and Key = DamageMap:getKey_nd() and 0 < DamageMap:tryGet(Key) and maxDamage < Key do
+        foreach tuple(_, _, _, DamageMap) in damageMaps and Key = DamageMap:getKey_nd() and 0 < DamageMap:tryGet(Key) and maxDamage < Key do
             maxDamage := Key
         end foreach,
         total := 0,
-        if tuple(_, tuple(_, DamageMap)) in damageMaps and ! and Key = DamageMap:getKey_nd() and Count = DamageMap:tryGet(0) then
+        if tuple(_, _, _, DamageMap) in damageMaps and Count = DamageMap:tryGet(0) then
             total := Count
         end if.
 
@@ -127,22 +129,14 @@ clauses
         Font = font::createFromFontFamily(FontFamily, fontSize, 0, unit),
         StringFormat = stringFormat::create(0, 0),
         Y = varM_integer::new(0),
-        foreach tuple(Pen, tuple(Name, DamageMap)) in damageMaps do
-            MinVar = varM_integer::new(maxDamage),
+        foreach tuple(Pen, Name, TotalCost, DamageMap) in damageMaps do
             MaxVar = varM_integer::new(0),
             foreach Key = DamageMap:getKey_nd() and 0 < DamageMap:tryGet(Key) do
                 if MaxVar:value < Key then
                     MaxVar:value := Key
-                end if,
-                if Key < MinVar:value then
-                    MinVar:value := Key
                 end if
             end foreach,
-            if MaxVar:value < MinVar:value then
-                MinVar:value := 0,
-                MaxVar:value := 0
-            end if,
-            MinMaxStr = string::format("Min%3d-Max%3d", MinVar:value, MaxVar:value),
+            MinMaxStr = string::format("%3dpts-Max%3d", TotalCost, MaxVar:value),
             Graphics:drawString(Name, -1, Font, gdiplus::rectF(12, Y:value, Width, Height), StringFormat, blackPen:brush),
             Graphics:drawString(MinMaxStr, -1, Font, gdiplus::rectF(12, Y:value + 15, Width, Height), StringFormat, blackPen:brush),
             Graphics:fillRectangleF(Pen:brush, 0, Y:value + 5, 10, 5),
@@ -170,23 +164,34 @@ clauses
         end foreach,
         Graphics:drawString("  0", -1, Font, gdiplus::rectF(100, GraphHeight - 10, 40, 20), StringFormat, blackPen:brush),
         SectionWidth = getSectionWidth(),
+        hasDomain(predicate_dt{integer}, Ignore),
         if (1 + maxDamage) * SectionWidth < GraphWidth then
-            Mod = 1,
-            Eliminate = 1
+            Ignore = { (_I) :- succeed }
         else
             MaxSections = GraphWidth div SectionWidth,
             NumToRemove = 1 + maxDamage - MaxSections,
             if 1 = NumToRemove then
+                Ignore = { (I) :- I mod maxDamage - 4 <> maxDamage - 1 },
                 Mod = maxDamage - 4
             else
-                Mod = maxDamage div NumToRemove
-            end if,
-            Eliminate = Mod - 1
+                Mod = maxDamage div NumToRemove,
+                if 1 < Mod then
+                    Ignore = { (I) :- I mod Mod <> Mod - 1 }
+                elseif ModStep = std::fromTo(2, maxDamage) and maxDamage <= ModStep * MaxSections then
+                    Ignore =
+                        { (I) :-
+                            I mod ModStep = 0
+                            orelse I = maxDamage
+                        }
+                else
+                    Ignore = { (I) :- I mod maxDamage = 0 }
+                end if
+            end if
         end if,
         Offset = varM_integer::new(2),
-        foreach tuple(Pen, tuple(_Name, DamageMap)) in damageMaps do
+        foreach tuple(Pen, _Name, _TotalCost, DamageMap) in damageMaps do
             WidthCounter = varM_integer::new(Offset:value),
-            foreach Damage = DamageMap:getKey_nd() and Damage mod Mod <> Eliminate and Count = DamageMap:tryGet(Damage) and 0 < Count do
+            foreach Damage = DamageMap:getKey_nd() and Ignore(Damage) and Count = DamageMap:tryGet(Damage) and 0 < Count do
                 BarHeight = math::max(GraphHeight * Count div total, 2),
                 BarX = 120 + WidthCounter:value,
                 Graphics:fillRectangleI(Pen:brush, BarX, GraphHeight - BarHeight, barWidth, BarHeight),
@@ -195,7 +200,7 @@ clauses
             Offset:add(barWidth)
         end foreach,
         WidthCounter = varM_integer::new(2),
-        foreach Damage = std::fromTo(0, maxDamage) and Damage mod Mod <> Eliminate do
+        foreach Damage = std::fromTo(0, maxDamage) and Ignore(Damage) do
             BarX = 120 + WidthCounter:value,
             Graphics:drawString(string::format("%d", Damage), -1, Font, gdiplus::rectF(BarX, GraphHeight + 5, 40, 20), StringFormat, blackPen:brush),
             WidthCounter:add(SectionWidth)

@@ -4,9 +4,6 @@ class weapon
     open core
 
 predicates
-    simulate : (fleetBuilder::groupTemplate Attacker) -> mapM{integer HullDamage, integer Count}.
-
-predicates
     simulate : (fleetBuilder::groupTemplate Attacker, shipClass::fleetBuilderStats Defender, boolean ShieldsUp, boolean CloseActionWeapons,
         boolean WeaponsFree, boolean SingleLinkedDirection, integer Trials) -> mapM{integer HullDamage, integer Count}.
 

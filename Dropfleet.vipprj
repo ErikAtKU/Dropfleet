@@ -183,13 +183,13 @@
     <item-map filename="damageGraph\convertPixelsWidths\convertPixelsWidths.pack" />
     <item-map filename="damageGraph\damageGraph.pack" />
     <item-map filename="damageGraphDlg\damageGraphDlg.pack" />
+    <item-map filename="damageGraphDlg\damagePicker\damagePicker.pack" />
+    <item-map filename="damageGraphDlg\damagePicker\shipDamagePicker\shipDamagePicker.pack" />
     <item-map filename="dice\dice.pack" />
     <item-map filename="displayImage\displayImage.dlg" resource_id="dlg_displayImage" />
     <item-map filename="displayImage\displayImage.pack" />
     <item-map filename="fleet\fleet.pack" />
     <item-map filename="fleet\fleetBuilder\fleetBuilder.pack" />
-    <item-map filename="generateCostListDlg\damagePicker\damagePicker.pack" />
-    <item-map filename="generateCostListDlg\damagePicker\shipDamagePicker\shipDamagePicker.pack" />
     <item-map filename="generateCostListDlg\fleetPicker\fleetPicker.pack" />
     <item-map filename="generateCostListDlg\fleetPicker\shipCountName\shipCountName.pack" />
     <item-map filename="generateCostListDlg\generateCostListDlg.pack" />
