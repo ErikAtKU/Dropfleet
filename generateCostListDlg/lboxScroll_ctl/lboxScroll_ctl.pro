@@ -17,12 +17,15 @@ clauses
     setList(String_List) :-
         listbox_ctl:setList(String_List),
         Lines = list::length(String_List),
-        Height = math::max(groupBox_ctl:getHeight(), 12 * Lines),
+        Height = math::max(groupBox_ctl:getHeight(), 9 * Lines),
         listbox_ctl:setHeight(Height).
 
 clauses
     add(String) :-
-        listbox_ctl:add(String).
+        listbox_ctl:add(String),
+        Lines = list::length(listbox_ctl:getAllRows()),
+        Height = math::max(groupBox_ctl:getHeight(), 9 * Lines),
+        listbox_ctl:setHeight(Height).
 
 predicates
     onBoxScroll : window::scrollListener.
@@ -43,14 +46,16 @@ predicates
 clauses
     onScroll(vertScroll_ctl, _ScrollType, ThumbPosition) :-
         !,
-        New = -1 - ThumbPosition * ((listbox_ctl:getHeight() - groupBox_ctl:getHeight()) div 100),
+        New = ThumbPosition * (listbox_ctl:getHeight() - groupBox_ctl:getHeight()) div 100,
+        NewY = math::min(0, -1 - New),
         listbox_ctl:getPosition(X, _Y),
-        listbox_ctl:setPosition(X, New).
+        listbox_ctl:setPosition(X, NewY).
     onScroll(horScroll_ctl, _ScrollType, ThumbPosition) :-
         !,
-        New = -1 - ThumbPosition * ((listbox_ctl:getWidth() - groupBox_ctl:getWidth()) div 100),
+        New = ThumbPosition * ((listbox_ctl:getWidth() - groupBox_ctl:getWidth()) div 100),
+        NewX = math::min(0, -1 - New),
         listbox_ctl:getPosition(_X, Y),
-        listbox_ctl:setPosition(New, Y).
+        listbox_ctl:setPosition(NewX, Y).
     onScroll(_Scroll_ctl, _ScrollType, _ThumbPosition).
 
 % This code is maintained automatically, do not update it manually.

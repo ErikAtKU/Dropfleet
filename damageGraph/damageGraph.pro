@@ -8,10 +8,13 @@ constants
     penWidth : real = 1.0.
     fontFamily : string = "Times New Roman".
     fontSize : real = 14.0.
+    graphFontSize : real = 12.0.
+    barWidth : integer = 7.
 
 facts
     damageMaps : tuple{pen, tuple{string Name, mapM{integer Damage, integer Count}}}* := [].
     maxDamage : integer := 0.
+    total : integer := 0.
 
 clauses
     new(Parent) :-
@@ -22,19 +25,22 @@ clauses
     new() :-
         userControlSupport::new(),
         generatedInitialize(),
+        grayPen:dashStyle := gdiplus_native::dashStyleDash,
         setpaintresponder(onPaint).
 
 class facts
     penList : pen* :=
         [
-            pen::createColor(color::create(color::cornflowerblue), penWidth, unit),
             pen::createColor(color::create(color::burlywood), penWidth, unit),
+            pen::createColor(color::create(color::cornflowerblue), penWidth, unit),
             pen::createColor(color::create(color::crimson), penWidth, unit),
             pen::createColor(color::create(color::seagreen), penWidth, unit),
-            pen::createColor(color::create(color::mediumpurple), penWidth, unit)
+            pen::createColor(color::create(color::mediumpurple), penWidth, unit),
+            pen::createColor(color::create(color::firebrick), penWidth, unit)
         ].
     blackPen : pen := pen::createColor(color::create(color::black), penWidth, unit).
     whitePen : pen := pen::createColor(color::create(color::white), penWidth, unit).
+    grayPen : pen := pen::createColor(color::create(color::gray), penWidth, unit).
 
 clauses
     makeDamageMap(ShipSimList, Trials) :-
@@ -65,21 +71,33 @@ clauses
         foreach Thread in ThreadList:value do
             Thread:wait()
         end foreach,
-        foreach tuple(Pen, MapFact, SO, WF, CAW, SingleLinkedArc, Max, FBS) in PenSimList and [DamageMap | _] = MapFact:value do
-            damageMaps := [DamageMap | damageMaps]
+        foreach
+            tuple(Pen, MapFact, SO, WF, CAW, SingleLinkedArc, Max, FBS) in PenSimList and [DamageMap | _] = MapFact:value
+            and tuple(Pen, tuple(NameStr, MapOut)) = DamageMap
+        do
+            CountMap = mapM_redBlack::new(),
+            foreach Key = MapOut:getKey_nd() and Count = MapOut:tryGet(Key) and Damage = std::fromTo(0, Key) do
+                DamageVal = CountMap:get_default(Damage, 0),
+                CountMap:set(Damage, DamageVal + Count)
+            end foreach,
+            damageMaps := [tuple(Pen, tuple(NameStr, CountMap)) | damageMaps]
         end foreach,
-        setMaxDamage(),
+        setMaxs(),
         This:invalidate(),
         This:bringToTop().
 
 predicates
-    setMaxDamage : ().
+    setMaxs : ().
 clauses
-    setMaxDamage() :-
+    setMaxs() :-
         maxDamage := 0,
         foreach tuple(_, tuple(_, DamageMap)) in damageMaps and Key = DamageMap:getKey_nd() and 0 < DamageMap:tryGet(Key) and maxDamage < Key do
             maxDamage := Key
-        end foreach.
+        end foreach,
+        total := 0,
+        if tuple(_, tuple(_, DamageMap)) in damageMaps and ! and Key = DamageMap:getKey_nd() and Count = DamageMap:tryGet(0) then
+            total := Count
+        end if.
 
 predicates
     onPaint : window::paintresponder.
@@ -136,9 +154,57 @@ predicates
 clauses
     makeGraph(Graphics) :-
         convertPixelsWidths::convertDimensions(getWidth(), getHeight(), Width, Height),
-        Graphics:fillRectangleI(whitePen:brush, 120, 0, Width, Height),
-        Graphics:fillRectangleI(blackPen:brush, 120, 0, 2, Height - 20),
-        Graphics:fillRectangleI(blackPen:brush, 120, Height - 20, Width - 40, 2).
+        GraphHeight = Height - 20,
+        GraphWidth = Width - 120,
+        Graphics:fillRectangleI(whitePen:brush, 120, 0, GraphWidth, Height),
+        Graphics:fillRectangleI(blackPen:brush, 120, 0, 2, GraphHeight),
+        Graphics:fillRectangleI(blackPen:brush, 120, GraphHeight, GraphWidth, 2),
+        FontFamily = fontFamily::createFromName(fontFamily),
+        Font = font::createFromFontFamily(FontFamily, graphFontSize, 0, unit),
+        StringFormat = stringFormat::create(0, 0),
+        foreach Amount = std::fromTo(0, 3) do
+            Graphics:fillRectangleI(grayPen:brush, 120, Amount * GraphHeight div 4, GraphWidth, 1),
+            Num = 100 - 25 * Amount,
+            Graphics:drawString(string::format("%3d", Num), -1, Font, gdiplus::rectF(100, Amount * GraphHeight div 4, 40, 20), StringFormat,
+                blackPen:brush)
+        end foreach,
+        Graphics:drawString("  0", -1, Font, gdiplus::rectF(100, GraphHeight - 10, 40, 20), StringFormat, blackPen:brush),
+        SectionWidth = getSectionWidth(),
+        if (1 + maxDamage) * SectionWidth < GraphWidth then
+            Mod = 1,
+            Eliminate = 1
+        else
+            MaxSections = GraphWidth div SectionWidth,
+            NumToRemove = 1 + maxDamage - MaxSections,
+            if 1 = NumToRemove then
+                Mod = maxDamage - 4
+            else
+                Mod = maxDamage div NumToRemove
+            end if,
+            Eliminate = Mod - 1
+        end if,
+        Offset = varM_integer::new(2),
+        foreach tuple(Pen, tuple(_Name, DamageMap)) in damageMaps do
+            WidthCounter = varM_integer::new(Offset:value),
+            foreach Damage = DamageMap:getKey_nd() and Damage mod Mod <> Eliminate and Count = DamageMap:tryGet(Damage) and 0 < Count do
+                BarHeight = math::max(GraphHeight * Count div total, 2),
+                BarX = 120 + WidthCounter:value,
+                Graphics:fillRectangleI(Pen:brush, BarX, GraphHeight - BarHeight, barWidth, BarHeight),
+                WidthCounter:add(SectionWidth)
+            end foreach,
+            Offset:add(barWidth)
+        end foreach,
+        WidthCounter = varM_integer::new(2),
+        foreach Damage = std::fromTo(0, maxDamage) and Damage mod Mod <> Eliminate do
+            BarX = 120 + WidthCounter:value,
+            Graphics:drawString(string::format("%d", Damage), -1, Font, gdiplus::rectF(BarX, GraphHeight + 5, 40, 20), StringFormat, blackPen:brush),
+            WidthCounter:add(SectionWidth)
+        end foreach.
+
+predicates
+    getSectionWidth : () -> integer.
+clauses
+    getSectionWidth() = 2 + barWidth * list::length(damageMaps).
 
 % This code is maintained automatically, do not update it manually.
 predicates
