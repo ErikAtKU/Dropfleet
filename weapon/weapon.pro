@@ -108,36 +108,37 @@ clauses
                         [] <> SingleDamageList
             ],
         ReturnMap = mapM_redBlack::new(),
+        PointDefenseRolls = DefendShip:getPointDefense(),
         foreach _ = std::fromTo(1, Trials) do
             DamageVar = varM_integer::new(0),
-            HitsVar = varM_integer::new(0),
-            CritsVar = varM_integer::new(0),
+            CAWVar = varM_integer::new(0),
             %Standard Block
             foreach tuple(WeaponKey, SingleDamageList) in WeaponDamageList do
                 foreach tuple(_, _, SingleSystem, WeaponFunc) in SingleDamageList and not(isCloseAction(SingleSystem)) do
                     tuple(Hits, Crits) = WeaponFunc(),
-                    DamageVar:add(applySaves(SingleSystem, Hits, Crits, DefendShip))
+                    WepDamage = getWeaponDamage(Weapon, Hits, Crits),
+                    WepSpecial = getWeaponSpecial(Weapon),
+                    DamageVar:add(applySaves(WepSpecial, WepDamage, Hits, Crits, DefendShip))
                 end foreach
             end foreach,
             %Caw Block
-            PointDefenseRolls = DefendShip:getPointDefense(),
-            PDCount = dice::getPD(PointDefenseRolls),
             foreach tuple(WeaponKey, SingleDamageList) in WeaponDamageList do
                 foreach tuple(_, _, SingleSystem, WeaponFunc) in SingleDamageList and isCloseAction(SingleSystem) do
                     tuple(Hits, Crits) = WeaponFunc(),
-                    HitsVar:add(Hits),
-                    CritsVar:add(Crits)
+                    CAWVar:value := [tuple(getWeaponSpecial(SingleSystem), getWeaponDamage(SingleSystem, Hits, Crits), Hits, Crits) | CAWVar:value]
                 end foreach
             end foreach,
             %Launch Block
             foreach SingleDamageList in LaunchDamageList do
                 foreach tuple(_, _, SingleSystem, WeaponFunc) in SingleDamageList do
                     tuple(Hits, Crits) = WeaponFunc(),
-                    HitsVar:add(Hits),
-                    CritsVar:add(Crits)
+                    tuple(Hits, Crits) = WeaponFunc(),
+                    CAWVar:value := [tuple(getLaunchSpecial(SingleSystem), getLaunchDamage(SingleSystem), Hits, Crits) | CAWVar:value]
                 end foreach
             end foreach,
-            Damage = HitsVar:value + CritsVar:value + DamageVar:value,
+            PDCount = dice::getPD(PointDefenseRolls),
+            CAWDamage = applyPointDefense(CAWVar:value, PDCount, DefendShip),
+            Damage = CAWDamage + DamageVar:value,
             Count = ReturnMap:get_default(Damage, 0),
             ReturnMap:set(Damage, Count + 1)
         end foreach.
@@ -262,9 +263,30 @@ clauses
         !.
 
 class predicates
-    getWeaponDamage : (shipClass::weaponSystem) -> shipClass::count Damage.
+    getWeaponDamage : (shipClass::weaponSystem, integer Hits, integer Crits) -> shipClass::count Damage.
 clauses
-    getWeaponDamage(weaponSystem(_Name, _Lock, _Attack, Damage, _Arc, _WeaponSpecial)) = Damage.
+    getWeaponDamage(weaponSystem(_Name, _Lock, _Attack, star, _Arc, WeaponSpecial), Hits, Crits) = Damage :-
+        list::isMember(distortion, WeaponSpecial),
+        !,
+        Damage = Hits + Crits.
+    getWeaponDamage(weaponSystem(_Name, _Lock, _Attack, Damage, _Arc, _WeaponSpecial), _Hits, _Crits) = Damage.
+
+class predicates
+    getWeaponSpecial : (weaponSystem) -> shipClass::weaponSpecial*.
+clauses
+    getWeaponSpecial(weaponSystem(_Name, _Lock, _Attack, _Damage, _Arc, WeaponSpecial)) = WeaponSpecial.
+
+class predicates
+    getLaunchSpecial : (launchSystem) -> shipClass::weaponSpecial*.
+clauses
+    getLaunchSpecial(torpedo(_TS, _Launch, LaunchSpecial)) = LaunchSpecial.
+    getLaunchSpecial(strikeCraft(_SC, _Launch, LaunchSpecial)) = LaunchSpecial.
+
+class predicates
+    getLaunchDamage : (launchSystem) -> integer Damage.
+clauses
+    getLaunchDamage(torpedo(_TS, _Launch, _LaunchSpecial)) = 1.
+    getLaunchDamage(strikeCraft(_SC, _Launch, _LaunchSpecial)) = 1.
 
 clauses
     getBurnthrough(_, 0, 0, 0) :-
@@ -309,14 +331,13 @@ clauses
         CritsOut = CritCount:value.
 
 class predicates
-    applySaves : (shipClass::weaponSystem, integer Hits, integer Crits, ship DefendShip) -> integer Damage.
+    applySaves : (shipClass::weaponSpecial*, integer Damage, integer Hits, integer Crits, ship DefendShip) -> integer Damage.
     %  applySaves : (shipClass::launchSystem, integer Hits, integer Crits, ship DefendShip) -> integer Damage.
 clauses
-    applySaves(Weapon, Hits, Crits, DefendShip) = Damage :-
-        WepDamage = getWeaponDamage(Weapon),
+    applySaves(WeaponSpecial, WepDamage, Hits, Crits, DefendShip) = Damage :-
         Roll = DefendShip:getArmour(),
         HitsDice = dice::new(Roll),
-        DamageVar = varM_integer::new(Hits + Crits),
+        DamageVar = varM_integer::new(WepDamage * (Hits + Crits)),
         foreach _ = std::fromTo(1, Hits) and _ = std::fromTo(1, dice::getCount(WepDamage)) do
             if _ = HitsDice:getRoll_dt() then
                 DamageVar:dec()
@@ -333,33 +354,50 @@ clauses
         Damage = DamageVar:value.
 
 class predicates
-    applyPointDefense : (shipClass::weaponSystem, integer Hits, integer Crits, ship DefendShip, integer HitsOut [out], integer CritsOut [out]).
+    applyPointDefense : (tuple{shipClass::weaponSpecial, integer Damage, integer Hits, integer Crits}*, integer PD, ship DefendShip) -> Damage.
     %  applyPointDefense : (shipClass::launchSystem, integer Hits, integer Crits, ship DefendShip, integer HitsOut [out], integer CritsOut [out]).
 clauses
-    applyPointDefense(weaponSystem(_Name, _Lock, _Attack, _Damage, _Arc, WeaponSpecial), Hits, Crits, DefendShip, HitsOut, CritsOut) :-
-        not(list::isMember(particle, WeaponSpecial)),
-        (if closeAction(CAWType) in WeaponSpecial then
-                succeed
-            else
-                fail
-            end if
-            orelse if mauler(_) in WeaponSpecial then
-                CAWType = standard
-            else
-                fail
-            end if),
-        if CAWType = beam then
-            HitsOut = Hits,
-            CritsOut = Crits
-        elseif CAWType = standard then
-            HitsOut = Hits,
-            CritsOut = Crits
-        else
-            CAWType = swarmer,
-            HitsOut = Hits,
-            CritsOut = Crits
-        end if,
+    applyPointDefense([], _PD, _DefendShip) = 0 :-
         !.
-    applyPointDefense(_, Hits, Crits, _, Hits, Crits).
+    applyPointDefense(SpecialList, PD, DefendShip) = OutDamage :-
+        PDAttack in SpecialList, %+
+            tuple(WeaponSpecial, WepDamage, Hits, Crits) = PDAttack,
+            (list::isMember(particle, WeaponSpecial) orelse list::isMember(closeAction(beam), WeaponSpecia)),
+        !,
+        NextList = list::remove(SpecialList, PDAttack),
+        Damage = applySaves(WeaponSpecial, WepDamage, Hits, Crits, DefendShip),
+        OutDamage = Damage + applyPointDefense(NextList, PD, DefendShip).
+    applyPointDefense(SpecialList, PD, DefendShip) = OutDamage :-
+        PDAttack in SpecialList, %+
+            tuple(WeaponSpecial, WepDamage, Hits, Crits) = PDAttack,
+            list::isMember(scald, WeaponSpecial),
+        !,
+        NextList = list::remove(SpecialList, PDAttack),
+        Damage = applySaves(WeaponSpecial, WepDamage, Hits, Crits, DefendShip),
+        OutDamage = Damage + applyPointDefense(NextList, PD, DefendShip).
+
+    applyPointDefense(SpecialList, PD, DefendShip) = OutDamage :-
+        PDAttack in SpecialList, %+
+            tuple(WeaponSpecial, WepDamage, Hits, Crits) = PDAttack,
+            (list::isMember(mauler(_), WeaponSpecial) orelse list::isMember(closeAction(standard), WeaponSpecia)),
+        !,
+        NextList = list::remove(SpecialList, PDAttack),
+        Damage = applySaves(WeaponSpecial, WepDamage, Hits, Crits, DefendShip),
+        OutDamage = Damage + applyPointDefense(NextList, PD, DefendShip).
+
+    applyPointDefense(SpecialList, PD, DefendShip) = OutDamage :-
+        PDAttack in SpecialList, %+
+            tuple(WeaponSpecial, WepDamage, Hits, Crits) = PDAttack,
+            list::isMember(closeAction(swarmer), WeaponSpecia),
+        !,
+        NextList = list::remove(SpecialList, PDAttack),
+        Damage = applySaves(WeaponSpecial, WepDamage, Hits, Crits, DefendShip),
+        OutDamage = Damage + applyPointDefense(NextList, PD, DefendShip).
+
+    applyPointDefense([tuple(WeaponSpecial, WepDamage, Hits, Crits) | NextList], PD, DefendShip) = OutDamage :-
+        !,
+        NextList = list::remove(SpecialList, PDAttack),
+        Damage = applySaves(WeaponSpecial, WepDamage, Hits, Crits, DefendShip),
+        OutDamage = Damage + applyPointDefense(NextList, PD, DefendShip).
 
 end implement weapon
