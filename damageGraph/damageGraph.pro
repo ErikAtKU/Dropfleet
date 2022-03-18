@@ -209,6 +209,9 @@ clauses
 predicates
     getSectionWidth : () -> integer.
 clauses
+    getSectionWidth() = 10 :-
+        1 = list::length(damageMaps),
+        !.
     getSectionWidth() = 2 + barWidth * list::length(damageMaps).
 
 % This code is maintained automatically, do not update it manually.

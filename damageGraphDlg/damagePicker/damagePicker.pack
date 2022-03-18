@@ -1,6 +1,7 @@
 ﻿#include @"damageGraphDlg\damagePicker\damagePicker.ph"
 
 % privately used packages
+#include @"pfc\gui\controls\textControl\textControl.ph"
 #include @"damageGraphDlg\damagePicker\shipDamagePicker\shipDamagePicker.ph"
 #include @"pfc\collection\M\varM\varM.ph"
 #include @"pfc\list\list.ph"

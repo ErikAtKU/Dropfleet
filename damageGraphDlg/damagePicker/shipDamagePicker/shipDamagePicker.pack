@@ -1,6 +1,7 @@
 ﻿#include @"damageGraphDlg\damagePicker\shipDamagePicker\shipDamagePicker.ph"
 
 % privately used packages
+#include @"pfc\math\math.ph"
 #include @"pfc\gui\controls\checkButton\checkButton.ph"
 #include @"pfc\string\string.ph"
 #include @"displayImage\displayImage.ph"

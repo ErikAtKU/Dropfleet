@@ -66,38 +66,41 @@ clauses
 facts
     ok_ctl : button.
     cancel_ctl : button.
-    fleetCost_lbox : lboxScroll_ctl.
     damageGraph_ctl : damageGraph.
     damagePoints_ctl : editControl.
     generateDamage_ctl : button.
     damagePicker_ctl : damagePicker.
-    vsOsaka_ctl : radioButton.
+    basaltRadio_ctl : radioButton.
     trials_ctl : editControl.
+    londonRadio_ctl : radioButton.
+    bellaRadio_ctl : radioButton.
+    orpheusRadio_ctl : radioButton.
+    shenlongRadio_ctl : radioButton.
+    osakaRadio_ctl : radioButton.
+    aquamarineRadio_ctl : radioButton.
 
 predicates
     generatedInitialize : ().
 clauses
     generatedInitialize() :-
         setText("generateCostListDlg"),
-        setRect(vpiDomains::rct(50, 40, 650, 488)),
+        setRect(vpiDomains::rct(50, 40, 650, 370)),
         setModal(true),
         setDecoration(titlebar([frameDecoration::closeButton])),
         ok_ctl := button::newOk(This),
         ok_ctl:setText("&OK"),
-        ok_ctl:setPosition(476, 428),
+        ok_ctl:setPosition(476, 310),
         ok_ctl:setSize(56, 16),
         ok_ctl:defaultHeight := false,
         ok_ctl:setAnchors([control::right, control::bottom]),
         cancel_ctl := button::newCancel(This),
         cancel_ctl:setText("Cancel"),
-        cancel_ctl:setPosition(540, 428),
+        cancel_ctl:setPosition(540, 310),
         cancel_ctl:setSize(56, 16),
         cancel_ctl:defaultHeight := false,
         cancel_ctl:setAnchors([control::right, control::bottom]),
-        fleetCost_lbox := lboxScroll_ctl::new(This),
-        fleetCost_lbox:setRect(vpiDomains::rct(176, 180, 596, 424)),
         damageGraph_ctl := damageGraph::new(This),
-        damageGraph_ctl:setRect(vpiDomains::rct(180, 24, 592, 178)),
+        damageGraph_ctl:setRect(vpiDomains::rct(180, 150, 592, 304)),
         damageGraph_ctl:setAnchors([control::top, control::right, control::bottom]),
         Points_ctl = textControl::new(This),
         Points_ctl:setText("Points"),
@@ -108,17 +111,34 @@ clauses
         damagePoints_ctl:addModifiedListener(onIntChange),
         generateDamage_ctl := button::new(This),
         generateDamage_ctl:setText("Damage Graph"),
-        generateDamage_ctl:setPosition(184, 4),
+        generateDamage_ctl:setPosition(180, 128),
         generateDamage_ctl:setClickResponder(onDamage),
         damagePicker_ctl := damagePicker::new(This),
-        damagePicker_ctl:setRect(vpiDomains::rct(4, 24, 172, 444)),
-        vsOsaka_ctl := radioButton::new(This),
-        vsOsaka_ctl:setText("Vs Osaka"),
-        vsOsaka_ctl:setRect(vpiDomains::rct(248, 6, 306, 18)),
+        damagePicker_ctl:setRect(vpiDomains::rct(4, 24, 172, 324)),
+        basaltRadio_ctl := radioButton::new(This),
+        basaltRadio_ctl:setText("Basalt (Shields + Fighters)"),
+        basaltRadio_ctl:setRect(vpiDomains::rct(304, 74, 408, 86)),
         trials_ctl := editControl::new(This),
         trials_ctl:setText("100000"),
         trials_ctl:setPosition(124, 6),
-        trials_ctl:addModifiedListener(onIntChange).
+        trials_ctl:addModifiedListener(onIntChange),
+        londonRadio_ctl := radioButton::new(This),
+        londonRadio_ctl:setText("London (Aegis)"),
+        londonRadio_ctl:setRect(vpiDomains::rct(304, 110, 368, 122)),
+        bellaRadio_ctl := radioButton::new(This),
+        bellaRadio_ctl:setText("Bellarophon (Fighters)"),
+        bellaRadio_ctl:setRect(vpiDomains::rct(304, 92, 392, 104)),
+        orpheusRadio_ctl := radioButton::new(This),
+        orpheusRadio_ctl:setText("Orpheus"),
+        orpheusRadio_ctl:setRect(vpiDomains::rct(248, 74, 292, 86)),
+        shenlongRadio_ctl := radioButton::new(This),
+        shenlongRadio_ctl:setText("Shenlong"),
+        shenlongRadio_ctl:setRect(vpiDomains::rct(248, 92, 292, 104)),
+        osakaRadio_ctl := radioButton::new(This),
+        osakaRadio_ctl:setText("Osaka"),
+        osakaRadio_ctl:setRect(vpiDomains::rct(248, 58, 292, 70)),
+        aquamarineRadio_ctl := radioButton::new(This),
+        aquamarineRadio_ctl:setText("Aquamarine (Shields)"),
+        aquamarineRadio_ctl:setRect(vpiDomains::rct(304, 58, 392, 70)).
 % end of automatic code
-
 end implement damageGraphDlg
