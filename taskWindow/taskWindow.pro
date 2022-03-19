@@ -42,11 +42,7 @@ clauses
 predicates
     onFileNew : window::menuItemListener.
 clauses
-    onFileNew(_Source, _MenuTag) :-
-        weapon::simulate(fleetBuilder::group(phrEuropa::getFleetBuilderStats(), 3), phrOrpheus::getFleetBuilderStats(), false, false, true, true,
-                5000)
-            = ReturnMap,
-        nothing(ReturnMap).
+    onFileNew(_Source, _MenuTag).
 
 predicates
     onFileOpen : window::menuItemListener.

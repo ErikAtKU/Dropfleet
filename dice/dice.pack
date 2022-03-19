@@ -1,6 +1,7 @@
 ﻿#include @"dice\dice.ph"
 
 % privately used packages
+#include @"pfc\collection\M\mapM_redBlack\mapM_redBlack.ph"
 #include @"pfc\std\std.ph"
 #include @"pfc\collection\M\varM\varM.ph"
 #include @"pfc\math\math.ph"

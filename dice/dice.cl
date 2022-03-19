@@ -11,4 +11,7 @@ predicates
     getCount : (shipClass::count) -> integer.
     getPD : (integer) -> integer.
 
+predicates
+    getBest : (shipClass::roll, shipClass::roll) -> shipClass::roll.
+
 end class dice

@@ -162,10 +162,12 @@ predicates
     thrust : () -> real.
     hull : () -> integer.
     armour : (boolean ShieldsUp = false) -> roll.
+    shields_dt : (boolean ShieldsUp = false) -> roll determ.
     pointDefense : (boolean ShieldsUp = false) -> integer.
     groupSize : () -> group.
     tonnage : () -> tonnage.
     name : () -> string.
+    canShield : () determ.
 
 predicates
     getWeaponSystem_nd : () -> weaponSystem nondeterm.

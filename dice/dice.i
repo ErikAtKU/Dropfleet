@@ -15,4 +15,7 @@ predicates
 predicates
     setBurnthroughCrit : ().
 
+predicates
+    setScald : ().
+
 end interface dice

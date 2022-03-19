@@ -2,6 +2,7 @@
 #include @"ship\ship.ph"
 
 % privately used packages
+#include @"pfc\std\std.ph"
 #include @"pfc\collection\M\setM_redBlack\setM_redBlack.ph"
 #include @"pfc\list\list.ph"
 #include @"pfc\collection\M\mapM_redBlack\mapM_redBlack.ph"

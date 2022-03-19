@@ -5,6 +5,6 @@ interface damageGraph supports control
 
 predicates
     makeDamageMap : (tuple{boolean SA, boolean WF, boolean CAW, boolean LinkedOverlapping, integer Count, shipClass::fleetBuilderStats Ship}*,
-        integer Trials).
+        shipClass::fleetBuilderStats DefendShip, integer Trials).
 
 end interface damageGraph

@@ -62,9 +62,13 @@ clauses
     armour(ShieldsUp) = Return :-
         shaltariStats(_ShipPoints, _Scan, _Signature, _Thrust, _Hull, Armour, _PointDefense, _GroupSize, _Tonnage) = shipStats_var,
         arm(Down, Up) = Armour,
-        Return = if ShieldsUp = true then Up else Down end if,
+        Return = if ShieldsUp = false then Down else dice::getBest(Down, Up) end if,
         !.
     armour(_) = d6(7, e).
+
+    shields_dt(true) = Up :-
+        shaltariStats(_ShipPoints, _Scan, _Signature, _Thrust, _Hull, Shields, _PointDefense, _GroupSize, _Tonnage) = shipStats_var,
+        arm(_Down, Up) = Shields.
 
     pointDefense(_) = PointDefense :-
         stats(_ShipPoints, _Scan, _Signature, _Thrust, _Hull, _Armour, PointDefense, _GroupSize, _Tonnage) = shipStats_var,
@@ -91,6 +95,9 @@ clauses
     tonnage() = light(0).
 
     name() = name_var.
+
+    canShield() :-
+        _ = shields_dt(true).
 
 clauses
     getWeaponSystem_nd() = WeaponSystem :-

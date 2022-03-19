@@ -1,6 +1,7 @@
 ﻿#include @"weapon\weapon.ph"
 
 % privately used packages
+#include @"pfc\string\string.ph"
 #include @"ship\ucmOsaka\ucmOsaka.ph"
 #include @"pfc\collection\M\setM_redBlack\setM_redBlack.ph"
 #include @"pfc\list\list.ph"

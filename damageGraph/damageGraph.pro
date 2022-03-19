@@ -43,7 +43,7 @@ class facts
     grayPen : pen := pen::createColor(color::create(color::gray), penWidth, unit).
 
 clauses
-    makeDamageMap(ShipSimList, Trials) :-
+    makeDamageMap(ShipSimList, DefendFBS, Trials) :-
         damageMaps := [],
         PenSimList =
             [ tuple(Pen, MapFact, SO, WF, CAW, SingleLinkedArc, Max, FBS) ||
@@ -56,8 +56,7 @@ clauses
             Thread =
                 thread::start(
                     { () :-
-                        MapOut =
-                            weapon::simulate(fleetBuilder::group(FBS, Max), ucmOsaka::getFleetBuilderStats(), false, CAW, WF, SingleLinkedArc, Trials),
+                        MapOut = weapon::simulate(fleetBuilder::group(FBS, Max), DefendFBS, CAW, WF, SingleLinkedArc, Trials),
                         Name = string::present(FBS),
                         if true = WF then
                             NameStr = string::format("%s WF", Name)
@@ -209,10 +208,8 @@ clauses
 predicates
     getSectionWidth : () -> integer.
 clauses
-    getSectionWidth() = 10 :-
-        1 = list::length(damageMaps),
-        !.
-    getSectionWidth() = 2 + barWidth * list::length(damageMaps).
+    getSectionWidth() = Val :-
+        Val = math::max(2 + barWidth * list::length(damageMaps), 12).
 
 % This code is maintained automatically, do not update it manually.
 predicates

@@ -4,6 +4,7 @@
 facts
     shipClass_var : shipClass.
     shieldsUp : boolean := false.
+    inAtmo : boolean := false.
     damage : integer := 0.
 
 clauses
@@ -26,17 +27,27 @@ clauses
     getHull() = shipClass_var:hull() - damage.
 
 clauses
-    getArmour() = shipClass_var:armour(false).
+    getArmour() = shipClass_var:armour(shieldsUp).
 
 clauses
-    getShields_dt() = shipClass_var:armour(true) :-
-        true = shieldsUp.
+    getShields_dt() = shipClass_var:shields_dt(shieldsUp).
 
 clauses
-    getPointDefense() = shipClass_var:pointDefense(shieldsUp).
+    getPointDefense() = BasePD + AegisPD + FighterPD :-
+        BasePD = shipClass_var:pointDefense(shieldsUp),
+        AegisPD = if aegis(X) = getShipSpecial_nd() then X else 0 end if,
+        FighterList =
+            [ PDBonus ||
+                LaunchSystem = getLaunch_nd(), %+
+                    fighter_stats(_, _, PDBonus, _) = getStrikeCraft_nd(LaunchSystem)
+            ],
+        FighterPD = list::sum(FighterList).
 
 clauses
     getTonnage() = shipClass_var:tonnage().
+
+clauses
+    getLayer() = inAtmo.
 
 clauses
     getWeaponSystem_nd(SingleKey, Weapons) :-
@@ -68,7 +79,38 @@ clauses
     getShipSpecial_nd() = shipClass_var:getShipSpecial_nd().
 
 clauses
+    getLaunch_nd() = LaunchAsset :-
+        Special = getShipSpecial_nd(), %+
+            launch(LaunchAssets) = Special,
+            LaunchAsset in LaunchAssets.
+
+predicates
+    getStrikeCraft_nd : (shipClass::launchSystem) -> shipClass::strikeCraftSystem nondeterm.
+clauses
+    getStrikeCraft_nd(shipClass::strikeCraft(System, Launch, Special)) = Return :-
+        if fighterBomber_stats(Left, Right) = System then
+            Return = getStrikeCraft_nd(shipClass::strikeCraft(Left, Launch, Special))
+            or
+            Return = getStrikeCraft_nd(shipClass::strikeCraft(Right, Launch, Special))
+        else
+            Return = System,
+            _ = std::fromTo(1, Launch)
+        end if.
+
+clauses
     setShields(ShieldsUp) :-
+        shipClass_var:canShield(),
+        !,
         shieldsUp := ShieldsUp.
+    setShields(_) :-
+        shieldsUp := false.
+
+clauses
+    setAtmospheric(InAtmo) :-
+        atmospheric = getShipSpecial_nd(),
+        !,
+        inAtmo := InAtmo.
+    setAtmospheric(_) :-
+        inAtmo := false.
 
 end implement ship

@@ -2,6 +2,7 @@
 #include @"ship\shipClass\shipClass.ph"
 
 % privately used packages
+#include @"dice\dice.ph"
 #include @"pfc\string\string.ph"
 #include @"pfc\collection\M\varM\varM.ph"
 #include @"pfc\list\list.ph"
