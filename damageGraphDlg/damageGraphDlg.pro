@@ -24,10 +24,33 @@ predicates
     onDamage : button::clickResponder.
 clauses
     onDamage(_Source) = button::defaultAction :-
-        damageGraph_ctl:setEnabled(false),
+        setAllEnabled(false),
         damageGraph_ctl:makeDamageMap(damagePicker_ctl:getFleetRange(), getTarget(), lastTrials),
         damageGraph_ctl:setText("Damage Graph"),
-        damageGraph_ctl:setEnabled(true).
+        setAllEnabled(true).
+
+predicates
+    setAllEnabled : (boolean Enabled).
+clauses
+    setAllEnabled(Enabled) :-
+        damagePoints_ctl:setEnabled(Enabled),
+        trials_ctl:setEnabled(Enabled),
+        damagePicker_ctl:setEnabled(Enabled),
+        hirukoRadio_ctl:setEnabled(Enabled),
+        newOrleansRadio_ctl:setEnabled(Enabled),
+        castorRadio_ctl:setEnabled(Enabled),
+        harpyRadio_ctl:setEnabled(Enabled),
+        osakaRadio_ctl:setEnabled(Enabled),
+        aquamarineRadio_ctl:setEnabled(Enabled),
+        orpheusRadio_ctl:setEnabled(Enabled),
+        basaltRadio_ctl:setEnabled(Enabled),
+        shenlongRadio_ctl:setEnabled(Enabled),
+        bellaRadio_ctl:setEnabled(Enabled),
+        londonRadio_ctl:setEnabled(Enabled),
+        platinumRadio_ctl:setEnabled(Enabled),
+        generateDamage_ctl:setEnabled(Enabled),
+        ok_ctl:setEnabled(Enabled),
+        cancel_ctl:setEnabled(Enabled).
 
 facts
     lastNum : integer := 100.

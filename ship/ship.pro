@@ -4,7 +4,7 @@
 facts
     shipClass_var : shipClass.
     shieldsUp : boolean := false.
-    inAtmo : boolean := false.
+    layer_var : layer := highOrbit.
     damage : integer := 0.
 
 clauses
@@ -47,7 +47,7 @@ clauses
     getTonnage() = shipClass_var:tonnage().
 
 clauses
-    getLayer() = inAtmo.
+    getLayer() = layer_var.
 
 clauses
     getWeaponSystem_nd(SingleKey, Weapons) :-
@@ -106,11 +106,14 @@ clauses
         shieldsUp := false.
 
 clauses
-    setAtmospheric(InAtmo) :-
+    setLayer(atmosphere) :-
         atmospheric = getShipSpecial_nd(),
         !,
-        inAtmo := InAtmo.
-    setAtmospheric(_) :-
-        inAtmo := false.
+        layer_var := atmosphere.
+    setLayer(atmosphere) :-
+        !,
+        layer_var := lowOrbit.
+    setLayer(Layer) :-
+        layer_var := Layer.
 
 end implement ship

@@ -46,17 +46,17 @@ clauses
     makeDamageMap(ShipSimList, DefendFBS, Trials) :-
         damageMaps := [],
         PenSimList =
-            [ tuple(Pen, MapFact, SO, WF, CAW, SingleLinkedArc, Max, FBS) ||
+            [ tuple(Pen, MapFact, SO, WF, CAW, Launch, SingleLinkedArc, Max, FBS) ||
                 Head = list::zipHead_nd(penList, ShipSimList),
-                tuple(Pen, tuple(SO, WF, CAW, SingleLinkedArc, Max, FBS)) = Head,
+                tuple(Pen, tuple(SO, WF, CAW, Launch, SingleLinkedArc, Max, FBS)) = Head,
                 MapFact = varM::new([])
             ],
         ThreadList = varM::new([]),
-        foreach tuple(Pen, MapFact, _SO, WF, CAW, SingleLinkedArc, Max, FBS) in PenSimList do
+        foreach tuple(Pen, MapFact, _SO, WF, CAW, Launch, SingleLinkedArc, Max, FBS) in PenSimList do
             Thread =
                 thread::start(
                     { () :-
-                        MapOut = weapon::simulate(fleetBuilder::group(FBS, Max), DefendFBS, CAW, WF, SingleLinkedArc, Trials),
+                        MapOut = weapon::simulate(fleetBuilder::group(FBS, Max), DefendFBS, WF, CAW, Launch, SingleLinkedArc, Trials),
                         Name = string::present(FBS),
                         if true = WF then
                             NameStr = string::format("%s WF", Name)
@@ -73,7 +73,7 @@ clauses
             Thread:wait()
         end foreach,
         foreach
-            tuple(Pen, MapFact, _SO, _WF, _CAW, _SingleLinkedArc, _Max, _FBS) in PenSimList and [DamageMap | _] = MapFact:value
+            tuple(Pen, MapFact, _SO, _WF, _CAW, _Launch, _SingleLinkedArc, _Max, _FBS) in PenSimList and [DamageMap | _] = MapFact:value
             and tuple(Pen, NameStr, TotalCost, MapOut) = DamageMap
         do
             CountMap = mapM_redBlack::new(),

@@ -6,7 +6,7 @@ implement generateCostListDlg inherits dialog
 clauses
     display(Parent, Faction, Models) = Dialog :-
         FactionList = fillFactionMap(Faction, Models),
-        Dialog = new(Parent, FactionList),
+        Dialog = new(Parent, Faction, FactionList),
         Dialog:show().
 
 clauses
@@ -30,16 +30,23 @@ clauses
         foreach Ship in ALLShips do
             HelpSet:insert(tuple(0, 0, Ship))
         end foreach,
-        foreach Model in Models do
+        foreach Model in Models and HelpSet:contains(Model) do
+            %sanity check, assuming faction list is correct
             HelpSet:remove(Model),
             HelpSet:insert(Model)
         end foreach,
         Return = HelpSet:asList.
 
+facts
+    faction_var : faction.
+
 clauses
-    new(Parent, Fleet) :-
+    new(Parent, Faction, Fleet) :-
         dialog::new(Parent),
+        faction_var := Faction,
         generatedInitialize(),
+        lowerPoints_ctl:setText(toString(fleet::myLowerPoints)),
+        upperPoints_ctl:setText(toString(fleet::myUpperPoints)),
         delayCall(1, { () :- fleetPicker_ctl:addModelList(Fleet) }).
 
 predicates
@@ -64,6 +71,31 @@ predicates
 clauses
     onGenerate(_Source) = button::defaultAction :-
         generate().
+
+predicates
+    onOk : button::clickResponder.
+clauses
+    onOk(_Source) = button::defaultAction :-
+        FleetRange = fleetPicker_ctl:getFleetRange(),
+        if ucm = faction_var then
+            fleet::myUCMShips := FleetRange
+        elseif scourge = faction_var then
+            fleet::myScourgeShips := FleetRange
+        elseif phr = faction_var then
+            fleet::myPHRShips := FleetRange
+        elseif shaltari = faction_var then
+            fleet::myShaltariShips := FleetRange
+        elseif resistance = faction_var then
+            fleet::myResistanceShips := FleetRange
+        end if,
+        if LowerPoints = tryToTerm(lowerPoints_ctl:getText()) then
+            fleet::myLowerPoints := LowerPoints,
+            if UpperPoints = tryToTerm(upperPoints_ctl:getText()) and LowerPoints <= UpperPoints then
+                fleet::myUpperPoints := UpperPoints
+            else
+                fleet::myUpperPoints := LowerPoints + 20
+            end if
+        end if.
 
 % This code is maintained automatically, do not update it manually.
 facts
@@ -99,11 +131,12 @@ clauses
         generate_ctl:setPosition(116, 4),
         generate_ctl:setClickResponder(onGenerate),
         ok_ctl := button::newOk(This),
-        ok_ctl:setText("&OK"),
-        ok_ctl:setPosition(472, 272),
-        ok_ctl:setSize(56, 16),
+        ok_ctl:setText("Update Ship Count"),
+        ok_ctl:setPosition(456, 272),
+        ok_ctl:setSize(72, 16),
         ok_ctl:defaultHeight := false,
         ok_ctl:setAnchors([control::right, control::bottom]),
+        ok_ctl:setClickResponder(onOk),
         cancel_ctl := button::newCancel(This),
         cancel_ctl:setText("Cancel"),
         cancel_ctl:setPosition(536, 272),

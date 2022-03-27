@@ -3,38 +3,41 @@
 implement fleet
     open core
 
-class facts
-    myUCMShips : tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* :=
-        [
-            tuple(0, 2, ucmNewOrleans::getFleetBuilderStats()),
-            tuple(0, 6, ucmLysander::getFleetBuilderStats()),
-            tuple(0, 1, ucmMadrid::getFleetBuilderStats()),
-            tuple(0, 0, ucmOsaka::getFleetBuilderStats()),
-            tuple(0, 1, ucmLima::getFleetBuilderStats()),
-            tuple(0, 1, ucmSanFransisco::getFleetBuilderStats()),
-            tuple(0, 2, ucmSeattle::getFleetBuilderStats()),
-            tuple(0, 1, ucmStPetersburg::getFleetBuilderStats()),
-            tuple(0, 0, ucmWashington::getFleetBuilderStats()),
-            tuple(0, 0, ucmTaipei::getFleetBuilderStats()),
-            tuple(0, 0, ucmKyiv::getFleetBuilderStats())
-        ].
-    myShaltariShips : tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* :=
-        [
-            tuple(0, 1, shaltariEmerald::getFleetBuilderStats()),
-            tuple(0, 0, shaltariAmber::getFleetBuilderStats()),
-            tuple(0, 0, shaltariGranite::getFleetBuilderStats()),
-            tuple(0, 0, shaltariObsidian::getFleetBuilderStats()),
-            tuple(0, 0, shaltariJet::getFleetBuilderStats()),
-            tuple(0, 2, shaltariAquamarine::getFleetBuilderStats()),
-            tuple(0, 0, shaltariTurquoise::getFleetBuilderStats()),
-            tuple(0, 0, shaltariBasalt::getFleetBuilderStats()),
-            tuple(0, 0, shaltariOnyx::getFleetBuilderStats()),
-            tuple(0, 0, shaltariAzurite::getFleetBuilderStats()),
-            tuple(0, 3, shaltariVoidgate::getFleetBuilderStats()),
-            tuple(0, 0, shaltariTopaz::getFleetBuilderStats()),
-            tuple(0, 2, shaltariJade::getFleetBuilderStats()),
-            tuple(0, 2, shaltariAmethyst::getFleetBuilderStats()),
-            tuple(0, 0, shaltariOpal::getFleetBuilderStats())
-        ].
+clauses
+    resetCount() :-
+        myUCMShips := [],
+        myScourgeShips := [],
+        myPHRShips := [],
+        myShaltariShips := [],
+        myResistanceShips := [].
+
+clauses
+    tryConsult() :-
+        Dir = directory::getCurrentDirectory(),
+        File = string::format("%s/shipList.pl", Dir),
+        try
+            file::consult(File, myShips)
+        catch _ do
+            fail
+        end try.
+
+clauses
+    trySave() :-
+        Dir = directory::getCurrentDirectory(),
+        File = string::format("%s/shipList.pl", Dir),
+        try
+            file::save(File, myShips)
+        catch _ do
+            fail
+        end try.
+
+class facts - myShips
+    myUCMShips : tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* := [].
+    myScourgeShips : tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* := [].
+    myPHRShips : tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* := [].
+    myShaltariShips : tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* := [].
+    myResistanceShips : tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* := [].
+    myLowerPoints : integer := 480.
+    myUpperPoints : integer := 500.
 
 end implement fleet

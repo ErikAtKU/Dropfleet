@@ -10,7 +10,10 @@ predicates
     getShields_dt : () -> shipClass::roll determ.
     getPointDefense : () -> integer.
     getTonnage : () -> shipClass::tonnage.
-    getLayer : () -> boolean InAtmo.
+    getLayer : () -> layer.
+
+domains
+    layer = atmosphere; lowOrbit; highOrbit.
 
 predicates
     getWeaponSystem_nd : (shipClass::weaponSpecial* Key [out], shipClass::weaponSystem* [out]) nondeterm.
@@ -25,6 +28,6 @@ predicates
     setShields : (boolean ShieldsUp).
 
 predicates
-    setAtmospheric : (boolean InAtmo).
+    setLayer : (layer).
 
 end interface ship

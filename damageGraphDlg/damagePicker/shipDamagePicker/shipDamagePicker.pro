@@ -27,9 +27,9 @@ clauses
         !.
     setPoints(Points) :-
         shipClass::getFBSPoints(fbs, ShipCost),
-        Num = Points div ShipCost,
+        Num = math::max(Points div ShipCost, 1),
         max_int:setText(toString(Num)),
-        Cost = math::max(ShipCost, Num * ShipCost),
+        Cost = Num * ShipCost,
         cost_ctl:setText(toString(Cost)).
 
 clauses
@@ -38,7 +38,7 @@ clauses
         Max > 0,
         !,
         (standardOrders_ctl:getChecked() = true and SA = true and WF = false or weaponsFree_ctl:getChecked() = true and SA = false and WF = true),
-        Return = tuple(SA, WF, closeAction_ctl:getChecked(), ~~singleLinked_ctl:getChecked(), Max, fbs).
+        Return = tuple(SA, WF, closeAction_ctl:getChecked(), launch_ctl:getChecked(), ~~singleLinked_ctl:getChecked(), Max, fbs).
 
 predicates
     onClick : button::clickResponder.
@@ -54,6 +54,7 @@ facts
     standardOrders_ctl : checkButton.
     weaponsFree_ctl : checkButton.
     closeAction_ctl : checkButton.
+    launch_ctl : checkButton.
     singleLinked_ctl : checkButton.
 
 predicates
@@ -73,16 +74,18 @@ clauses
         name_ctl := button::new(This),
         name_ctl:setText("UCM"),
         name_ctl:setPosition(36, 0),
-        name_ctl:setWidth(72),
+        name_ctl:setWidth(64),
         name_ctl:defaultHeight := false,
         name_ctl:setHeight(12),
         name_ctl:setClickResponder(onClick),
         standardOrders_ctl := checkButton::new(This),
-        standardOrders_ctl:setRect(vpiDomains::rct(108, 0, 116, 12)),
+        standardOrders_ctl:setRect(vpiDomains::rct(100, 0, 108, 12)),
         weaponsFree_ctl := checkButton::new(This),
-        weaponsFree_ctl:setRect(vpiDomains::rct(116, 0, 124, 12)),
+        weaponsFree_ctl:setRect(vpiDomains::rct(108, 0, 116, 12)),
         closeAction_ctl := checkButton::new(This),
-        closeAction_ctl:setRect(vpiDomains::rct(124, 0, 132, 12)),
+        closeAction_ctl:setRect(vpiDomains::rct(116, 0, 124, 12)),
+        launch_ctl := checkButton::new(This),
+        launch_ctl:setRect(vpiDomains::rct(124, 0, 132, 12)),
         singleLinked_ctl := checkButton::new(This),
         singleLinked_ctl:setRect(vpiDomains::rct(132, 0, 140, 12)).
 % end of automatic code

@@ -4,13 +4,13 @@ implement weapon
     open core, shipClass
 
 clauses
-    simulate(Attacker, Defender, CAW, WeaponsFree, SingleLinkedDirection, Trials) = ReturnMap :-
+    simulate(Attacker, Defender, WeaponsFree, CAW, Launch, SingleLinkedDirection, Trials) = ReturnMap :-
         fleetBuilder::group(fbs(_, _, _, AttackerConstructor), AttackerCount) = Attacker,
         AttackShip = AttackerConstructor(),
         fbs(_, _, _, DefenderConstructor) = Defender,
         DefendShip = DefenderConstructor(),
         DefendShip:setShields(true),
-        DefendShip:setAtmospheric(true),
+        DefendShip:setLayer(ship::atmosphere),
         AllWeaponDamageList =
             [ tuple(WeaponKeySet:asList, AfterLinked) ||
                 AttackShip:getWeaponSystem_nd(WeaponKey, WeaponSystem), %+
@@ -18,6 +18,9 @@ clauses
                         [ tuple(Total, CritsVar:value, SingleSystem, WeaponFunc) ||
                             SingleSystem in WeaponSystem, %+
                                 if isCloseAction(SingleSystem) and false = CAW then
+                                    fail
+                                end if,
+                                if isBombardment(SingleSystem) then
                                     fail
                                 end if,
                                 DiceFunctionList =
@@ -142,6 +145,7 @@ clauses
         end if,
         LaunchDamageList =
             [ SingleDamageList ||
+                true = Launch,
                 ShipSpecial = AttackShip:getShipSpecial_nd(), %+
                     launch(LaunchAssets) = ShipSpecial,
                     LaunchSystem in LaunchAssets, %+
@@ -194,7 +198,13 @@ clauses
             foreach SingleDamageList in LaunchDamageList do
                 foreach tuple(_, _, SingleSystem, WeaponFunc) in SingleDamageList do
                     tuple(Hits, Crits) = WeaponFunc(),
-                    CAWVar:value := [tuple(getLaunchSpecial(SingleSystem), getLaunchDamage(SingleSystem), Hits, Crits) | CAWVar:value]
+                    if torpedo(_, _, _) = SingleSystem then
+                        LaunchDamage = getLaunchDamage(SingleSystem),
+                        LaunchSpecial = getLaunchSpecial(SingleSystem),
+                        DamageVar:add(applySaves(LaunchSpecial, LaunchDamage, Hits, Crits, DefendShip, CAW))
+                    else
+                        CAWVar:value := [tuple(getLaunchSpecial(SingleSystem), getLaunchDamage(SingleSystem), Hits, Crits) | CAWVar:value]
+                    end if
                 end foreach
             end foreach,
             PDCount = dice::getPD(PointDefenseRolls),
@@ -208,7 +218,7 @@ class predicates
     getDiceFunction_nd : (weaponSystem, ship Attacker, integer AttackerCount, ship Defender, boolean WeaponsFree) -> function{dice*} nondeterm.
 clauses
     getDiceFunction_nd(weaponSystem(_Name, _, _Attack, _Damage, _Arc, Special), _Attacker, _AttackerCount, Defender, _WeaponsFree) = _ :-
-        true = Defender:getLayer(),
+        ship::atmosphere = Defender:getLayer(),
         not(reEntry in Special),
         not(airToAir in Special),
         closeAction(_) in Special,
@@ -224,7 +234,7 @@ clauses
         Particle = if list::isMember(particle, Special) then true else false end if,
         d6(Lock, Diemod) = BaseLockRoll,
         !,
-        if true = Defender:getLayer() and not(reEntry in Special) and not(airToAir in Special) then
+        if ship::atmosphere = Defender:getLayer() and not(reEntry in Special) and not(airToAir in Special) then
             LockRoll = d6(6, p),
             CritRoll = d6(8, p)
         elseif calibre(CalibreList) in Special and ! and Calibre in CalibreList
@@ -288,7 +298,7 @@ class predicates
     getDiceFunction_nd : (launchSystem, integer AttackerCount, ship DefendShip) -> function{dice*} nondeterm.
 clauses
     getDiceFunction_nd(_, _, DefendShip) = _ :-
-        true = DefendShip:getLayer(),
+        ship::atmosphere = DefendShip:getLayer(),
         !,
         fail.
     getDiceFunction_nd(strikeCraft(fighterBomber_stats(Left, Right), Launch, LaunchSpecial), AttackerCount, DefendShip) = DiceFunction :-
@@ -296,6 +306,23 @@ clauses
         or
         DiceFunction = getDiceFunction_nd(strikeCraft(Right, Launch, LaunchSpecial), AttackerCount, DefendShip).
     getDiceFunction_nd(strikeCraft(bomber_stats(_Name, _Thrust, BaseLockRoll, Attack, _Damage, _Special), Launch, _LaunchSpecial), AttackerCount, _) =
+            DiceFunction :-
+        d6(Lock, Diemod) = BaseLockRoll,
+        LockRoll = BaseLockRoll,
+        CritRoll = d6(Lock + 2, Diemod),
+        DiceFunction =
+            { () =
+                    [ Die ||
+                        _ = std::fromTo(1, DiceCountVar:value), %+
+                            Die = dice::new(LockRoll, CritRoll)
+                    ] :-
+                DiceCountVar = varM_integer::new(0),
+                foreach _ = std::fromTo(1, Launch) do
+                    DiceCountVar:add(dice::getCount(Attack))
+                end foreach
+            },
+        _ = std::fromTo(1, AttackerCount).
+    getDiceFunction_nd(torpedo(torpedo_stats(_Name, _Thrust, BaseLockRoll, Attack, _Damage, _Special), Launch, _LaunchSpecial), AttackerCount, _) =
             DiceFunction :-
         d6(Lock, Diemod) = BaseLockRoll,
         LockRoll = BaseLockRoll,
@@ -338,6 +365,13 @@ clauses
         !.
 
 class predicates
+    isBombardment : (shipClass::weaponSystem) determ.
+clauses
+    isBombardment(weaponSystem(_Name, _Lock, _Attack, _Damage, _Arc, WeaponSpecial)) :-
+        bombardment in WeaponSpecial,
+        !.
+
+class predicates
     isBurnthrough : (shipClass::weaponSystem, boolean WeaponsFree) -> integer BurnthroughCap determ.
 clauses
     isBurnthrough(weaponSystem(_Name, _Lock, _Attack, _Damage, _Arc, WeaponSpecial), WF) = ReturnBurnthroughCap :-
@@ -350,20 +384,6 @@ clauses
         end if.
     isBurnthrough(weaponSystem(_Name, _Lock, _Attack, _Damage, _Arc, WeaponSpecial), _) = BurnthroughCap :-
         mauler(BurnthroughCap) in WeaponSpecial,
-        !.
-
-class predicates
-    isAltWeapon : (shipClass::weaponSystem) determ.
-clauses
-    isAltWeapon(weaponSystem(_Name, _Lock, _Attack, _Damage, _Arc, WeaponSpecial)) :-
-        alt(_) in WeaponSpecial,
-        !.
-
-class predicates
-    isScaldWeapon : (shipClass::weaponSystem) determ.
-clauses
-    isScaldWeapon(weaponSystem(_Name, _Lock, _Attack, _Damage, _Arc, WeaponSpecial)) :-
-        scald in WeaponSpecial,
         !.
 
 class predicates
@@ -383,14 +403,25 @@ clauses
 class predicates
     getLaunchSpecial : (launchSystem) -> shipClass::weaponSpecial*.
 clauses
-    getLaunchSpecial(torpedo(_TS, _Launch, LaunchSpecial)) = LaunchSpecial.
-    getLaunchSpecial(strikeCraft(_SC, _Launch, LaunchSpecial)) = LaunchSpecial.
+    getLaunchSpecial(torpedo(torpedo_stats(_Name, _Thrust, _Lock, _Attack, _Damage, Special), _Launch, LaunchSpecial)) =
+        list::removeDuplicates(list::append(Special, LaunchSpecial)).
+    getLaunchSpecial(strikeCraft(SC, _Launch, LaunchSpecial)) = Return :-
+        SubList = [ Special || Special = getLaunchSpecial_nd(SC) ],
+        Return = list::removeDuplicates(list::appendList([LaunchSpecial | SubList])).
+
+class predicates
+    getLaunchSpecial_nd : (strikeCraftSystem) -> weaponSpecial* nondeterm.
+clauses
+    getLaunchSpecial_nd(fighterBomber_stats(Left, Right)) = Special :-
+        !,
+        (Special = getLaunchSpecial_nd(Left) or Special = getLaunchSpecial_nd(Right)).
+    getLaunchSpecial_nd(bomber_stats(_Name, _Thrust, _Lock, _Attack, _Damage, Special)) = Special.
 
 class predicates
     getLaunchDamage : (launchSystem) -> integer Damage.
 clauses
-    getLaunchDamage(torpedo(_TS, _Launch, _LaunchSpecial)) = 1.
-    getLaunchDamage(strikeCraft(_SC, _Launch, _LaunchSpecial)) = 1.
+    getLaunchDamage(torpedo(torpedo_stats(_Name, _Thrust, _Lock, _Attack, Damage, _Special), _Launch, _LaunchSpecial)) = dice::getCount(Damage).
+    getLaunchDamage(strikeCraft(_SC, _Launch, _LaunchSpecial)) = 1. %The value for bombers
 
 clauses
     getBurnthrough(_, 0, 0, 0) :-
@@ -436,12 +467,12 @@ clauses
 
 class predicates
     applySaves : (shipClass::weaponSpecial*, integer Damage, integer Hits, integer Crits, ship DefendShip, boolean IsCA) -> integer Damage.
-    %  applySaves : (shipClass::launchSystem, integer Hits, integer Crits, ship DefendShip) -> integer Damage.
 clauses
     applySaves(WeaponSpecial, WepDamage, Hits, Crits, DefendShip, IsCA) = Damage :-
         Roll = DefendShip:getArmour(),
         HitsDice = dice::new(Roll),
         if true = IsCA and scald in WeaponSpecial then
+            HitsDice:setScald()
         end if,
         DamageVar = varM_integer::new(WepDamage * (Hits + Crits)),
         foreach _ = std::fromTo(1, Hits) and _ = std::fromTo(1, WepDamage) do

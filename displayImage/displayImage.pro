@@ -17,7 +17,7 @@ clauses
         shipClass::getFBSImageFile(FBS, Filename),
         shipClass::getFBSName(FBS, Name),
         generatedInitialize(),
-        setText(Name),
+        setText(string::present(FBS)),
         imageControl_ctl:setPlace(imageControl::centre),
         Image = image::createFromFile(Filename),
         imageControl_ctl:setGdipImage(Image),

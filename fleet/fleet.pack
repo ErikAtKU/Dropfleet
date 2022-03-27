@@ -2,6 +2,8 @@
 #include @"fleet\fleet.ph"
 
 % privately used packages
+#include @"pfc\string\string.ph"
+#include @"pfc\fileSystem\fileSystem.ph"
 #include @"ship\shaltariOpal\shaltariOpal.ph"
 #include @"ship\shaltariAmethyst\shaltariAmethyst.ph"
 #include @"ship\shaltariJade\shaltariJade.ph"

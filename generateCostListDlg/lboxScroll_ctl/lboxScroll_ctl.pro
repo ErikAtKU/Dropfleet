@@ -18,14 +18,16 @@ clauses
         listbox_ctl:setList(String_List),
         Lines = list::length(String_List),
         Height = math::max(groupBox_ctl:getHeight(), 9 * Lines),
-        listbox_ctl:setHeight(Height).
+        listbox_ctl:setHeight(Height),
+        onScroll(vertScroll_ctl, 1, 0).
 
 clauses
     add(String) :-
         listbox_ctl:add(String),
         Lines = list::length(listbox_ctl:getAllRows()),
         Height = math::max(groupBox_ctl:getHeight(), 9 * Lines),
-        listbox_ctl:setHeight(Height).
+        listbox_ctl:setHeight(Height),
+        onScroll(vertScroll_ctl, 1, 0).
 
 predicates
     onBoxScroll : window::scrollListener.

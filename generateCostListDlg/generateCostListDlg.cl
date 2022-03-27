@@ -10,7 +10,7 @@ predicates
     display : (window Parent, faction, tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* Fleet = []) -> generateCostListDlg Dialog.
 
 constructors
-    new : (window Parent, tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* Fleet).
+    new : (window Parent, faction, tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* Fleet).
 
 predicates
     fillFactionMap : (faction, tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* OwnedFleet)

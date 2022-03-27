@@ -6,6 +6,9 @@ implement taskWindow inherits applicationWindow
 constants
     mdiProperty : boolean = true.
 
+class facts
+    msg_stream : outputStream := erroneous.
+
 clauses
     new() :-
         applicationWindow::new(),
@@ -15,7 +18,11 @@ predicates
     onShow : window::showListener.
 clauses
     onShow(_, _CreationData) :-
-        _MessageForm = messageForm::display(This).
+        msg_stream := messageForm::display(This):getOutputStream(),
+        if fleet::tryConsult() then
+            msg_stream:write("'shipList.pl' successfully consulted! Initializing with previous ship count."),
+            msg_stream:nl()
+        end if.
 
 class predicates
     onDestroy : window::destroyListener.
@@ -25,7 +32,7 @@ clauses
 class predicates
     onHelpAbout : window::menuItemListener.
 clauses
-    onHelpAbout(TaskWin, _MenuTag).
+    onHelpAbout(_TaskWin, _MenuTag).
 
 predicates
     onFileExit : window::menuItemListener.
@@ -42,18 +49,42 @@ clauses
 predicates
     onFileNew : window::menuItemListener.
 clauses
-    onFileNew(_Source, _MenuTag).
+    onFileNew(_Source, _MenuTag) :-
+        fleet::resetCount().
 
 predicates
     onFileOpen : window::menuItemListener.
 clauses
-    onFileOpen(_Source, _MenuTag).
+    onFileOpen(_Source, _MenuTag) :-
+        fleet::tryConsult(),
+        !,
+        msg_stream:write("'shipList.pl' successfully consulted!"),
+        msg_stream:nl().
+    onFileOpen(_Source, _MenuTag) :-
+        Dir = directory::getCurrentDirectory(),
+        File = string::format("%s/shipList.pl", Dir),
+        msg_stream:writef("Unable to consult '%s.'", File),
+        msg_stream:nl().
+
+predicates
+    onFileSave : window::menuItemListener.
+clauses
+    onFileSave(_Source, _MenuTag) :-
+        fleet::trySave(),
+        !,
+        msg_stream:write("'shipList.pl' successfully saved!"),
+        msg_stream:nl().
+    onFileSave(_Source, _MenuTag) :-
+        Dir = directory::getCurrentDirectory(),
+        File = string::format("%s/shipList.pl", Dir),
+        msg_stream:writef("Unable to save '%s.'", File),
+        msg_stream:nl().
 
 predicates
     onEditUndo : window::menuItemListener.
 clauses
     onEditUndo(_Source, _MenuTag) :-
-        _ = generateCostListDlg::display(This, generateCostListDlg::scourge, []).
+        _ = generateCostListDlg::display(This, generateCostListDlg::scourge, fleet::myScourgeShips).
 
 predicates
     onEditRedo : window::menuItemListener.
@@ -71,7 +102,7 @@ predicates
     onEditCopy : window::menuItemListener.
 clauses
     onEditCopy(_Source, _MenuTag) :-
-        _ = generateCostListDlg::display(This, generateCostListDlg::phr, []).
+        _ = generateCostListDlg::display(This, generateCostListDlg::phr, fleet::myPHRShips).
 
 predicates
     onEditPaste : window::menuItemListener.
@@ -137,7 +168,8 @@ clauses
         addMenuItemListener(resourceIdentifiers::id_graphs_resistance_graphs, onGraphsResistanceGraphs),
         addMenuItemListener(resourceIdentifiers::id_graphs_shaltari_graphs, onGraphsShaltariGraphs),
         addMenuItemListener(resourceIdentifiers::id_graphs_phr_graphs, onGraphsPhrGraphs),
-        addMenuItemListener(resourceIdentifiers::id_graphs_scourge_graphs, onGraphsScourgeGraphs).
+        addMenuItemListener(resourceIdentifiers::id_graphs_scourge_graphs, onGraphsScourgeGraphs),
+        addMenuItemListener(resourceIdentifiers::id_file_save, onFileSave).
 % end of automatic code
 
 end implement taskWindow

@@ -10,6 +10,7 @@ predicates
     setPoints : (integer Points).
 
 predicates
-    getFleetRange : () -> tuple{boolean SA, boolean WF, boolean CAW, boolean LinkedOverlapping, integer Count, shipClass::fleetBuilderStats Ship}*.
+    getFleetRange : ()
+        -> tuple{boolean SA, boolean WF, boolean CAW, boolean Launch, boolean LinkedOverlapping, integer Count, shipClass::fleetBuilderStats Ship}*.
 
 end interface damagePicker
