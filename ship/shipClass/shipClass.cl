@@ -4,7 +4,7 @@ constructors
     new : (shipStats, shipSpecial*, weaponSystem*, string Name).
 
 predicates
-    getFleetBuilderStats : (string ClassName, shipStats, shipSpecial*, core::function{ship} Constructor) -> fleetBuilderStats.
+    getFleetBuilderStats : (string ClassName, shipStats, shipSpecial*, weaponSystem*, core::function{ship} Constructor) -> fleetBuilderStats.
 
 predicates
     matchRosterCatTonnage_dt : (shipClass::rosterCategory, shipClass::tonnage) determ.
@@ -15,6 +15,9 @@ predicates
 
 predicates
     getFBSName : (fleetBuilderStats, string Name [out]).
+
+predicates
+    getFBSDesc : (fleetBuilderStats, string Desc [out]).
 
 predicates
     getFBSPoints : (fleetBuilderStats, integer Points [out]).

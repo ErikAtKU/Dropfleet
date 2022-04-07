@@ -38,7 +38,7 @@ clauses
 
 clauses
     getFleetBuilderStats() = ConstructorStats :-
-        ConstructorStats = getFleetBuilderStats(class_name(), shipStats_var, special_var, { () = newShip() }).
+        ConstructorStats = getFleetBuilderStats(class_name(), shipStats_var, special_var, weaponSystemList, { () = newShip() }).
 
 clauses
     getShipCount() = shipCount.

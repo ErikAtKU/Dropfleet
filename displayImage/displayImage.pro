@@ -21,6 +21,8 @@ clauses
         imageControl_ctl:setPlace(imageControl::centre),
         Image = image::createFromFile(Filename),
         imageControl_ctl:setGdipImage(Image),
+        shipClass::getFBSDesc(FBS, Desc),
+        edit_ctl:setText(Desc),
         allOpen := [This | allOpen].
 
 predicates
@@ -50,18 +52,19 @@ clauses
     onShow(_Source, _Data) :-
         center().
 
-% This code is maintained automatically, do not update it manually.%  15:09:19-5.3.2022
+% This code is maintained automatically, do not update it manually.%  16:23:32-7.4.2022
 facts
     cancel_ctl : button.
     imageControl_ctl : imageControl.
     closeAll_ctl : button.
+    edit_ctl : editControl.
 
 predicates
     generatedInitialize : ().
 clauses
     generatedInitialize() :-
         setText("displayImage"),
-        setRect(rct(50, 40, 342, 336)),
+        setRect(rct(50, 40, 475, 336)),
         setModal(false),
         setDecoration(titlebar([closeButton])),
         setState([wsf_NoClipSiblings]),
@@ -76,13 +79,20 @@ clauses
         closeAll_ctl := button::new(This),
         closeAll_ctl:setText("Close All"),
         closeAll_ctl:setPosition(212, 278),
-        closeAll_ctl:setWidth(40),
-        closeAll_ctl:defaultHeight := true,
+        closeAll_ctl:setSize(40, 14),
+        closeAll_ctl:defaultHeight := false,
         closeAll_ctl:setClickResponder(onClick),
         imageControl_ctl := imageControl::new(This),
         imageControl_ctl:setPosition(8, 110),
         imageControl_ctl:setSize(276, 172),
-        imageControl_ctl:setAnchors([control::left, control::top, control::right, control::bottom]).
+        imageControl_ctl:setAnchors([control::left, control::top, control::right, control::bottom]),
+        edit_ctl := editControl::new(This),
+        edit_ctl:setText(""),
+        edit_ctl:setPosition(4, 2),
+        edit_ctl:setWidth(416),
+        edit_ctl:setHeight(106),
+        edit_ctl:setMultiLine(),
+        edit_ctl:setReadOnly().
 % end of automatic code
 
 end implement displayImage

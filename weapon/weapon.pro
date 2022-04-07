@@ -5,9 +5,9 @@ implement weapon
 
 clauses
     simulate(Attacker, Defender, WeaponsFree, CAW, Launch, SingleLinkedDirection, Trials) = ReturnMap :-
-        fleetBuilder::group(fbs(_, _, _, AttackerConstructor), AttackerCount) = Attacker,
+        fleetBuilder::group(fbs(_, _, _, AttackerConstructor, _), AttackerCount) = Attacker,
         AttackShip = AttackerConstructor(),
-        fbs(_, _, _, DefenderConstructor) = Defender,
+        fbs(_, _, _, DefenderConstructor, _) = Defender,
         DefendShip = DefenderConstructor(),
         DefendShip:setShields(true),
         DefendShip:setLayer(ship::atmosphere),

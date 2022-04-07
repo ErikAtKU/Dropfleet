@@ -50,7 +50,7 @@ clauses
         checkConditions_dt(CurrentCost, CurrentGroups).
     generateCostLists_nd([Group | RemainingList], CurrentCost, CurrentGroups) = Return :-
         tuple(MinAmount, MaxAmount, FBS) = Group,
-        fbs(conStats(Points, g(GroupMin, GroupMax), _Tonnage), _Name, _SpecialList, _Con) = FBS,
+        fbs(conStats(Points, g(GroupMin, GroupMax), _Tonnage), _Name, _SpecialList, _Con, _Desc) = FBS,
         MaxLaunch = getMaxLaunch(gameSize_var),
         MaxRares = getMaxRares(gameSize_var),
         getFBSLaunchCount(FBS, LaunchCount),

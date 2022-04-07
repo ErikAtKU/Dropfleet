@@ -120,7 +120,7 @@ domains
 
 domains
     fleetBuilderStats =
-        fbs(constructorStats, string ClassName, shipSpecial* Special, function{ship} Constructor)
+        fbs(constructorStats, string ClassName, shipSpecial* Special, function{ship} Constructor, string Description)
         [presenter(shipClass::fbsPresenter)].
     constructorStats = conStats(integer ShipPoints, group GroupSize, tonnage Tonnage).
 
