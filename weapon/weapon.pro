@@ -551,6 +551,8 @@ class predicates
     applyPD : (integer PD, integer HitDamage, integer CritDamage, shipClass::caType, integer PDOut [out], integer HitDamageOut [out],
         integer CritDamageOut [out]).
 clauses
+    applyPD(0, HitDamage, CritDamage, _, 0, HitDamage, CritDamage) :-
+        !.
     applyPD(PD, HitDamage, CritDamage, swarmer, PDout, HitDamageOut, CritDamageOut) :-
         0 < CritDamage,
         3 <= PD,

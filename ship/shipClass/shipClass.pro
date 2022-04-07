@@ -64,7 +64,7 @@ clauses
         arm(Down, Up) = Armour,
         Return = if ShieldsUp = false then Down else dice::getBest(Down, Up) end if,
         !.
-    armour(_) = d6(7, e).
+    armour(_) = star.
 
     shields_dt(true) = Up :-
         shaltariStats(_ShipPoints, _Scan, _Signature, _Thrust, _Hull, Shields, _PointDefense, _GroupSize, _Tonnage) = shipStats_var,

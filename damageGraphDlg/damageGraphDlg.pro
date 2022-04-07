@@ -25,9 +25,12 @@ predicates
 clauses
     onDamage(_Source) = button::defaultAction :-
         setAllEnabled(false),
-        damageGraph_ctl:makeDamageMap(damagePicker_ctl:getFleetRange(), getTarget(), lastTrials),
-        damageGraph_ctl:setText("Damage Graph"),
-        setAllEnabled(true).
+        delayCall(100,
+            { () :-
+                damageGraph_ctl:makeDamageMap(damagePicker_ctl:getFleetRange(), getTarget(), lastTrials),
+                damageGraph_ctl:setText("Damage Graph"),
+                setAllEnabled(true)
+            }).
 
 predicates
     setAllEnabled : (boolean Enabled).
