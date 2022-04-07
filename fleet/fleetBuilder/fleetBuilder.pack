@@ -114,7 +114,7 @@
 #include @"ship\ucmStPetersburg\ucmStPetersburg.ph"
 #include @"ship\ucmSeattle\ucmSeattle.ph"
 #include @"ship\ucmSantiago\ucmSantiago.ph"
-#include @"ship\ucmSanFransisco\ucmSanFransisco.ph"
+#include @"ship\ucmSanFrancisco\ucmSanFrancisco.ph"
 #include @"ship\ucmRome\ucmRome.ph"
 #include @"ship\ucmRio\ucmRio.ph"
 #include @"ship\ucmReykjavik\ucmReykjavik.ph"
@@ -150,9 +150,6 @@
 #include @"ship\shipClass\shipClass.ph"
 
 % private interfaces
-
 % private classes
-
 % implementations
 #include @"fleet\fleetBuilder\fleetBuilder.pro"
-

@@ -15,7 +15,6 @@ clauses
     new(Parent, FBS) :-
         dialog::new(Parent),
         shipClass::getFBSImageFile(FBS, Filename),
-        shipClass::getFBSName(FBS, Name),
         generatedInitialize(),
         setText(string::present(FBS)),
         imageControl_ctl:setPlace(imageControl::centre),
@@ -52,7 +51,7 @@ clauses
     onShow(_Source, _Data) :-
         center().
 
-% This code is maintained automatically, do not update it manually.%  16:23:32-7.4.2022
+% This code is maintained automatically, do not update it manually.%  21:38:13-7.4.2022
 facts
     cancel_ctl : button.
     imageControl_ctl : imageControl.
@@ -64,33 +63,33 @@ predicates
 clauses
     generatedInitialize() :-
         setText("displayImage"),
-        setRect(rct(50, 40, 475, 336)),
+        setRect(rct(50, 40, 474, 440)),
         setModal(false),
         setDecoration(titlebar([closeButton])),
         setState([wsf_NoClipSiblings]),
         addShowListener(onShow),
         cancel_ctl := button::newCancel(This),
         cancel_ctl:setText("Close"),
-        cancel_ctl:setPosition(260, 278),
+        cancel_ctl:setPosition(396, 382),
         cancel_ctl:setSize(24, 14),
         cancel_ctl:defaultHeight := false,
         cancel_ctl:setAnchors([control::right, control::bottom]),
         cancel_ctl:setClickResponder(onClick),
         closeAll_ctl := button::new(This),
         closeAll_ctl:setText("Close All"),
-        closeAll_ctl:setPosition(212, 278),
+        closeAll_ctl:setPosition(348, 382),
         closeAll_ctl:setSize(40, 14),
         closeAll_ctl:defaultHeight := false,
         closeAll_ctl:setClickResponder(onClick),
         imageControl_ctl := imageControl::new(This),
-        imageControl_ctl:setPosition(8, 110),
+        imageControl_ctl:setPosition(4, 2),
         imageControl_ctl:setSize(276, 172),
         imageControl_ctl:setAnchors([control::left, control::top, control::right, control::bottom]),
         edit_ctl := editControl::new(This),
         edit_ctl:setText(""),
-        edit_ctl:setPosition(4, 2),
+        edit_ctl:setPosition(4, 176),
         edit_ctl:setWidth(416),
-        edit_ctl:setHeight(106),
+        edit_ctl:setHeight(210),
         edit_ctl:setMultiLine(),
         edit_ctl:setReadOnly().
 % end of automatic code

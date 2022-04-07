@@ -110,41 +110,31 @@ clauses
 clauses
     getFleetBuilderStats(ClassName, Stats, Special, Weapons, Constructor) = fbs(ConstructorStats, ClassName, Special, Constructor, Description) :-
         stats(ShipPointsOut, Scan, Signature, Thrust, Hull, Armour, PointDefense, GroupSizeOut, TonnageOut) = Stats,
-        StringSpecialList = [ SpecialStringLine || SpecialStringLine = specialListToString_nd(Special) ],
-        DescriptionList =
-            [ StringRow ||
-                StringRow = string::format("%-30s     Ship Points %d", ClassName, ShipPointsOut)
-                or
-                StringRow =
-                    string::format("%-30s %-10s %-10s %-10s %-10s %-10s %-10s %-10s %-10s %s", "Name", "Scan", "Sig", "Thrust", "Hull", "Armour",
-                        "PD", "Group", "Tonnage", "Special")
-                or
-                if [FirstSpecial | RestSpecial] = StringSpecialList then
-                    succeed
-                else
-                    FirstSpecial = "",
-                    RestSpecial = []
-                end if,
-                (StringRow =
-                        string::format("%-30s %-10s %-10s %-15s %-10s %-15s %-10s %-15s %-10s %s", trimName(ClassName), toInches(Scan),
-                            toInches(Signature), toInches(Thrust), toString(Hull), rollToString(Armour), toString(PointDefense),
-                            toString(GroupSizeOut), tonnageToString(TonnageOut), FirstSpecial)
-                    or StringSpecial in RestSpecial
-                    and %+
-                        StringRow = string::format("%180s", StringSpecial))
-            ],
-        Description = string::concatWithDelimiter(DescriptionList, "\n"),
+        Description =
+            makeDescription(ClassName, ShipPointsOut, Scan, string::format("      %-17s", toInches(Signature)), Thrust, Hull,
+                string::format("   %-15s", rollToString(Armour)), PointDefense, GroupSizeOut, TonnageOut, Special, Weapons),
         ConstructorStats = conStats(ShipPointsOut, GroupSizeOut, TonnageOut).
     getFleetBuilderStats(ClassName, Stats, Special, Weapons, Constructor) = fbs(ConstructorStats, ClassName, Special, Constructor, Description) :-
         shaltariStats(ShipPointsOut, Scan, Signature, Thrust, Hull, Armour, PointDefense, GroupSizeOut, TonnageOut) = Stats,
+        Description =
+            makeDescription(ClassName, ShipPointsOut, Scan, string::format("%-17s", shaltariSplitToString(Signature)), Thrust, Hull,
+                string::format("    %-13s", shaltariSplitToString(Armour)), PointDefense, GroupSizeOut, TonnageOut, Special, Weapons),
+        ConstructorStats = conStats(ShipPointsOut, GroupSizeOut, TonnageOut).
+
+class predicates
+    makeDescription : (string ClassName, integer ShipPoints, real Scan, string Sig, real Thrust, integer Hull, string Armour, integer PointDefense,
+        group GroupSize, tonnage, shipSpecial*, weaponSystem*) -> string.
+clauses
+    makeDescription(ClassName, ShipPointsOut, Scan, Signature, Thrust, Hull, Armour, PointDefense, GroupSizeOut, TonnageOut, Special, WeaponSystems) =
+            Description :-
         StringSpecialList = [ SpecialStringLine || SpecialStringLine = specialListToString_nd(Special) ],
         DescriptionList =
             [ StringRow ||
-                StringRow = string::format("%-30s     Ship Points %d", ClassName, ShipPointsOut)
+                StringRow = string::format("%-100s Ship Points %d", ClassName, ShipPointsOut)
                 or
                 StringRow =
-                    string::format("%-30s %-10s %-10s %-10s %-10s %-10s %-10s %-10s %-10s %s", "Name", "Scan", "Sig", "Thrust", "Hull", "Armour",
-                        "PD", "Group", "Tonnage", "Special")
+                    string::format("%-15s %-15s %-15s %-15s %-10s %-10s %-10s %-10s %s", "Scan", "Sig", "Thrust", "Hull", "Armour", "PD", "Group",
+                        "Tonnage", "Special")
                 or
                 if [FirstSpecial | RestSpecial] = StringSpecialList then
                     succeed
@@ -153,15 +143,146 @@ clauses
                     RestSpecial = []
                 end if,
                 (StringRow =
-                        string::format("%-30s %-10s %-10s %-15s %-10s %-15s %-10s %-15s %-10s %s", trimName(ClassName), toInches(Scan),
-                            shaltariSplitToString(Signature), toInches(Thrust), toString(Hull), shaltariSplitToString(Armour),
-                            toString(PointDefense), toString(GroupSizeOut), tonnageToString(TonnageOut), FirstSpecial)
+                        string::format("%-10s %s %-15s %-15s %s %-10s %-14s %-14s %s", toInches(Scan), Signature, toInches(Thrust), toString(Hull),
+                            Armour, toString(PointDefense), toString(GroupSizeOut), tonnageToString(TonnageOut), FirstSpecial)
                     or StringSpecial in RestSpecial
                     and %+
-                        StringRow = string::format("%180s", StringSpecial))
+                        StringRow = string::format("%150s", StringSpecial))
             ],
-        Description = string::concatWithDelimiter(DescriptionList, "\n"),
-        ConstructorStats = conStats(ShipPointsOut, GroupSizeOut, TonnageOut).
+        if [] = WeaponSystems then
+            WeaponDescriptionList = []
+        else
+            WeaponDescriptionList =
+                [ StringRow ||
+                    StringRow = ""
+                    or
+                    StringRow = string::format("%-30s %-10s %-10s %-10s %-10s %s", "Type", "Lock", "Attack", "Damage", "Arc", "Special")
+                    or
+                    weaponSystem(WepName, WepLock, WepAttack, WepDamage, WepArc, WepSpecial) in WeaponSystems, %+
+                        StringWeaponSpecialList =
+                            [ SpecialStringLine || SpecialStringLine = weaponSpecialListToString_nd(list::removeDuplicates(WepSpecial)) ],
+                        if [FirstSpecial | RestSpecial] = StringWeaponSpecialList then
+                            succeed
+                        else
+                            FirstSpecial = "",
+                            RestSpecial = []
+                        end if,
+                        (StringRow = WepName
+                            or StringRow =
+                                string::format("%35s %-10s % %s %-15s %s", "", rollToString(WepLock), countToString(WepAttack),
+                                    countToString(WepDamage), arcsToString(WepArc), FirstSpecial)
+                            or StringSpecial in RestSpecial
+                            and %+
+                                StringRow = string::format("%100s", StringSpecial))
+                ]
+        end if,
+        if launch(LaunchAssets) in Special then
+            LaunchNameSet = setM_redBlack::new(),
+            LaunchDescriptionList =
+                [ StringRow ||
+                    StringRow = ""
+                    or
+                    StringRow = string::format("%-50s %-15s %s", "Load", "Launch", "Special")
+                    or
+                    LaunchSystem in LaunchAssets, %+
+                        if torpedo(TorpedoSystem, Launch, WepSpecial) = LaunchSystem then
+                            torpedo_stats(LaunchName, _Thrust, _Lock, _Attack, _Damage, Special2) = TorpedoSystem,
+                            LaunchSpecial = list::append(WepSpecial, Special2)
+                        else
+                            strikeCraft(StrikeCraftSystem, Launch, WepSpecial) = LaunchSystem,
+                            LaunchName = getStrikeCraftName(StrikeCraftSystem),
+                            Special2 = getStrikeCraftSpecial(StrikeCraftSystem),
+                            LaunchSpecial = list::append(WepSpecial, Special2)
+                        end if,
+                        LaunchNameSet:insert(LaunchSystem),
+                        StringWeaponSpecialList =
+                            [ SpecialStringLine || SpecialStringLine = weaponSpecialListToString_nd(list::removeDuplicates(LaunchSpecial)) ],
+                        if [FirstSpecial | RestSpecial] = StringWeaponSpecialList then
+                            succeed
+                        else
+                            FirstSpecial = "",
+                            RestSpecial = []
+                        end if,
+                        (StringRow = string::format("%-45s %-15d %s", LaunchName, Launch, FirstSpecial)
+                            or StringSpecial in RestSpecial
+                            and %+
+                                StringRow = string::format("%100s", StringSpecial))
+                    or
+                    not(LaunchNameSet:isEmpty()),
+                    StringRow = ""
+                    or
+                    LaunchSystem in LaunchNameSet, %+
+                        if torpedo(TorpedoSystem, _Launch, WepSpecial) = LaunchSystem then
+                            torpedo_stats(LaunchName, LaunchThrust, LaunchLock, LaunchAttack, LaunchDamage, Special2) = TorpedoSystem,
+                            LaunchThrustStr = toInches(LaunchThrust),
+                            LaunchSpecial = list::append(WepSpecial, Special2),
+                            LaunchLockStr = rollToString(LaunchLock),
+                            LaunchAttackStr = countToString(LaunchAttack),
+                            LaunchDamageStr = countToString(LaunchDamage)
+                        else
+                            strikeCraft(StrikeCraftSystem, Launch, WepSpecial) = LaunchSystem,
+                            if fighterBomber_stats(Left, Right) = StrikeCraftSystem then
+                                SubSystem = Left
+                                or
+                                SubSystem = Right
+                            else
+                                SubSystem = StrikeCraftSystem
+                            end if,
+                            getStrikeCraftStats_dt(SubSystem, LaunchName, LaunchThrustStr, LaunchLockStr, LaunchAttackStr, LaunchDamageStr),
+                            LaunchName = getStrikeCraftName(SubSystem),
+                            Special2 = getStrikeCraftSpecial(SubSystem),
+                            LaunchSpecial = list::append(WepSpecial, Special2)
+                        end if,
+                        StringWeaponSpecialList =
+                            [ SpecialStringLine || SpecialStringLine = weaponSpecialListToString_nd(list::removeDuplicates(LaunchSpecial)) ],
+                        if [FirstSpecial | RestSpecial] = StringWeaponSpecialList then
+                            succeed
+                        else
+                            FirstSpecial = "",
+                            RestSpecial = []
+                        end if,
+                        StringRow =
+                            string::format("%-45s %-15s %-15s %-15s %-15s %s", LaunchName, LaunchThrustStr, LaunchLockStr, LaunchAttackStr,
+                                LaunchDamageStr, FirstSpecial)
+                ]
+        else
+            LaunchDescriptionList = []
+        end if,
+        Description = string::concatWithDelimiter(list::append(DescriptionList, WeaponDescriptionList, LaunchDescriptionList), "\n").
+
+class predicates
+    getStrikeCraftName : (strikeCraftSystem) -> string Name.
+clauses
+    getStrikeCraftName(fighter_stats(Name, _Thrust, _PointDefenseBonus, _Special)) = Name.
+    getStrikeCraftName(bomber_stats(Name, _Thrust, _Lock, _Attack, _Damage, _Special)) = Name.
+    getStrikeCraftName(fighterBomber_stats(_Left, _Right)) = "Fighters & Bombers".
+    getStrikeCraftName(bulkLander_stats(Name, _Thrust)) = Name.
+    getStrikeCraftName(dropships_stats(Name, _Thrust)) = Name.
+    getStrikeCraftName(gate_stats(Name)) = Name.
+
+class predicates
+    getStrikeCraftStats_dt : (strikeCraftSystem, string Name [out], string Thrust [out], string Lock [out], string Attack [out], string Damage [out])
+        determ.
+clauses
+    getStrikeCraftStats_dt(fighter_stats(Name, Thrust, PointDefenseBonus, _Special), Name, toInches(Thrust),
+            string::format("PD+%d", PointDefenseBonus), "", "").
+    getStrikeCraftStats_dt(bomber_stats(Name, Thrust, Lock, Attack, Damage, _Special), Name, toInches(Thrust), rollToString(Lock),
+            countToString(Attack), countToString(Damage)).
+    getStrikeCraftStats_dt(bulkLander_stats(Name, Thrust), Name, toInches(Thrust), "", "", "").
+    getStrikeCraftStats_dt(dropships_stats(Name, Thrust), Name, toInches(Thrust), "", "", "").
+
+class predicates
+    getStrikeCraftSpecial : (strikeCraftSystem) -> weaponSpecial*.
+clauses
+    getStrikeCraftSpecial(fighter_stats(_Name, _Thrust, _PointDefenseBonus, Special)) = Special :-
+        !.
+    getStrikeCraftSpecial(bomber_stats(_Name, _Thrust, _Lock, _Attack, _Damage, Special)) = Special :-
+        !.
+    getStrikeCraftSpecial(fighterBomber_stats(Left, Right)) = list::append(List1, List2) :-
+        !,
+        List1 = getStrikeCraftSpecial(Left),
+        List2 = getStrikeCraftSpecial(Right).
+    getStrikeCraftSpecial(_) = [].
 
 class predicates
     toInches : (real Val) -> string.
@@ -174,6 +295,68 @@ clauses
     rollToString(d6(Value, p)) = string::format("%d+", Value).
     rollToString(d6(Value, e)) = string::format("%d", Value).
     rollToString(star) = "*".
+
+class predicates
+    countToString : (count Value) -> string.
+clauses
+    countToString(i(Value)) = string::format("%-15d", Value).
+    countToString(nd3plus(N, 0)) = string::format("%-11dD3", N) :-
+        !.
+    countToString(nd3plus(N, Val)) = string::format("%dD3+%-6d", N, Val).
+    countToString(nd6plus(N, 0)) = string::format("%-11dD6", N) :-
+        !.
+    countToString(nd6plus(N, Val)) = string::format("%dD6+%-6d", N, Val).
+    countToString(star) = string::format("%-15s", "*").
+
+class predicates
+    arcsToString : (arc*, string Helper = "") -> string.
+clauses
+    arcsToString([], Helper) = Helper.
+    arcsToString([front(narrow) | Rest], Helper) = ReturnStr :-
+        !,
+        if "" = Helper then
+            NextHelper = "F(n)"
+        else
+            NextHelper = string::format("F(n)/%s", Helper)
+        end if,
+        ReturnStr = arcsToString(Rest, NextHelper).
+    arcsToString([front(_) | Rest], Helper) = ReturnStr :-
+        if "" = Helper then
+            NextHelper = "F"
+        else
+            NextHelper = string::format("F/%s", Helper)
+        end if,
+        ReturnStr = arcsToString(Rest, NextHelper).
+    arcsToString([side(right) | Rest], Helper) = ReturnStr :-
+        !,
+        if "" = Helper then
+            NextHelper = "S(r)"
+        else
+            NextHelper = string::format("%s/S(r)", Helper)
+        end if,
+        ReturnStr = arcsToString(Rest, NextHelper).
+    arcsToString([side(left) | Rest], Helper) = ReturnStr :-
+        !,
+        if "" = Helper then
+            NextHelper = "S(l)"
+        else
+            NextHelper = string::format("%s/S(l)", Helper)
+        end if,
+        ReturnStr = arcsToString(Rest, NextHelper).
+    arcsToString([side(_) | Rest], Helper) = ReturnStr :-
+        if "" = Helper then
+            NextHelper = "S"
+        else
+            NextHelper = string::format("%s/S", Helper)
+        end if,
+        ReturnStr = arcsToString(Rest, NextHelper).
+    arcsToString([rear | Rest], Helper) = ReturnStr :-
+        if "" = Helper then
+            NextHelper = "R"
+        else
+            NextHelper = string::format("%s/R", Helper)
+        end if,
+        ReturnStr = arcsToString(Rest, NextHelper).
 
 class predicates
     tonnageToString : (tonnage) -> string.
@@ -200,7 +383,7 @@ clauses
     specialListToString_nd([], Helper) = Helper.
     specialListToString_nd([Head | Rest], Helper) = ReturnStr :-
         TestStr = if Helper <> "" then string::format("%s, %s", Helper, shipSpecialToString(Head)) else shipSpecialToString(Head) end if,
-        if 20 < string::length(TestStr) then
+        if 40 < string::length(TestStr) then
             ReturnStr = TestStr
             or
             ReturnStr = specialListToString_nd(Rest, "")
@@ -216,6 +399,65 @@ clauses
         Count = countLaunch(launch(LaunchAssets)),
         ReturnString = if 0 < Count then string::format("launch(%d)", Count) else "launch" end if.
     shipSpecialToString(Special) = toString(Special).
+
+class predicates
+    weaponSpecialListToString_nd : (weaponSpecial*, string Helper = "") -> string nondeterm.
+clauses
+    weaponSpecialListToString_nd([], "") = _ :-
+        !,
+        fail.
+    weaponSpecialListToString_nd([], Helper) = Helper.
+    weaponSpecialListToString_nd([Head | Rest], Helper) = ReturnStr :-
+        TestStr = if Helper <> "" then string::format("%s, %s", Helper, weaponSpecialToString(Head)) else weaponSpecialToString(Head) end if,
+        if 40 < string::length(TestStr) then
+            ReturnStr = TestStr
+            or
+            ReturnStr = weaponSpecialListToString_nd(Rest, "")
+        else
+            ReturnStr = weaponSpecialListToString_nd(Rest, TestStr)
+        end if.
+
+class predicates
+    weaponSpecialToString : (weaponSpecial) -> string.
+clauses
+    weaponSpecialToString(closeAction(standard)) = "closeAction" :-
+        !.
+    weaponSpecialToString(calibre(RosterCats)) = string::format("calibre(%s)", rosterCatsToString(RosterCats)) :-
+        !.
+    weaponSpecialToString(Special) = toString(Special).
+
+class predicates
+    rosterCatsToString : (rosterCategory*, string Helper = "") -> string.
+clauses
+    rosterCatsToString([], Helper) = Helper.
+    rosterCatsToString([cat_light | Rest], Helper) = ReturnStr :-
+        if "" = Helper then
+            NextHelper = "L"
+        else
+            NextHelper = string::format("L,%s", Helper)
+        end if,
+        ReturnStr = rosterCatsToString(Rest, NextHelper).
+    rosterCatsToString([cat_medium | Rest], Helper) = ReturnStr :-
+        if "" = Helper then
+            NextHelper = "M"
+        else
+            NextHelper = string::format("M,%s", Helper)
+        end if,
+        ReturnStr = rosterCatsToString(Rest, NextHelper).
+    rosterCatsToString([cat_heavy | Rest], Helper) = ReturnStr :-
+        if "" = Helper then
+            NextHelper = "H"
+        else
+            NextHelper = string::format("%s,H", Helper)
+        end if,
+        ReturnStr = rosterCatsToString(Rest, NextHelper).
+    rosterCatsToString([cat_superHeavy | Rest], Helper) = ReturnStr :-
+        if "" = Helper then
+            NextHelper = "SH"
+        else
+            NextHelper = string::format("%s,SH", Helper)
+        end if,
+        ReturnStr = rosterCatsToString(Rest, NextHelper).
 
 class predicates
     shaltariSplitToString : (shaltariSplit) -> string.

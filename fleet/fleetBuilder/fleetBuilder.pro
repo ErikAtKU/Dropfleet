@@ -387,7 +387,7 @@ clauses
                 ucmReykjavik::getFleetBuilderStats(),
                 ucmRio::getFleetBuilderStats(),
                 ucmRome::getFleetBuilderStats(),
-                ucmSanFransisco::getFleetBuilderStats(),
+                ucmSanFrancisco::getFleetBuilderStats(),
                 ucmSantiago::getFleetBuilderStats(),
                 ucmSeattle::getFleetBuilderStats(),
                 ucmStPetersburg::getFleetBuilderStats(),

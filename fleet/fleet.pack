@@ -24,7 +24,7 @@
 #include @"ship\ucmWashington\ucmWashington.ph"
 #include @"ship\ucmStPetersburg\ucmStPetersburg.ph"
 #include @"ship\ucmSeattle\ucmSeattle.ph"
-#include @"ship\ucmSanFransisco\ucmSanFransisco.ph"
+#include @"ship\ucmSanFrancisco\ucmSanFrancisco.ph"
 #include @"ship\ucmLima\ucmLima.ph"
 #include @"ship\ucmOsaka\ucmOsaka.ph"
 #include @"ship\ucmMadrid\ucmMadrid.ph"
@@ -34,9 +34,6 @@
 #include @"pfc\core.ph"
 
 % private interfaces
-
 % private classes
-
 % implementations
 #include @"fleet\fleet.pro"
-
