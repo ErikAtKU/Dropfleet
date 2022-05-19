@@ -43,16 +43,15 @@ class facts
     grayPen : pen := pen::createColor(color::create(color::gray), penWidth, unit).
 
 clauses
-    makeDamageMap(ShipSimList, DefendFBS, Trials) :-
+    makeDamageMap(ShipSims, DefendFBS, Trials) :-
         damageMaps := [],
-        PenSimList =
-            [ tuple(Pen, MapFact, SO, WF, CAW, Launch, SingleLinkedArc, Max, FBS) ||
-                Head = list::zipHead_nd(penList, ShipSimList),
-                tuple(Pen, tuple(SO, WF, CAW, Launch, SingleLinkedArc, Max, FBS)) = Head,
+        ShipSimList =
+            [ tuple(MapFact, SO, WF, CAW, Launch, SingleLinkedArc, Max, FBS) ||
+                tuple(SO, WF, CAW, Launch, SingleLinkedArc, Max, FBS) in ShipSims,
                 MapFact = varM::new([])
             ],
         ThreadList = varM::new([]),
-        foreach tuple(Pen, MapFact, _SO, WF, CAW, Launch, SingleLinkedArc, Max, FBS) in PenSimList do
+        foreach tuple(MapFact, _SO, WF, CAW, Launch, SingleLinkedArc, Max, FBS) in ShipSimList do
             Thread =
                 thread::start(
                     { () :-
@@ -65,24 +64,35 @@ clauses
                         end if,
                         shipClass::getFBSPoints(FBS, ShipPoints),
                         TotalCost = ShipPoints * Max,
-                        MapFact:value := [tuple(Pen, NameStr, TotalCost, MapOut)]
+                        MapFact:value := [tuple(NameStr, TotalCost, MapOut)]
                     }),
             ThreadList:value := [Thread | ThreadList:value]
         end foreach,
         foreach Thread in ThreadList:value do
             Thread:wait()
         end foreach,
+        DamageMapsVar = varM::new([]),
         foreach
-            tuple(Pen, MapFact, _SO, _WF, _CAW, _Launch, _SingleLinkedArc, _Max, _FBS) in PenSimList and [DamageMap | _] = MapFact:value
-            and tuple(Pen, NameStr, TotalCost, MapOut) = DamageMap
+            tuple(MapFact, _SO, _WF, _CAW, _Launch, _SingleLinkedArc, _Max, _FBS) in ShipSimList and [DamageMap | _] = MapFact:value
+            and tuple(NameStr, TotalCost, MapOut) = DamageMap
         do
             CountMap = mapM_redBlack::new(),
+            MaxDamage = varM_integer::new(0),
             foreach Key = MapOut:getKey_nd() and Count = MapOut:tryGet(Key) and Damage = std::fromTo(0, Key) do
                 DamageVal = CountMap:get_default(Damage, 0),
-                CountMap:set(Damage, DamageVal + Count)
+                CountMap:set(Damage, DamageVal + Count),
+                if MaxDamage:value < Damage then
+                    MaxDamage:value := Damage
+                end if
             end foreach,
-            damageMaps := [tuple(Pen, NameStr, TotalCost, CountMap) | damageMaps]
+            DamageMapsVar:value := [tuple(MaxDamage:value, tuple(NameStr, TotalCost, CountMap)) | DamageMapsVar:value]
         end foreach,
+        SortedList = list::sort(DamageMapsVar:value, core::descending),
+        damageMaps :=
+            [ tuple(Pen, NameStr, TotalCost, CountMap) ||
+                Head = list::zipHead_nd(penList, SortedList),
+                tuple(Pen, tuple(_MaxDamage, tuple(NameStr, TotalCost, CountMap))) = Head
+            ],
         setMaxs(),
         This:invalidate(),
         This:bringToTop().
