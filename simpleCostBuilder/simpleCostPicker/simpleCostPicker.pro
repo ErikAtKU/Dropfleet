@@ -1,28 +1,22 @@
 ﻿% Copyright
 
-implement fleetPicker inherits userControlSupport
+implement simpleCostPicker inherits userControlSupport
     open core, vpiDomains
 
 facts
-    isCostCount : boolean := false.
     shipCountNameList : shipCountName* := [].
 
 clauses
     new(Parent) :-
-        userControlSupport::new(),
-        generatedInitialize(),
+        new(),
         setContainer(Parent),
         shipCountName_ctl:setFBS(ucmTokyo::getFleetBuilderStats()),
         shipCountNameList := [shipCountName_ctl].
 
 clauses
-    newCostCount(Parent) :-
+    new() :-
         userControlSupport::new(),
-        generatedInitialize(),
-        setContainer(Parent),
-        isCostCount := true,
-        shipCountName_ctl:setFBS(ucmTokyo::getFleetBuilderStats()),
-        shipCountNameList := [shipCountName_ctl].
+        generatedInitialize().
 
 predicates
     onScroll : scrollControl::scrollListener.
@@ -47,7 +41,7 @@ clauses
         [First | Rest] = Ships,
         !,
         deleteAllOthers(),
-        shipCountName_ctl:setFBS(First),
+        shipCountName_ctl:setCostCount(First),
         shipCountName_ctl:setVisible(true),
         shipCountNameList := [shipCountName_ctl],
         foreach FBS in Rest do
@@ -55,7 +49,7 @@ clauses
             W = ShipCountName_ctl:getWidth(),
             H = ShipCountName_ctl:getHeight(),
             ShipCountName_ctl:setRect(vpiDomains::rct(3, 0, 3 + W, H)),
-            ShipCountName_ctl:setFBS(FBS),
+            ShipCountName_ctl:setCostCount(FBS),
             ShipCountName_ctl:show(),
             shipCountNameList := list::append(shipCountNameList, [ShipCountName_ctl])
         end foreach,
@@ -68,37 +62,24 @@ clauses
         deleteAllOthers().
 
 clauses
-    addModelList(ModelList) :-
-        [First | Rest] = ModelList,
-        !,
-        deleteAllOthers(),
-        shipCountName_ctl:setModel(First),
-        shipCountName_ctl:setVisible(true),
-        shipCountNameList := [shipCountName_ctl],
-        foreach Model in Rest do
-            ShipCountName_ctl = shipCountName::new(groupBox_ctl),
-            W = ShipCountName_ctl:getWidth(),
-            H = ShipCountName_ctl:getHeight(),
-            ShipCountName_ctl:setRect(vpiDomains::rct(3, 0, 3 + W, H)),
-            ShipCountName_ctl:setModel(Model),
-            ShipCountName_ctl:show(),
-            shipCountNameList := list::append(shipCountNameList, [ShipCountName_ctl])
-        end foreach,
-        if [_, SecondShipCount | _] = shipCountNameList then
-            shipCountName_ctl:setRect(SecondShipCount:getRect())
-        end if,
-        vertScroll_ctl:setThumbPosition(0),
-        onScroll(vertScroll_ctl, vpiDomains::sc_lineUp, vertScroll_ctl:getThumbPosition()).
-    addModelList(_Ships) :-
-        deleteAllOthers().
-
-clauses
     getFleetRange() = List :-
         List =
             [ GroupRange ||
                 ShipCountName in shipCountNameList, %+
-                    GroupRange = ShipCountName:getGroupRange()
+                    tuple(Num, _Cost, FBS) = ShipCountName:getCostRange_dt(),
+                    GroupRange = tuple(Num, Num, FBS)
             ].
+
+clauses
+    getTotalCost() = Total:value :-
+        Total = varM_integer::new(0),
+        foreach
+            ShipCountName in shipCountNameList
+            and %+
+                tuple(_Num, Cost, _FBS) = ShipCountName:getCostRange_dt()
+        do
+            Total:add(Cost)
+        end foreach.
 
 predicates
     deleteAllOthers : ().
@@ -145,4 +126,4 @@ clauses
         vertScroll_ctl:addScrollListener(onScroll).
 % end of automatic code
 
-end implement fleetPicker
+end implement simpleCostPicker

@@ -336,9 +336,12 @@
     <item-map filename="ship\ucmVenice\ucmVenice.pack" />
     <item-map filename="ship\ucmVienna\ucmVienna.pack" />
     <item-map filename="ship\ucmWashington\ucmWashington.pack" />
+    <item-map filename="simpleCostBuilder\simpleCostBuilder.pack" />
+    <item-map filename="simpleCostBuilder\simpleCostPicker\simpleCostPicker.pack" />
     <item-map filename="taskWindow\TaskMenu.mnu" resource_id="mnu_TaskMenu" />
     <item-map filename="taskWindow\taskWindow.pack" />
     <item-map filename="taskWindow\Toolbars\CopyBitmap.bmp" resource_id="idb_CopyBitmap" />
+    <item-map filename="taskWindow\Toolbars\cost.bmp" resource_id="idb_cost" />
     <item-map filename="taskWindow\Toolbars\CutBitmap.bmp" resource_id="idb_CutBitmap" />
     <item-map filename="taskWindow\Toolbars\graph.bmp" resource_id="idb_graph" />
     <item-map filename="taskWindow\Toolbars\HelpBitmap.bmp" resource_id="idb_HelpBitmap" />

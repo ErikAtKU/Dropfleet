@@ -4,9 +4,9 @@ class fleetPicker : fleetPicker
     open core
 
 constructors
-    new : ().
+    new : (containerWindow Parent).
 
 constructors
-    new : (containerWindow Parent).
+    newCostCount : (containerWindow Parent).
 
 end class fleetPicker

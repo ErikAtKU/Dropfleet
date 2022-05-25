@@ -1,6 +1,7 @@
 ﻿#include @"generateCostListDlg\fleetPicker\shipCountName\shipCountName.ph"
 
 % privately used packages
+#include @"pfc\math\math.ph"
 #include @"displayImage\displayImage.ph"
 #include @"pfc\string\string.ph"
 #include @"ship\shipClass\shipClass.ph"

@@ -139,6 +139,31 @@ clauses
     onGraphsScourgeGraphs(_Source, _MenuTag) :-
         _ = damageGraphDlg::display(This, generateCostListDlg::scourge, []).
 
+predicates
+    onCostsUcmcosts : window::menuItemListener.
+clauses
+    onCostsUcmcosts(_Source, _MenuTag).
+
+predicates
+    onCostsResistancecosts : window::menuItemListener.
+clauses
+    onCostsResistancecosts(_Source, _MenuTag).
+
+predicates
+    onCostsShaltaricosts : window::menuItemListener.
+clauses
+    onCostsShaltaricosts(_Source, _MenuTag).
+
+predicates
+    onCostsScourgecosts : window::menuItemListener.
+clauses
+    onCostsScourgecosts(_Source, _MenuTag).
+
+predicates
+    onCostsPhrcosts : window::menuItemListener.
+clauses
+    onCostsPhrcosts(_Source, _MenuTag).
+
 % This code is maintained automatically, do not update it manually.
 predicates
     generatedInitialize : ().
@@ -169,7 +194,12 @@ clauses
         addMenuItemListener(resourceIdentifiers::id_graphs_shaltari_graphs, onGraphsShaltariGraphs),
         addMenuItemListener(resourceIdentifiers::id_graphs_phr_graphs, onGraphsPhrGraphs),
         addMenuItemListener(resourceIdentifiers::id_graphs_scourge_graphs, onGraphsScourgeGraphs),
-        addMenuItemListener(resourceIdentifiers::id_file_save, onFileSave).
+        addMenuItemListener(resourceIdentifiers::id_file_save, onFileSave),
+        addMenuItemListener(resourceIdentifiers::id_costs_ucmcosts, onCostsUcmcosts),
+        addMenuItemListener(resourceIdentifiers::id_costs_resistancecosts, onCostsResistancecosts),
+        addMenuItemListener(resourceIdentifiers::id_costs_shaltaricosts, onCostsShaltaricosts),
+        addMenuItemListener(resourceIdentifiers::id_costs_scourgecosts, onCostsScourgecosts),
+        addMenuItemListener(resourceIdentifiers::id_costs_phrcosts, onCostsPhrcosts).
 % end of automatic code
 
 end implement taskWindow
