@@ -157,7 +157,8 @@ clauses
 predicates
     onCostsScourgecosts : window::menuItemListener.
 clauses
-    onCostsScourgecosts(_Source, _MenuTag).
+    onCostsScourgecosts(_Source, _MenuTag) :-
+        _ = simpleCostBuilder::display(This, generateCostListDlg::scourge).
 
 predicates
     onCostsPhrcosts : window::menuItemListener.

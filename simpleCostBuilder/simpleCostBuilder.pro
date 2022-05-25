@@ -9,27 +9,16 @@ clauses
         Dialog = new(Parent, FactionList),
         Dialog:show().
 
-class predicates
-    fillFactionMap_helper : (shipClass::fleetBuilderStats* ALLShips, tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* OwnedFleet)
-        -> tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* FullFleet.
-clauses
-    fillFactionMap_helper(ALLShips, Models) = Return :-
-        HelpSet = setM_redBlack::newCustom({ (tuple(_, _, LFBS), tuple(_, _, RFBS)) = shipClass::fbsSorter(LFBS, RFBS) }),
-        foreach Ship in ALLShips do
-            HelpSet:insert(tuple(0, 0, Ship))
-        end foreach,
-        foreach Model in Models and HelpSet:contains(Model) do
-            %sanity check, assuming faction list is correct
-            HelpSet:remove(Model),
-            HelpSet:insert(Model)
-        end foreach,
-        Return = HelpSet:asList.
-
 clauses
     new(Parent, Fleet) :-
         dialog::new(Parent),
         generatedInitialize(),
-        delayCall(1, { () :- simpleCostPicker_ctl:addShipList(Fleet) }).
+        Ships = list::map(Fleet, { (tuple(_, _, FBS)) = FBS }),
+        delayCall(1,
+            { () :-
+                simpleCostPicker_ctl:addShipList(Ships),
+                timerCall()
+            }).
 
 predicates
     generate : ().
@@ -46,6 +35,18 @@ clauses
         end foreach,
         fail.
     generate().
+
+predicates
+    timerCall : ().
+clauses
+    timerCall() :-
+        try
+            Cost = simpleCostPicker_ctl:getTotalCost(),
+            lowerPoints_ctl:setText(toString(Cost)),
+            delayCall(1000, timerCall)
+        catch _Ex do
+            succeed
+        end try.
 
 predicates
     onGenerate : button::clickResponder.
