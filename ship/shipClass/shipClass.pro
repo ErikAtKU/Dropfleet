@@ -213,7 +213,8 @@ clauses
                     or
                     LaunchSystem in LaunchNameSet, %+
                         if torpedo(TorpedoSystem, _Launch, WepSpecial) = LaunchSystem then
-                            torpedo_stats(LaunchName, LaunchThrust, LaunchLock, LaunchAttack, LaunchDamage, Special2) = TorpedoSystem,
+                            torpedo_stats(TorpedoName, LaunchThrust, LaunchLock, LaunchAttack, LaunchDamage, Special2) = TorpedoSystem,
+                            LaunchName = string::format("%-45s", TorpedoName),
                             LaunchThrustStr = toInches(LaunchThrust),
                             LaunchSpecial = list::append(WepSpecial, Special2),
                             LaunchLockStr = rollToString(LaunchLock),
@@ -229,7 +230,6 @@ clauses
                                 SubSystem = StrikeCraftSystem
                             end if,
                             getStrikeCraftStats_dt(SubSystem, LaunchName, LaunchThrustStr, LaunchLockStr, LaunchAttackStr, LaunchDamageStr),
-                            LaunchName = getStrikeCraftName(SubSystem),
                             Special2 = getStrikeCraftSpecial(SubSystem),
                             LaunchSpecial = list::append(WepSpecial, Special2)
                         end if,
@@ -242,7 +242,7 @@ clauses
                             RestSpecial = []
                         end if,
                         StringRow =
-                            string::format("%-45s %-15s %-15s %-15s %-15s %s", LaunchName, LaunchThrustStr, LaunchLockStr, LaunchAttackStr,
+                            string::format("%s %-15s %-15s %-15s %-15s %s", LaunchName, LaunchThrustStr, LaunchLockStr, LaunchAttackStr,
                                 LaunchDamageStr, FirstSpecial)
                 ]
         else
@@ -264,12 +264,12 @@ class predicates
     getStrikeCraftStats_dt : (strikeCraftSystem, string Name [out], string Thrust [out], string Lock [out], string Attack [out], string Damage [out])
         determ.
 clauses
-    getStrikeCraftStats_dt(fighter_stats(Name, Thrust, PointDefenseBonus, _Special), Name, toInches(Thrust),
+    getStrikeCraftStats_dt(fighter_stats(Name, Thrust, PointDefenseBonus, _Special), string::format("%-47s", Name), toInches(Thrust),
             string::format("PD+%d", PointDefenseBonus), "", "").
-    getStrikeCraftStats_dt(bomber_stats(Name, Thrust, Lock, Attack, Damage, _Special), Name, toInches(Thrust), rollToString(Lock),
-            countToString(Attack), countToString(Damage)).
-    getStrikeCraftStats_dt(bulkLander_stats(Name, Thrust), Name, toInches(Thrust), "", "", "").
-    getStrikeCraftStats_dt(dropships_stats(Name, Thrust), Name, toInches(Thrust), "", "", "").
+    getStrikeCraftStats_dt(bomber_stats(Name, Thrust, Lock, Attack, Damage, _Special), string::format("%-45s", Name), toInches(Thrust),
+            rollToString(Lock), countToString(Attack), countToString(Damage)).
+    getStrikeCraftStats_dt(bulkLander_stats(Name, Thrust), string::format("%-45s", Name), toInches(Thrust), "", "", "").
+    getStrikeCraftStats_dt(dropships_stats(Name, Thrust), string::format("%-45s", Name), toInches(Thrust), "", "", "").
 
 class predicates
     getStrikeCraftSpecial : (strikeCraftSystem) -> weaponSpecial*.
