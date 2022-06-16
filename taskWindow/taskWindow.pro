@@ -142,17 +142,20 @@ clauses
 predicates
     onCostsUcmcosts : window::menuItemListener.
 clauses
-    onCostsUcmcosts(_Source, _MenuTag).
+    onCostsUcmcosts(_Source, _MenuTag) :-
+        _ = simpleCostBuilder::display(This, generateCostListDlg::ucm).
 
 predicates
     onCostsResistancecosts : window::menuItemListener.
 clauses
-    onCostsResistancecosts(_Source, _MenuTag).
+    onCostsResistancecosts(_Source, _MenuTag) :-
+        _ = simpleCostBuilder::display(This, generateCostListDlg::resistance).
 
 predicates
     onCostsShaltaricosts : window::menuItemListener.
 clauses
-    onCostsShaltaricosts(_Source, _MenuTag).
+    onCostsShaltaricosts(_Source, _MenuTag) :-
+        _ = simpleCostBuilder::display(This, generateCostListDlg::shaltari).
 
 predicates
     onCostsScourgecosts : window::menuItemListener.
@@ -163,7 +166,8 @@ clauses
 predicates
     onCostsPhrcosts : window::menuItemListener.
 clauses
-    onCostsPhrcosts(_Source, _MenuTag).
+    onCostsPhrcosts(_Source, _MenuTag) :-
+        _ = simpleCostBuilder::display(This, generateCostListDlg::phr).
 
 % This code is maintained automatically, do not update it manually.
 predicates
