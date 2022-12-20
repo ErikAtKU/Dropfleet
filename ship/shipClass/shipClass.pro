@@ -190,7 +190,11 @@ clauses
                             LaunchSpecial = list::append(WepSpecial, Special2)
                         else
                             strikeCraft(StrikeCraftSystem, Launch, WepSpecial) = LaunchSystem,
-                            LaunchName = getStrikeCraftName(StrikeCraftSystem),
+                            if StrikeCraftSystem = gate_stats(_) then
+                                LaunchName = string::format("%-55s", getStrikeCraftName(StrikeCraftSystem))
+                            else
+                                LaunchName = getStrikeCraftName(StrikeCraftSystem)
+                            end if,
                             Special2 = getStrikeCraftSpecial(StrikeCraftSystem),
                             LaunchSpecial = list::append(WepSpecial, Special2)
                         end if,

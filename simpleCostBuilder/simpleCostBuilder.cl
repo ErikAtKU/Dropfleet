@@ -4,10 +4,9 @@ class simpleCostBuilder : simpleCostBuilder
     open core
 
 predicates
-    display : (window Parent, generateCostListDlg::faction, tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* Fleet = [])
-        -> simpleCostBuilder Dialog.
+    display : (window Parent, generateCostListDlg::faction, fleet::fleetCount* FleetCount = []) -> simpleCostBuilder Dialog.
 
 constructors
-    new : (window Parent, tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* Fleet).
+    new : (window Parent, tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* Fleet, generateCostListDlg::faction).
 
 end class simpleCostBuilder

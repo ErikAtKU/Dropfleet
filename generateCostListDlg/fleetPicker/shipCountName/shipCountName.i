@@ -6,7 +6,7 @@ interface shipCountName supports control
 predicates
     setFBS : (shipClass::fleetBuilderStats FBS).
     setModel : (tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}).
-    setCostCount : (shipClass::fleetBuilderStats FBS).
+    setCostCount : (tuple{integer Min, integer Max, shipClass::fleetBuilderStats} FBS).
 
 predicates
     getGroupRange : () -> tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}.

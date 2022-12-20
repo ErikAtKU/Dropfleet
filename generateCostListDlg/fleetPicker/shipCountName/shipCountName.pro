@@ -29,9 +29,9 @@ clauses
         max_int:setText(toString(MaxNum)).
 
 clauses
-    setCostCount(FBS) :-
+    setCostCount(tuple(Min, _Max, FBS)) :-
         setFBS(FBS),
-        min_int:setText("0"),
+        min_int:setText(toString(Min)),
         max_int:setEnabled(false),
         shipClass::getFBSPoints(FBS, Points),
         max_int:setText(toString(Points)).

@@ -5,18 +5,55 @@ implement simpleCostBuilder inherits dialog
 
 clauses
     display(Parent, Faction, Models) = Dialog :-
-        FactionList = generateCostListDlg::fillFactionMap(Faction, Models),
-        Dialog = new(Parent, FactionList),
+        FactionList = fillFactionMap(Faction, Models),
+        Dialog = new(Parent, FactionList, Faction),
         Dialog:show().
 
+class predicates
+    fillFactionMap : (generateCostListDlg::faction, fleet::fleetCount* OwnedFleet)
+        -> tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* FullFleet.
 clauses
-    new(Parent, Fleet) :-
+    fillFactionMap(generateCostListDlg::ucm, Fleet) = Return :-
+        Return = fillFactionMap_helper(fleetBuilder::getUCMList(), Fleet).
+    fillFactionMap(generateCostListDlg::scourge, Fleet) = Return :-
+        Return = fillFactionMap_helper(fleetBuilder::getScourgeList(), Fleet).
+    fillFactionMap(generateCostListDlg::phr, Fleet) = Return :-
+        Return = fillFactionMap_helper(fleetBuilder::getPHRList(), Fleet).
+    fillFactionMap(generateCostListDlg::shaltari, Fleet) = Return :-
+        Return = fillFactionMap_helper(fleetBuilder::getShaltariList(), Fleet).
+    fillFactionMap(generateCostListDlg::resistance, Fleet) = Return :-
+        Return = fillFactionMap_helper(fleetBuilder::getResistanceList(), Fleet).
+
+class predicates
+    fillFactionMap_helper : (shipClass::fleetBuilderStats* ALLShips, fleet::fleetCount* OwnedFleet)
+        -> tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* FullFleet.
+clauses
+    fillFactionMap_helper(ALLShips, Models) = Return :-
+        HelpSet = setM_redBlack::newCustom({ (tuple(_, _, LFBS), tuple(_, _, RFBS)) = shipClass::fbsSorter(LFBS, RFBS) }),
+        foreach Ship in ALLShips do
+            HelpSet:insert(tuple(0, 0, Ship))
+        end foreach,
+        foreach
+            tuple(ClassName, Count) in Models and Entry in HelpSet
+            and tuple(_, _, shipClass::fbs(ConstructorStats, ClassName, Special, Constructor, Description)) = Entry
+        do
+            %sanity check, assuming faction list is correct
+            HelpSet:remove(Entry),
+            HelpSet:insert(tuple(Count, Count, shipClass::fbs(ConstructorStats, ClassName, Special, Constructor, Description)))
+        end foreach,
+        Return = HelpSet:asList.
+
+facts
+    faction_var : generateCostListDlg::faction.
+
+clauses
+    new(Parent, Fleet, Faction) :-
         dialog::new(Parent),
         generatedInitialize(),
-        Ships = list::map(Fleet, { (tuple(_, _, FBS)) = FBS }),
+        faction_var := Faction,
         delayCall(1,
             { () :-
-                simpleCostPicker_ctl:addShipList(Ships),
+                simpleCostPicker_ctl:addShipList(Fleet),
                 timerCall()
             }).
 
@@ -57,7 +94,27 @@ clauses
 predicates
     onOk : button::clickResponder.
 clauses
-    onOk(_Source) = button::defaultAction.
+    onOk(_Source) = button::defaultAction :-
+        FleetRange = simpleCostPicker_ctl:getFleetRange(),
+        ShipList = convertFleetRange(FleetRange),
+        if generateCostListDlg::ucm = faction_var then
+            fleet::myUCMShips := ShipList
+        elseif generateCostListDlg::scourge = faction_var then
+            fleet::myScourgeShips := ShipList
+        elseif generateCostListDlg::phr = faction_var then
+            fleet::myPHRShips := ShipList
+        elseif generateCostListDlg::shaltari = faction_var then
+            fleet::myShaltariShips := ShipList
+        elseif generateCostListDlg::resistance = faction_var then
+            fleet::myResistanceShips := ShipList
+        end if.
+
+class predicates
+    convertFleetRange : (tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}*) -> tuple{string ClassName, integer MaxNum}*.
+clauses
+    convertFleetRange([]) = [].
+    convertFleetRange([tuple(Count, _Cost, shipClass::fbs(_, ClassName, _, _, _)) | Rest]) = [tuple(ClassName, Count) | ReturnList] :-
+        ReturnList = convertFleetRange(Rest).
 
 % This code is maintained automatically, do not update it manually.
 facts

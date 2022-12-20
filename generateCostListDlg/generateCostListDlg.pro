@@ -45,8 +45,8 @@ clauses
         dialog::new(Parent),
         faction_var := Faction,
         generatedInitialize(),
-        lowerPoints_ctl:setText(toString(fleet::myLowerPoints)),
-        upperPoints_ctl:setText(toString(fleet::myUpperPoints)),
+        lowerPoints_ctl:setText(toString(480)),
+        upperPoints_ctl:setText(toString(500)),
         delayCall(1, { () :- fleetPicker_ctl:addModelList(Fleet) }).
 
 predicates
@@ -75,27 +75,7 @@ clauses
 predicates
     onOk : button::clickResponder.
 clauses
-    onOk(_Source) = button::defaultAction :-
-        FleetRange = fleetPicker_ctl:getFleetRange(),
-        if ucm = faction_var then
-            fleet::myUCMShips := FleetRange
-        elseif scourge = faction_var then
-            fleet::myScourgeShips := FleetRange
-        elseif phr = faction_var then
-            fleet::myPHRShips := FleetRange
-        elseif shaltari = faction_var then
-            fleet::myShaltariShips := FleetRange
-        elseif resistance = faction_var then
-            fleet::myResistanceShips := FleetRange
-        end if,
-        if LowerPoints = tryToTerm(lowerPoints_ctl:getText()) then
-            fleet::myLowerPoints := LowerPoints,
-            if UpperPoints = tryToTerm(upperPoints_ctl:getText()) and LowerPoints <= UpperPoints then
-                fleet::myUpperPoints := UpperPoints
-            else
-                fleet::myUpperPoints := LowerPoints + 20
-            end if
-        end if.
+    onOk(_Source) = button::defaultAction.
 
 % This code is maintained automatically, do not update it manually.
 facts

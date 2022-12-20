@@ -32,12 +32,10 @@ clauses
         end try.
 
 class facts - myShips
-    myUCMShips : tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* := [].
-    myScourgeShips : tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* := [].
-    myPHRShips : tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* := [].
-    myShaltariShips : tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* := [].
-    myResistanceShips : tuple{integer MinNum, integer MaxNum, shipClass::fleetBuilderStats}* := [].
-    myLowerPoints : integer := 480.
-    myUpperPoints : integer := 500.
+    myUCMShips : tuple{string ClassName, integer MaxNum}* := [].
+    myScourgeShips : tuple{string ClassName, integer MaxNum}* := [].
+    myPHRShips : tuple{string ClassName, integer MaxNum}* := [].
+    myShaltariShips : tuple{string ClassName, integer MaxNum}* := [].
+    myResistanceShips : tuple{string ClassName, integer MaxNum}* := [].
 
 end implement fleet

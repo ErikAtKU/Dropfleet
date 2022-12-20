@@ -84,25 +84,25 @@ predicates
     onEditUndo : window::menuItemListener.
 clauses
     onEditUndo(_Source, _MenuTag) :-
-        _ = generateCostListDlg::display(This, generateCostListDlg::scourge, fleet::myScourgeShips).
+        _ = generateCostListDlg::display(This, generateCostListDlg::scourge, []).
 
 predicates
     onEditRedo : window::menuItemListener.
 clauses
     onEditRedo(_Source, _MenuTag) :-
-        _ = generateCostListDlg::display(This, generateCostListDlg::shaltari, fleet::myShaltariShips).
+        _ = generateCostListDlg::display(This, generateCostListDlg::shaltari, []).
 
 predicates
     onEditCut : window::menuItemListener.
 clauses
     onEditCut(_Source, _MenuTag) :-
-        _ = generateCostListDlg::display(This, generateCostListDlg::ucm, fleet::myUCMShips).
+        _ = generateCostListDlg::display(This, generateCostListDlg::ucm, []).
 
 predicates
     onEditCopy : window::menuItemListener.
 clauses
     onEditCopy(_Source, _MenuTag) :-
-        _ = generateCostListDlg::display(This, generateCostListDlg::phr, fleet::myPHRShips).
+        _ = generateCostListDlg::display(This, generateCostListDlg::phr, []).
 
 predicates
     onEditPaste : window::menuItemListener.
@@ -143,7 +143,7 @@ predicates
     onCostsUcmcosts : window::menuItemListener.
 clauses
     onCostsUcmcosts(_Source, _MenuTag) :-
-        _ = simpleCostBuilder::display(This, generateCostListDlg::ucm).
+        _ = simpleCostBuilder::display(This, generateCostListDlg::ucm, fleet::myUCMShips).
 
 predicates
     onCostsResistancecosts : window::menuItemListener.
@@ -155,19 +155,19 @@ predicates
     onCostsShaltaricosts : window::menuItemListener.
 clauses
     onCostsShaltaricosts(_Source, _MenuTag) :-
-        _ = simpleCostBuilder::display(This, generateCostListDlg::shaltari).
+        _ = simpleCostBuilder::display(This, generateCostListDlg::shaltari, fleet::myShaltariShips).
 
 predicates
     onCostsScourgecosts : window::menuItemListener.
 clauses
     onCostsScourgecosts(_Source, _MenuTag) :-
-        _ = simpleCostBuilder::display(This, generateCostListDlg::scourge).
+        _ = simpleCostBuilder::display(This, generateCostListDlg::scourge, fleet::myScourgeShips).
 
 predicates
     onCostsPhrcosts : window::menuItemListener.
 clauses
     onCostsPhrcosts(_Source, _MenuTag) :-
-        _ = simpleCostBuilder::display(This, generateCostListDlg::phr).
+        _ = simpleCostBuilder::display(This, generateCostListDlg::phr, fleet::myPHRShips).
 
 % This code is maintained automatically, do not update it manually.
 predicates
