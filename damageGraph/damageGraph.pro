@@ -78,12 +78,12 @@ clauses
         do
             CountMap = mapM_redBlack::new(),
             MaxDamage = varM_integer::new(0),
-            DamageArea = varM_integer::new(0),
+            DamageArea = varM::new(0.0),
             foreach Key = MapOut:getKey_nd() and Count = MapOut:tryGet(Key) and Damage = std::fromTo(0, Key) do
                 DamageVal = CountMap:get_default(Damage, 0),
                 CountMap:set(Damage, DamageVal + Count),
                 MaxDamage:max(Damage),
-                DamageArea:add(Count)
+                DamageArea:value := DamageArea:value + 1.0 * Count / (1.0 * Trials)
             end foreach,
             DamageMapsVar:value := [tuple(DamageArea:value, MaxDamage:value, tuple(NameStr, TotalCost, CountMap)) | DamageMapsVar:value]
         end foreach,
