@@ -371,12 +371,12 @@
     <item-map filename="weapon\weapon.pack" />
   </item-set>
   <setting-set key="target">
-    <setting-map target="Win32">
+    <setting-map hidden="true" target="Win32">
       <var-list>
         <var-map name="Target.Machine" value="x86" />
       </var-list>
     </setting-map>
-    <setting-map hidden="true" target="x64">
+    <setting-map target="x64">
       <var-list>
         <var-map name="Target.Machine" value="x64" />
         <var-map name="Target.DirPrefix" value="64" />

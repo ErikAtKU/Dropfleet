@@ -50,27 +50,27 @@ clauses
                 tuple(SO, WF, CAW, Launch, SingleLinkedArc, Max, FBS) in ShipSims,
                 MapFact = varM::new([])
             ],
-        %ThreadList = varM::new([]),
+        ThreadList = varM::new([]),
         foreach tuple(MapFact, _SO, WF, CAW, Launch, SingleLinkedArc, Max, FBS) in ShipSimList do
-            %    Thread =
-            %        thread::start(
-            %            { () :-
-            MapOut = weapon::simulate(fleetBuilder::group(FBS, Max), DefendFBS, WF, CAW, Launch, SingleLinkedArc, Trials),
-            Name = string::present(FBS),
-            if true = WF then
-                NameStr = string::format("%s WF", Name)
-            else
-                NameStr = Name
-            end if,
-            shipClass::getFBSPoints(FBS, ShipPoints),
-            TotalCost = ShipPoints * Max,
-            MapFact:value := [tuple(NameStr, TotalCost, MapOut)]
-            %            }),
-            %    ThreadList:value := [Thread | ThreadList:value]
+            Thread =
+                thread::start(
+                    { () :-
+                        MapOut = weapon::simulate(fleetBuilder::group(FBS, Max), DefendFBS, WF, CAW, Launch, SingleLinkedArc, Trials),
+                        Name = string::present(FBS),
+                        if true = WF then
+                            NameStr = string::format("%s WF", Name)
+                        else
+                            NameStr = Name
+                        end if,
+                        shipClass::getFBSPoints(FBS, ShipPoints),
+                        TotalCost = ShipPoints * Max,
+                        MapFact:value := [tuple(NameStr, TotalCost, MapOut)]
+                    }),
+            ThreadList:value := [Thread | ThreadList:value]
         end foreach,
-        %foreach Thread in ThreadList:value do
-        %    Thread:wait()
-        %end foreach,
+        foreach Thread in ThreadList:value do
+            Thread:wait()
+        end foreach,
         DamageMapsVar = varM::new([]),
         foreach
             tuple(MapFact, _SO, _WF, _CAW, _Launch, _SingleLinkedArc, _Max, _FBS) in ShipSimList and [DamageMap | _] = MapFact:value

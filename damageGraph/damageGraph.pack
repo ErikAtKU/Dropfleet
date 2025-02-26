@@ -1,6 +1,7 @@
 ﻿#include @"damageGraph\damageGraph.ph"
 
 % privately used packages
+#include @"pfc\multiThread\thread\thread.ph"
 #include @"pfc\collection\M\mapM_redBlack\mapM_redBlack.ph"
 #include @"pfc\std\std.ph"
 #include @"ship\shipClass\shipClass.ph"
