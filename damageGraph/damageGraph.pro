@@ -78,20 +78,20 @@ clauses
         do
             CountMap = mapM_redBlack::new(),
             MaxDamage = varM_integer::new(0),
+            DamageArea = varM_integer::new(0),
             foreach Key = MapOut:getKey_nd() and Count = MapOut:tryGet(Key) and Damage = std::fromTo(0, Key) do
                 DamageVal = CountMap:get_default(Damage, 0),
                 CountMap:set(Damage, DamageVal + Count),
-                if MaxDamage:value < Damage then
-                    MaxDamage:value := Damage
-                end if
+                MaxDamage:max(Damage),
+                DamageArea:add(Count)
             end foreach,
-            DamageMapsVar:value := [tuple(MaxDamage:value, tuple(NameStr, TotalCost, CountMap)) | DamageMapsVar:value]
+            DamageMapsVar:value := [tuple(DamageArea:value, MaxDamage:value, tuple(NameStr, TotalCost, CountMap)) | DamageMapsVar:value]
         end foreach,
         SortedList = list::sort(DamageMapsVar:value, core::descending),
         damageMaps :=
             [ tuple(Pen, NameStr, TotalCost, CountMap) ||
                 Head = list::zipHead_nd(penList, SortedList),
-                tuple(Pen, tuple(_MaxDamage, tuple(NameStr, TotalCost, CountMap))) = Head
+                tuple(Pen, tuple(_DamageArea, _MaxDamage, tuple(NameStr, TotalCost, CountMap))) = Head
             ],
         setMaxs(),
         This:invalidate(),
