@@ -5,7 +5,6 @@
 #include @"ship\phrCastor\phrCastor.ph"
 #include @"ship\ucmNewOrleans\ucmNewOrleans.ph"
 #include @"ship\scourgeHiruko\scourgeHiruko.ph"
-#include @"pfc\multiThread\multiThread.ph"
 #include @"ship\phrBellerophon\phrBellerophon.ph"
 #include @"ship\shaltariPlatinum\shaltariPlatinum.ph"
 #include @"ship\ucmLondon\ucmLondon.ph"

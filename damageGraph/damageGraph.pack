@@ -7,7 +7,6 @@
 #include @"ship\ucmOsaka\ucmOsaka.ph"
 #include @"fleet\fleetBuilder\fleetBuilder.ph"
 #include @"weapon\weapon.ph"
-#include @"pfc\multiThread\multiThread.ph"
 #include @"pfc\string\string.ph"
 #include @"pfc\collection\M\varM\varM.ph"
 #include @"damageGraph\convertPixelsWidths\convertPixelsWidths.ph"

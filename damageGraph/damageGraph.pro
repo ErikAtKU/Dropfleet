@@ -1,10 +1,10 @@
 ﻿% Copyright
 
 implement damageGraph inherits userControlSupport
-    open core
+    open core, gdiplus_native
 
 constants
-    unit : integer = gdiPlus_native::unitPixel.
+    unit : integer = unitPixel.
     penWidth : real = 1.0.
     fontFamily : string = "Times New Roman".
     fontSize : real = 14.0.
@@ -25,22 +25,22 @@ clauses
     new() :-
         userControlSupport::new(),
         generatedInitialize(),
-        grayPen:dashStyle := gdiplus_native::dashStyleDash,
+        grayPen:dashStyle := dashStyleDash,
         setpaintresponder(onPaint).
 
 class facts
     penList : pen* :=
         [
-            pen::createColor(color::create(color::burlywood), penWidth, unit),
-            pen::createColor(color::create(color::cornflowerblue), penWidth, unit),
-            pen::createColor(color::create(color::crimson), penWidth, unit),
-            pen::createColor(color::create(color::seagreen), penWidth, unit),
-            pen::createColor(color::create(color::mediumpurple), penWidth, unit),
-            pen::createColor(color::create(color::firebrick), penWidth, unit)
+            pen::createColor(burlywood, penWidth, unit),
+            pen::createColor(cornflowerblue, penWidth, unit),
+            pen::createColor(crimson, penWidth, unit),
+            pen::createColor(seagreen, penWidth, unit),
+            pen::createColor(mediumpurple, penWidth, unit),
+            pen::createColor(firebrick, penWidth, unit)
         ].
-    blackPen : pen := pen::createColor(color::create(color::black), penWidth, unit).
-    whitePen : pen := pen::createColor(color::create(color::white), penWidth, unit).
-    grayPen : pen := pen::createColor(color::create(color::gray), penWidth, unit).
+    blackPen : pen := pen::createColor(black, penWidth, unit).
+    whitePen : pen := pen::createColor(white, penWidth, unit).
+    grayPen : pen := pen::createColor(gray, penWidth, unit).
 
 clauses
     makeDamageMap(ShipSims, DefendFBS, Trials) :-
@@ -50,27 +50,27 @@ clauses
                 tuple(SO, WF, CAW, Launch, SingleLinkedArc, Max, FBS) in ShipSims,
                 MapFact = varM::new([])
             ],
-        ThreadList = varM::new([]),
+        %ThreadList = varM::new([]),
         foreach tuple(MapFact, _SO, WF, CAW, Launch, SingleLinkedArc, Max, FBS) in ShipSimList do
-            Thread =
-                thread::start(
-                    { () :-
-                        MapOut = weapon::simulate(fleetBuilder::group(FBS, Max), DefendFBS, WF, CAW, Launch, SingleLinkedArc, Trials),
-                        Name = string::present(FBS),
-                        if true = WF then
-                            NameStr = string::format("%s WF", Name)
-                        else
-                            NameStr = Name
-                        end if,
-                        shipClass::getFBSPoints(FBS, ShipPoints),
-                        TotalCost = ShipPoints * Max,
-                        MapFact:value := [tuple(NameStr, TotalCost, MapOut)]
-                    }),
-            ThreadList:value := [Thread | ThreadList:value]
+            %    Thread =
+            %        thread::start(
+            %            { () :-
+            MapOut = weapon::simulate(fleetBuilder::group(FBS, Max), DefendFBS, WF, CAW, Launch, SingleLinkedArc, Trials),
+            Name = string::present(FBS),
+            if true = WF then
+                NameStr = string::format("%s WF", Name)
+            else
+                NameStr = Name
+            end if,
+            shipClass::getFBSPoints(FBS, ShipPoints),
+            TotalCost = ShipPoints * Max,
+            MapFact:value := [tuple(NameStr, TotalCost, MapOut)]
+            %            }),
+            %    ThreadList:value := [Thread | ThreadList:value]
         end foreach,
-        foreach Thread in ThreadList:value do
-            Thread:wait()
-        end foreach,
+        %foreach Thread in ThreadList:value do
+        %    Thread:wait()
+        %end foreach,
         DamageMapsVar = varM::new([]),
         foreach
             tuple(MapFact, _SO, _WF, _CAW, _Launch, _SingleLinkedArc, _Max, _FBS) in ShipSimList and [DamageMap | _] = MapFact:value
@@ -123,7 +123,7 @@ predicates
     doDraw : (graphics Graphics).
 clauses
     doDraw(Graphics) :-
-        Graphics:smoothingMode := gdiplus_native::smoothingModeAntiAlias,
+        Graphics:smoothingMode := smoothingModeAntiAlias,
         convertPixelsWidths::convertDimensions(getWidth(), getHeight(), Width, Height),
         Graphics:fillRectangleI(whitePen:brush, 0, 0, Width, Height),
         makeGraph(Graphics),
@@ -146,8 +146,8 @@ clauses
                 end if
             end foreach,
             MinMaxStr = string::format("%3dpts-Max%3d", TotalCost, MaxVar:value),
-            Graphics:drawString(Name, -1, Font, gdiplus::rectF(12, Y:value, Width, Height), StringFormat, blackPen:brush),
-            Graphics:drawString(MinMaxStr, -1, Font, gdiplus::rectF(12, Y:value + 15, Width, Height), StringFormat, blackPen:brush),
+            Graphics:drawString(Name, -1, Font, gdiplus_native::rectF(12, Y:value, Width, Height), StringFormat, blackPen:brush),
+            Graphics:drawString(MinMaxStr, -1, Font, gdiplus_native::rectF(12, Y:value + 15, Width, Height), StringFormat, blackPen:brush),
             Graphics:fillRectangleF(Pen:brush, 0, Y:value + 5, 10, 5),
             Y:add(40)
         end foreach.
@@ -168,10 +168,9 @@ clauses
         foreach Amount = std::fromTo(0, 3) do
             Graphics:fillRectangleI(grayPen:brush, 120, Amount * GraphHeight div 4, GraphWidth, 1),
             Num = 100 - 25 * Amount,
-            Graphics:drawString(string::format("%3d", Num), -1, Font, gdiplus::rectF(100, Amount * GraphHeight div 4, 40, 20), StringFormat,
-                blackPen:brush)
+            Graphics:drawString(string::format("%3d", Num), -1, Font, rectF(100, Amount * GraphHeight div 4, 40, 20), StringFormat, blackPen:brush)
         end foreach,
-        Graphics:drawString("  0", -1, Font, gdiplus::rectF(100, GraphHeight - 10, 40, 20), StringFormat, blackPen:brush),
+        Graphics:drawString("  0", -1, Font, rectF(100, GraphHeight - 10, 40, 20), StringFormat, blackPen:brush),
         SectionWidth = getSectionWidth(),
         hasDomain(predicate_dt{integer}, Ignore),
         if (1 + maxDamage) * SectionWidth < GraphWidth then
@@ -211,7 +210,7 @@ clauses
         WidthCounter = varM_integer::new(2),
         foreach Damage = std::fromTo(0, maxDamage) and Ignore(Damage) do
             BarX = 120 + WidthCounter:value,
-            Graphics:drawString(string::format("%d", Damage), -1, Font, gdiplus::rectF(BarX, GraphHeight + 5, 40, 20), StringFormat, blackPen:brush),
+            Graphics:drawString(string::format("%d", Damage), -1, Font, rectF(BarX, GraphHeight + 5, 40, 20), StringFormat, blackPen:brush),
             WidthCounter:add(SectionWidth)
         end foreach.
 

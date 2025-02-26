@@ -13,8 +13,22 @@
     <item-map filename="$(ProDir)lib\vipVpi.lib" />
     <item-map filename="$(ProDir)lib\win32.lib" />
     <item-map filename="$(ProDir)pfc\application\Exe\exe.pack" />
+    <item-map filename="$(ProDir)pfc\asynchronous\executionContext\executionContext.pack" />
+    <item-map filename="$(ProDir)pfc\asynchronous\executionContext\executionContext_pool\executionContext_pool.pack" />
+    <item-map filename="$(ProDir)pfc\asynchronous\suspending\resumable\resumable.pack" />
+    <item-map filename="$(ProDir)pfc\asynchronous\suspending\tp\tp.pack" />
+    <item-map filename="$(ProDir)pfc\asynchronous\suspending\tp\tps\callbackSupport\callbackSupport.pack" />
+    <item-map filename="$(ProDir)pfc\asynchronous\suspending\tp\tps\ioCallback\ioCallback.pack" />
+    <item-map filename="$(ProDir)pfc\asynchronous\suspending\tp\tps\threadpoolIoImpl\threadpoolIoImpl.pack" />
+    <item-map filename="$(ProDir)pfc\asynchronous\suspending\tp\tps\timerCallback\timerCallback.pack" />
+    <item-map filename="$(ProDir)pfc\asynchronous\suspending\tp\tps\timerImpl\timerImpl.pack" />
+    <item-map filename="$(ProDir)pfc\asynchronous\suspending\tp\tps\tps.pack" />
+    <item-map filename="$(ProDir)pfc\asynchronous\suspending\tp\tps\waitCallback\waitCallback.pack" />
+    <item-map filename="$(ProDir)pfc\asynchronous\suspending\tp\tps\workCallback_suspended\workCallback_suspended.pack" />
+    <item-map filename="$(ProDir)pfc\basis\cancelable\cancelable.pack" />
     <item-map filename="$(ProDir)pfc\basis\disposable\disposable.pack" />
     <item-map filename="$(ProDir)pfc\basis\disposable\disposeRetract\disposeRetract.pack" />
+    <item-map filename="$(ProDir)pfc\basis\disposable_uncollectable\disposable_uncollectable.pack" />
     <item-map filename="$(ProDir)pfc\basis\iterator\iterator.pack" />
     <item-map filename="$(ProDir)pfc\basis\uncollectable\uncollectable.pack" />
     <item-map filename="$(ProDir)pfc\binary\binary.pack" />
@@ -27,6 +41,7 @@
     <item-map filename="$(ProDir)pfc\collection\M\mapM_redBlack\mapM_redBlack.pack" />
     <item-map filename="$(ProDir)pfc\collection\M\queueM_fact\queueM_fact.pack" />
     <item-map filename="$(ProDir)pfc\collection\M\setM_redBlack\setM_redBlack.pack" />
+    <item-map filename="$(ProDir)pfc\collection\M\setM_redBlack_cas\setM_redBlack_cas.pack" />
     <item-map filename="$(ProDir)pfc\collection\M\varM\varM.pack" />
     <item-map filename="$(ProDir)pfc\collection\support\collectionMsupport\collectionMsupport.pack" />
     <item-map filename="$(ProDir)pfc\collection\support\collectionSupport\collectionSupport.pack" />
@@ -53,27 +68,19 @@
     <item-map filename="$(ProDir)pfc\gui\controls\editControl\editControl.pack" />
     <item-map filename="$(ProDir)pfc\gui\controls\groupBox\groupBox.pack" />
     <item-map filename="$(ProDir)pfc\gui\controls\iconControl\iconControl.pack" />
-    <item-map filename="$(ProDir)pfc\gui\controls\imageControl\imageControl.ctl" resource_id="imageControl" />
     <item-map filename="$(ProDir)pfc\gui\controls\imageControl\imageControl.pack" />
-    <item-map filename="$(ProDir)pfc\gui\controls\integerControl\integerControl.ctl" resource_id="integerControl" />
     <item-map filename="$(ProDir)pfc\gui\controls\integerControl\integerControl.pack" />
     <item-map filename="$(ProDir)pfc\gui\controls\listControl\listControl.pack" />
-    <item-map filename="$(ProDir)pfc\gui\controls\messageControl\messageControl.ctl" resource_id="messageControl" />
     <item-map filename="$(ProDir)pfc\gui\controls\messageControl\messageControl.pack" />
     <item-map filename="$(ProDir)pfc\gui\controls\messageControl\outputStream_delegate\outputStream_delegate.pack" />
     <item-map filename="$(ProDir)pfc\gui\controls\messageControl\outputStream_post\outputStream_post.pack" />
     <item-map filename="$(ProDir)pfc\gui\controls\radioButton\radioButton.pack" />
-    <item-map filename="$(ProDir)pfc\gui\controls\realControl\realControl.ctl" resource_id="realControl" />
     <item-map filename="$(ProDir)pfc\gui\controls\realControl\realControl.pack" />
-    <item-map filename="$(ProDir)pfc\gui\controls\sciLexer\sciLexer.ctl" resource_id="sciLexer" />
     <item-map filename="$(ProDir)pfc\gui\controls\sciLexer\sciLexer.pack" />
-    <item-map filename="$(ProDir)pfc\gui\controls\sciLexer\sciLexerSupport\findAndReplaceControl.ctl" resource_id="findAndReplaceControl" />
     <item-map filename="$(ProDir)pfc\gui\controls\sciLexer\sciLexerSupport\sciLexerSupport.pack" />
     <item-map filename="$(ProDir)pfc\gui\controls\scrollControl\scrollControl.pack" />
-    <item-map filename="$(ProDir)pfc\gui\controls\statusBarControl\statusBarControl.ctl" resource_id="statusBarControl" />
     <item-map filename="$(ProDir)pfc\gui\controls\statusBarControl\statusBarControl.pack" />
     <item-map filename="$(ProDir)pfc\gui\controls\textControl\textControl.pack" />
-    <item-map filename="$(ProDir)pfc\gui\controls\versionControl\versionControl.ctl" resource_id="versionControl" />
     <item-map filename="$(ProDir)pfc\gui\controls\versionControl\versionControl.pack" />
     <item-map filename="$(ProDir)pfc\gui\documentWindow\documentWindow.pack" />
     <item-map filename="$(ProDir)pfc\gui\errorPresentationDialog\errorPresentationDialog.pack" />
@@ -120,12 +127,15 @@
     <item-map filename="$(ProDir)pfc\memory\segmented\segmented_utf16\segmented_utf16.pack" />
     <item-map filename="$(ProDir)pfc\memory\segmented\segmented_utf8\segmented_utf8.pack" />
     <item-map filename="$(ProDir)pfc\memory\segmented\segmentedSupport\segmentedSupport.pack" />
-    <item-map filename="$(ProDir)pfc\memory\weakPointer\weakPointer.pack" />
     <item-map filename="$(ProDir)pfc\memory\weakReference\weakReference.pack" />
     <item-map filename="$(ProDir)pfc\multiThread\compareAndSwap\compareAndSwap.pack" />
+    <item-map filename="$(ProDir)pfc\multiThread\criticalSection\criticalSection.pack" />
     <item-map filename="$(ProDir)pfc\multiThread\criticalSectionSupport\criticalSectionSupport.pack" />
-    <item-map filename="$(ProDir)pfc\multiThread\multiThread.pack" />
+    <item-map filename="$(ProDir)pfc\multiThread\semaphore\semaphore.pack" />
     <item-map filename="$(ProDir)pfc\multiThread\srwLock\srwLock.pack" />
+    <item-map filename="$(ProDir)pfc\multiThread\syncObject\syncObject.pack" />
+    <item-map filename="$(ProDir)pfc\multiThread\thread\thread.pack" />
+    <item-map filename="$(ProDir)pfc\multiThread\waitableQueue\waitableQueue.pack" />
     <item-map filename="$(ProDir)pfc\namedValue\namedValue.pack" />
     <item-map filename="$(ProDir)pfc\presenter\presenter.pack" />
     <item-map filename="$(ProDir)pfc\programControl\programControl.pack" />
@@ -174,8 +184,11 @@
     <item-map filename="$(ProDir)pfc\windowsApi\Shell_api\Shell_api.pack" />
     <item-map filename="$(ProDir)pfc\windowsApi\string_api\string_api.pack" />
     <item-map filename="$(ProDir)pfc\windowsApi\string8_api\string8_api.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\suspending_api\suspending_api.pack" />
     <item-map filename="$(ProDir)pfc\windowsApi\systemInformation_api\systemInformation_api.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\threadpool_api\threadpool_api.pack" />
     <item-map filename="$(ProDir)pfc\windowsApi\time_api\time_api.pack" />
+    <item-map filename="$(ProDir)pfc\windowsApi\useDll_api\useDll_api.pack" />
     <item-map filename="$(ProDir)pfc\windowsApi\uxTheme_api\uxTheme_api.pack" />
     <item-map filename="$(ProDir)pfc\windowsApi\windowsAPI.pack" />
     <item-map filename="$(ProDir)pfc\windowsApi\WinErrors\winErrors.pack" />
